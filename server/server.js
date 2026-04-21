@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static frontend files (parent directory)
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '..'), { index: false }));
 
 // ===== ROUTES =====
 app.use('/api/auth', require('./routes/auth'));
