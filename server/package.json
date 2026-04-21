@@ -4,7 +4,7 @@
   "description": "TALEX - Skill-Based Learning & Hiring Platform API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node seed.js && node server.js",
     "dev": "node server.js",
     "seed": "node seed.js"
   },
