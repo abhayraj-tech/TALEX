@@ -1,7 +1,7 @@
 // ===== TALEX Frontend — API Integration =====
-const API_BASE = window.location.origin.includes('file:') || window.location.origin === 'null' 
-  ? 'http://localhost:5000/api' 
-  : window.location.origin + '/api';
+const isLocalhost = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1');
+const isFile = window.location.origin.includes('file:') || window.location.origin === 'null';
+const API_BASE = (isLocalhost || isFile) ? 'http://localhost:5000/api' : window.location.origin + '/api';
 let authToken = localStorage.getItem('talex_token');
 let currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
 
