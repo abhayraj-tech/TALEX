@@ -176,7 +176,7 @@ function renderCourses(coursesData) {
   grid.innerHTML = coursesData.map(course => {
     const isEnrolled = currentUser && currentUser.enrolledCourses?.includes(course._id);
     return `
-    <div class="course-card reveal visible" data-category="${course.category}" data-id="${course._id}">
+    <div class="course-card reveal visible" data-category="${course.category}" data-id="${course._id}" onclick="navigateTo('/course/${course._id}')" style="cursor: pointer;">
       <div class="course-thumb">
         <img src="${course.thumbnail}" alt="${course.title}">
         <span class="course-tag ${course.tags?.includes('badge') ? 'best' : course.tags?.includes('new') ? 'new' : 'hot'}">
@@ -186,7 +186,7 @@ function renderCourses(coursesData) {
       <div class="course-info">
         <h3>${course.title}</h3>
         <div class="instructor"><span class="dot"></span> ${course.instructorName} · ${course.credits} Credits</div>
-        <button class="btn-enroll ${isEnrolled ? 'enrolled' : ''}" onclick="enrollCourse('${course._id}')" ${isEnrolled ? 'disabled' : ''}>
+        <button class="btn-enroll ${isEnrolled ? 'enrolled' : ''}" onclick="event.stopPropagation(); enrollCourse('${course._id}')" ${isEnrolled ? 'disabled' : ''}>
           ${isEnrolled ? 'Enrolled ✓' : 'Enroll Now'}
         </button>
       </div>
@@ -424,3 +424,152 @@ dynamicStyles.textContent = `
   .btn-enroll.enrolled:hover{transform:none;box-shadow:none}
 `;
 document.head.appendChild(dynamicStyles);
+
+// ===== SPA ROUTING LOGIC =====
+function navigateTo(path) {
+  window.history.pushState({}, '', path);
+  handleRoute();
+}
+
+window.addEventListener('popstate', handleRoute);
+
+async function handleRoute() {
+  const path = window.location.pathname;
+  const landingView = document.getElementById('landing-view');
+  const appView = document.getElementById('app-view');
+  
+  if (!landingView || !appView) return;
+
+  if (path === '/' || path.includes('new.html') || path === '') {
+    appView.style.display = 'none';
+    landingView.style.display = 'block';
+    window.scrollTo(0, 0);
+    return;
+  }
+  
+  landingView.style.display = 'none';
+  appView.style.display = 'block';
+  appView.innerHTML = '<div class="loader"></div><p class="text-center">Loading...</p>';
+  window.scrollTo(0, 0);
+  
+  if (path.startsWith('/courses/')) {
+    const category = path.split('/')[2];
+    await renderCategoryView(category);
+  } else if (path.startsWith('/course/')) {
+    const id = path.split('/')[2];
+    await renderCourseDetailView(id);
+  } else {
+    appView.innerHTML = '<div class="container text-center" style="padding:100px;"><h2>404 - Page Not Found</h2><br><a href="/" onclick="navigateTo(\'/\'); return false;" style="color:#00d4aa;text-decoration:none;">Go back home</a></div>';
+  }
+}
+
+async function renderCategoryView(category) {
+  const appView = document.getElementById('app-view');
+  try {
+    const data = await apiCall(`/courses?category=${category}`);
+    const displayCategory = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    
+    let html = `
+      <div class="container">
+        <div class="category-header">
+          <h1>${displayCategory} Courses</h1>
+          <p class="section-sub">Master new skills with our top-rated creators</p>
+        </div>
+        <div class="course-grid">
+    `;
+    
+    if (data.courses.length === 0) {
+      html += `<div style="grid-column: 1 / -1; text-align: center; padding: 40px;">No courses found in this category yet.</div>`;
+    } else {
+      html += data.courses.map(course => {
+        const isEnrolled = currentUser && currentUser.enrolledCourses?.includes(course._id);
+        return `
+        <div class="course-card reveal visible" data-id="${course._id}" onclick="navigateTo('/course/${course._id}')" style="cursor: pointer;">
+          <div class="course-thumb">
+            <img src="${window.location.origin}/${course.thumbnail}" alt="${course.title}" onerror="this.src='${course.thumbnail}'">
+          </div>
+          <div class="course-info">
+            <h3>${course.title}</h3>
+            <div class="instructor"><span class="dot"></span> ${course.instructorName} · ★ ${course.rating || '4.5'}</div>
+            <button class="btn-enroll ${isEnrolled ? 'enrolled' : ''}" onclick="event.stopPropagation(); enrollCourse('${course._id}')" ${isEnrolled ? 'disabled' : ''}>
+              ${isEnrolled ? 'Enrolled ✓' : 'Enroll Now'}
+            </button>
+          </div>
+        </div>
+        `;
+      }).join('');
+    }
+    
+    html += `</div></div>`;
+    appView.innerHTML = html;
+  } catch (err) {
+    appView.innerHTML = `<div class="container text-center text-red">Failed to load courses. Please try again.</div>`;
+  }
+}
+
+async function renderCourseDetailView(id) {
+  const appView = document.getElementById('app-view');
+  try {
+    const data = await apiCall(`/courses/${id}`);
+    const course = data.course;
+    if (!course) throw new Error('Course not found');
+    
+    const isEnrolled = currentUser && currentUser.enrolledCourses?.includes(course._id);
+    const skillsHtml = (course.skills || []).map(skill => `<span class="skill-badge">${skill}</span>`).join('');
+    
+    appView.innerHTML = `
+      <div class="container">
+        <div class="course-detail-hero">
+          <button onclick="navigateTo('/courses/web-development')" style="background:none; border:none; color:var(--text-muted); cursor:pointer; margin-bottom: 20px;">← Back to Category</button>
+          <div class="course-video-wrapper">
+            <video src="${course.videoUrl || 'https://www.w3schools.com/html/mov_bbb.mp4'}" controls poster="${window.location.origin}/${course.thumbnail}" onerror="this.poster='${course.thumbnail}'"></video>
+          </div>
+          <div class="course-meta-header">
+            <div>
+              <h1>${course.title}</h1>
+              <div class="course-stats">
+                <span>👤 ${course.instructor?.name || 'TALEX Creator'}</span>
+                <span>⏱ ${course.duration || 'Flexible'}</span>
+                <span>★ ${course.rating || '4.8'} Rating</span>
+              </div>
+              <div class="skills-container">${skillsHtml}</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="course-body">
+          <div class="course-description">
+            <h3>Course Overview</h3>
+            <p>${course.description}</p>
+            <h3>What you will learn</h3>
+            <ul>
+              ${(course.skills || []).map(s => `<li style="margin-bottom: 10px; color: var(--text-secondary);">✓ Master ${s} fundamentals</li>`).join('')}
+              <li style="margin-bottom: 10px; color: var(--text-secondary);">✓ Build real-world portfolio projects</li>
+              <li style="margin-bottom: 10px; color: var(--text-secondary);">✓ Earn a verified TALEX skill badge</li>
+            </ul>
+          </div>
+          
+          <div class="course-sidebar">
+            <div class="enroll-panel">
+              <h3>Enrollment</h3>
+              <div class="enroll-price">${course.credits} ⚡</div>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Access to all video modules, project files, and community discord.</p>
+              <button class="btn-enroll ${isEnrolled ? 'enrolled' : ''}" onclick="enrollCourse('${course._id}')" ${isEnrolled ? 'disabled' : ''} id="detailEnrollBtn">
+                ${isEnrolled ? 'Enrolled ✓' : 'Enroll Now'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    appView.innerHTML = `<div class="container text-center text-red">Failed to load course details.</div>`;
+  }
+}
+
+// Ensure handleRoute runs if someone loads a direct link to a subpage
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname !== '/' && !window.location.pathname.includes('new.html')) {
+    handleRoute();
+  }
+});
