@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TALEX — Learn. Earn. Prove. Get Hired.</title>
+  <meta name="description" content="TALEX is a next-generation skill-based learning and hiring platform. Build real-world skills, earn credits, showcase verified badges, and get hired based on actual performance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Category cards: image + dark overlay ── */
+    .cat-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 60%, transparent 100%);
+      z-index: 1;
+      border-radius: inherit;
+    }
+    .cat-card span {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      z-index: 2;
+      color: #fff !important;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      font-weight: 700;
+    }
+
+    /* ── Course thumbnails: fill container ── */
+    .course-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: inherit;
+    }
+
+    /* ── Hero card images ── */
+    .hero-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+
+    /* ── Feed card images ── */
+    .feed-card-img {
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="#" class="nav-logo">TALEX</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#categories">Explore</a>
+      <a href="#courses">Courses</a>
+      <a href="#instructors">Creators</a>
+      <a href="#faq">FAQ</a>
+      <a href="#" class="nav-cta">Get Started Free</a>
+    </div>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-shapes">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge"><span></span> The Future of Skill-Based Hiring</div>
+      <h1>Learn. Earn. Prove Your Skills. Get Hired.</h1>
+      <p>TALEX connects learning, earning, and hiring into one ecosystem. Build real-world skills, earn credits, collect verified badges, and get discovered by top companies — all in one platform.</p>
+      <form class="hero-form" onsubmit="return false">
+        <input type="email" placeholder="Email address" id="heroEmail" required>
+        <input type="password" placeholder="Create a password" id="heroPass" required>
+        <button type="submit">Start Your Journey →</button>
+      </form>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="hero-card"><img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80" alt="UI/UX Design Course"></div>
+        <div class="hero-card"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80" alt="Data Science Course"></div>
+        <div class="hero-card"><img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=400&q=80" alt="AI & ML Course"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATEGORIES MARQUEE ===== -->
+<section class="categories" id="categories">
+  <div class="container">
+    <h2 class="reveal">Explore Skill Tracks</h2>
+  </div>
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
+      <!-- Set 1 -->
+      <div class="cat-card" data-cat="ui" style="background-image:url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&q=75');background-size:cover;background-position:center"><span>UI/UX Design</span></div>
+      <div class="cat-card" data-cat="photo" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&q=75');background-size:cover;background-position:center"><span>Data Science</span></div>
+      <div class="cat-card" data-cat="art" style="background-image:url('https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=300&q=75');background-size:cover;background-position:center"><span>Web Development</span></div>
+      <div class="cat-card" data-cat="market" style="background-image:url('https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&q=75');background-size:cover;background-position:center"><span>Digital Marketing</span></div>
+      <div class="cat-card" data-cat="prod" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=300&q=75');background-size:cover;background-position:center"><span>AI & Machine Learning</span></div>
+      <div class="cat-card" data-cat="music" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=75');background-size:cover;background-position:center"><span>Cloud Computing</span></div>
+      <div class="cat-card" data-cat="film" style="background-image:url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=300&q=75');background-size:cover;background-position:center"><span>Cybersecurity</span></div>
+      <div class="cat-card" data-cat="write" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=300&q=75');background-size:cover;background-position:center"><span>Content Creation</span></div>
+      <!-- Set 2 (duplicate for seamless loop) -->
+      <div class="cat-card" data-cat="ui" style="background-image:url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&q=75');background-size:cover;background-position:center"><span>UI/UX Design</span></div>
+      <div class="cat-card" data-cat="photo" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&q=75');background-size:cover;background-position:center"><span>Data Science</span></div>
+      <div class="cat-card" data-cat="art" style="background-image:url('https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=300&q=75');background-size:cover;background-position:center"><span>Web Development</span></div>
+      <div class="cat-card" data-cat="market" style="background-image:url('https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&q=75');background-size:cover;background-position:center"><span>Digital Marketing</span></div>
+      <div class="cat-card" data-cat="prod" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=300&q=75');background-size:cover;background-position:center"><span>AI & Machine Learning</span></div>
+      <div class="cat-card" data-cat="music" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=75');background-size:cover;background-position:center"><span>Cloud Computing</span></div>
+      <div class="cat-card" data-cat="film" style="background-image:url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=300&q=75');background-size:cover;background-position:center"><span>Cybersecurity</span></div>
+      <div class="cat-card" data-cat="write" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=300&q=75');background-size:cover;background-position:center"><span>Content Creation</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-text reveal">
+      <h2>The Complete Skill Economy</h2>
+      <p>TALEX isn't just a learning platform — it's an entire ecosystem where you learn, earn, prove, and get hired.</p>
+      <div class="feature-item">
+        <div class="feature-icon green">💰</div>
+        <div>
+          <h4>Credit-Based Reward System</h4>
+          <p>Earn credits through learning, engagement, and content creation. Use them to unlock premium courses and exclusive opportunities.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon purple">🏅</div>
+        <div>
+          <h4>Verified Skill Badges</h4>
+          <p>Prove your abilities with verified badges backed by ratings and reviews. Build trust and showcase real competence — not just credentials.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon blue">🤖</div>
+        <div>
+          <h4>AI-Powered Hiring Assistant</h4>
+          <p>Companies use our AI to find and hire candidates based on actual skills, projects, and performance — moving beyond traditional resumes.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon pink">🚀</div>
+        <div>
+          <h4>Become a Creator</h4>
+          <p>Share your knowledge, create courses, and earn credits while helping others grow. Students can become teachers in the TALEX ecosystem.</p>
+        </div>
+      </div>
+    </div>
+    <div class="features-visual reveal">
+      <div class="features-graphic">
+        <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+          <circle cx="90" cy="90" r="80" stroke="url(#grad1)" stroke-width="2" stroke-dasharray="8 6" opacity=".5"/>
+          <circle cx="90" cy="90" r="55" stroke="url(#grad2)" stroke-width="2" stroke-dasharray="4 4" opacity=".4"/>
+          <circle cx="90" cy="90" r="30" fill="url(#grad3)" opacity=".2"/>
+          <text x="90" y="96" text-anchor="middle" fill="#00d4aa" font-size="36">⚡</text>
+          <defs>
+            <linearGradient id="grad1"><stop stop-color="#00d4aa"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+            <linearGradient id="grad2"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#ec4899"/></linearGradient>
+            <radialGradient id="grad3"><stop stop-color="#00d4aa" stop-opacity=".5"/><stop offset="1" stop-color="transparent"/></radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats" id="stats">
+  <div class="container">
+    <div class="stat-card reveal">
+      <div class="stat-num" data-target="15" data-suffix="+">0</div>
+      <div class="stat-label">Expert Creators</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-num" data-target="30" data-suffix="+">0</div>
+      <div class="stat-label">Skill Courses</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-num" data-target="100" data-suffix="+">0</div>
+      <div class="stat-label">Active Learners</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-num" data-target="4.8" data-suffix="★">0</div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COURSES ===== -->
+<section class="courses" id="courses">
+  <div class="container">
+    <h2 class="reveal">Explore Skill-Building Courses</h2>
+    <p class="section-sub reveal">Earn credits, collect badges, and build a portfolio that gets you hired</p>
+
+    <div class="filter-tabs reveal">
+      <button class="filter-tab active" data-filter="all">Trending</button>
+      <button class="filter-tab" data-filter="design">Design</button>
+      <button class="filter-tab" data-filter="writing">Development</button>
+      <button class="filter-tab" data-filter="photo">Data & AI</button>
+      <button class="filter-tab" data-filter="marketing">Marketing</button>
+    </div>
+
+    <div class="course-grid">
+      <div class="course-card reveal" data-category="design">
+        <div class="course-thumb">
+          <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&q=80" alt="Modern UI/UX Design Masterclass">
+          <span class="course-tag best">🏅 Badge</span>
+        </div>
+        <div class="course-info">
+          <h3>Modern UI/UX Design Masterclass</h3>
+          <div class="instructor"><span class="dot"></span> Sarah Chen · 50 Credits</div>
+        </div>
+      </div>
+
+      <div class="course-card reveal" data-category="photo">
+        <div class="course-thumb">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Data Science with Python">
+          <span class="course-tag new">New</span>
+        </div>
+        <div class="course-info">
+          <h3>Data Science with Python</h3>
+          <div class="instructor"><span class="dot"></span> James Rivera · 75 Credits</div>
+        </div>
+      </div>
+
+      <div class="course-card reveal" data-category="design">
+        <div class="course-thumb">
+          <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&q=80" alt="Digital Art & Illustration">
+          <span class="course-tag hot">Hot</span>
+        </div>
+        <div class="course-info">
+          <h3>Digital Art & Illustration Fundamentals</h3>
+          <div class="instructor"><span class="dot"></span> Maya Patel · 40 Credits</div>
+        </div>
+      </div>
+
+      <div class="course-card reveal" data-category="marketing">
+        <div class="course-thumb">
+          <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500&q=80" alt="Social Media Marketing Pro">
+          <span class="course-tag best">🏅 Badge</span>
+        </div>
+        <div class="course-info">
+          <h3>Social Media Marketing Pro</h3>
+          <div class="instructor"><span class="dot"></span> Alex Thompson · 60 Credits</div>
+        </div>
+      </div>
+
+      <div class="course-card reveal" data-category="writing">
+        <div class="course-thumb">
+          <img src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=500&q=80" alt="Full-Stack Web Development">
+          <span class="course-tag new">New</span>
+        </div>
+        <div class="course-info">
+          <h3>Full-Stack Web Development</h3>
+          <div class="instructor"><span class="dot"></span> Olivia Hart · 80 Credits</div>
+        </div>
+      </div>
+
+      <div class="course-card reveal" data-category="design">
+        <div class="course-thumb">
+          <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=500&q=80" alt="Brand Identity Design">
+          <span class="course-tag hot">Hot</span>
+        </div>
+        <div class="course-info">
+          <h3>Brand Identity Design from Scratch</h3>
+          <div class="instructor"><span class="dot"></span> David Kim · 55 Credits</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ECOSYSTEM FEED (Creative Feed Rebrand) ===== -->
+<section class="creative-feed" id="feed">
+  <div class="container">
+    <h2 class="reveal">The TALEX Ecosystem</h2>
+    <p class="section-sub reveal">Four pillars that power your journey from learner to professional</p>
+
+    <div class="feed-grid">
+      <div class="feed-card reveal">
+        <div class="feed-card-img" style="background:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80') center/cover no-repeat"></div>
+        <div class="feed-card-body">
+          <h3>📚 Learn & Grow</h3>
+          <p>Access curated skill tracks and hands-on projects designed by industry experts. Build real-world competence, not just theoretical knowledge.</p>
+        </div>
+      </div>
+      <div class="feed-card reveal">
+        <div class="feed-card-img" style="background:url('https://images.unsplash.com/photo-1559526324-593bc073d938?w=600&q=80') center/cover no-repeat"></div>
+        <div class="feed-card-body">
+          <h3>💰 Earn Credits</h3>
+          <p>Get rewarded for learning, engaging, and creating content. Use credits to unlock premium courses, features, and exclusive opportunities.</p>
+        </div>
+      </div>
+      <div class="feed-card reveal">
+        <div class="feed-card-img" style="background:url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80') center/cover no-repeat"></div>
+        <div class="feed-card-body">
+          <h3>🏅 Prove & Get Hired</h3>
+          <p>Collect verified skill badges backed by real performance. Let our AI hiring assistant match you with companies looking for exactly your skillset.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CREATORS (Instructors Rebrand) ===== -->
+<section class="instructors" id="instructors">
+  <div class="container">
+    <h2 class="reveal">Meet Our Top Creators</h2>
+    <p class="section-sub reveal">Industry experts and community leaders sharing knowledge and earning on TALEX</p>
+
+    <div class="instructor-grid">
+      <div class="instructor-card reveal">
+        <div class="instructor-avatar" style="background:linear-gradient(135deg,#00d4aa,#00b894)">SC</div>
+        <h4>Sarah Chen</h4>
+        <p>UI/UX Design Lead</p>
+      </div>
+      <div class="instructor-card reveal">
+        <div class="instructor-avatar" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">JR</div>
+        <h4>James Rivera</h4>
+        <p>Data Science Expert</p>
+      </div>
+      <div class="instructor-card reveal">
+        <div class="instructor-avatar" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">MP</div>
+        <h4>Maya Patel</h4>
+        <p>Digital Artist</p>
+      </div>
+      <div class="instructor-card reveal">
+        <div class="instructor-avatar" style="background:linear-gradient(135deg,#ec4899,#db2777)">AT</div>
+        <h4>Alex Thompson</h4>
+        <p>Marketing Strategist</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="reveal">What Our Community Says</h2>
+
+    <div class="testimonial-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"TALEX changed the game for me. I earned badges, built a real portfolio, and got hired within 3 months — no traditional resume needed."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#00d4aa,#00b894)">EJ</div>
+          <div>
+            <h5>Emma Johnson</h5>
+            <span>Hired as UX Designer</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The credit system is genius — I earned while learning and used credits to unlock advanced courses. Then the AI matched me with my dream company."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">MC</div>
+          <div>
+            <h5>Marcus Cole</h5>
+            <span>Data Analyst at TechCorp</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"As a creator on TALEX, I teach what I know and earn credits doing it. The verified badge system ensures only quality content thrives. Love this platform!"</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">AP</div>
+          <div>
+            <h5>Aisha Patel</h5>
+            <span>TALEX Creator · 12 Courses</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TALEX FOR BUSINESS (Teams Rebrand) ===== -->
+<section class="teams" id="teams">
+  <div class="container">
+    <div class="teams-text reveal">
+      <h2>TALEX for Business</h2>
+      <p>Stop hiring based on resumes. Use TALEX's AI-powered hiring assistant to find candidates with verified skills, real project experience, and proven performance. Upskill your existing team with unlimited access to expert-led courses and track their growth with our badge and credit system.</p>
+      <a href="#" class="btn-team">Explore Business Solutions →</a>
+    </div>
+    <div class="teams-visual reveal" style="background:url('https://images.unsplash.com/photo-1553877522-43269d4ea984?w=700&q=80') center/cover no-repeat; border-radius:16px; min-height:320px; position:relative; overflow:hidden;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0.35),rgba(6,182,212,0.25));border-radius:16px;"></div>
+      <div style="position:absolute;bottom:1.5rem;left:1.5rem;color:#fff;font-weight:700;font-size:1.1rem;text-shadow:0 2px 8px rgba(0,0,0,0.5);">AI-Powered Hiring · Verified Skills · Real Results</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="container">
+    <h2 class="reveal">Frequently Asked Questions</h2>
+
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q">What is TALEX? <span class="icon">+</span></div>
+        <div class="faq-a"><p>TALEX is a next-generation skill-based learning and hiring platform. It connects learning, earning, and hiring into one ecosystem — allowing you to build real-world skills, earn credits, collect verified badges, and get hired based on actual performance rather than traditional resumes.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How does the credit system work? <span class="icon">+</span></div>
+        <div class="faq-a"><p>You earn credits by completing courses, engaging with the community, and creating content. These credits can be used to unlock premium courses, access exclusive features, and boost your profile visibility to potential employers. It's a self-sustaining skill economy.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What are verified skill badges? <span class="icon">+</span></div>
+        <div class="faq-a"><p>Verified badges are proof-of-skill certifications backed by ratings, reviews, and project assessments. Unlike traditional certificates, badges on TALEX represent demonstrated ability — validated by both peers and industry experts. They ensure trust and transparency for employers.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How does AI-powered hiring work? <span class="icon">+</span></div>
+        <div class="faq-a"><p>Our AI hiring assistant analyzes candidates' verified badges, completed projects, skill ratings, and performance data to match them with the right opportunities. Companies get access to pre-vetted talent based on real skills — not just keywords on a resume.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I become a creator on TALEX? <span class="icon">+</span></div>
+        <div class="faq-a"><p>Absolutely! TALEX empowers students to become creators. Share your knowledge by building courses, earn credits for your content, and grow within the ecosystem. Apply through our creator program and start teaching what you know.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">TALEX</a>
+        <p>The complete skill economy — where you learn, earn, prove your abilities, and get hired. Beyond resumes, beyond traditional learning.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Twitter">𝕏</a>
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="YouTube">▶</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Skill Tracks</h4>
+        <a href="#">UI/UX Design</a>
+        <a href="#">Web Development</a>
+        <a href="#">Data Science</a>
+        <a href="#">Digital Marketing</a>
+        <a href="#">AI & ML</a>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#">About TALEX</a>
+        <a href="#">Become a Creator</a>
+        <a href="#">For Business</a>
+        <a href="#">Badge System</a>
+        <a href="#">Credit Economy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 TALEX. All rights reserved. Learn. Earn. Prove. Get Hired. 🚀</p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+// TALEX shared client logic — localStorage backed.
+(function () {
+  const KEY_USER = 'talex.user';
+  const KEY_ENROLL = 'talex.enrolled';
+  const KEY_BADGES = 'talex.badges';
+
+  function read(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (e) { return fallback; }
+  }
+  function write(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+  const TALEX = {
+    // ---- Auth ----
+    signup({ name, email, password }) {
+      const user = { name, email, password, credits: 120, joinedAt: Date.now() };
+      write(KEY_USER, user);
+      write(KEY_ENROLL, []);
+      write(KEY_BADGES, ['beginner']);
+      return user;
+    },
+    login({ email, password }) {
+      const u = read(KEY_USER, null);
+      if (!u) return false;
+      // Loose match — prototype: accept stored email or new account
+      if (u.email !== email || u.password !== password) return false;
+      return true;
+    },
+    logout() {
+      localStorage.removeItem(KEY_USER);
+      localStorage.removeItem(KEY_ENROLL);
+      localStorage.removeItem(KEY_BADGES);
+    },
+    currentUser() { return read(KEY_USER, null); },
+
+    // ---- Credits ----
+    getCredits() {
+      const u = read(KEY_USER, null); return u ? u.credits : 0;
+    },
+    setCredits(n) {
+      const u = read(KEY_USER, null);
+      if (!u) return;
+      u.credits = Math.max(0, Math.floor(n));
+      write(KEY_USER, u);
+    },
+
+    // ---- Enrollment ----
+    enrolled() { return read(KEY_ENROLL, []); },
+    isEnrolled(courseId) { return this.enrolled().some(c => c.id === courseId); },
+    unlockCourse(course) {
+      const u = this.currentUser();
+      if (!u) return { ok: false, reason: 'login' };
+      if (this.isEnrolled(course.id)) return { ok: false, reason: 'already' };
+      if (u.credits < course.cost) return { ok: false, reason: 'insufficient' };
+      this.setCredits(u.credits - course.cost);
+      const list = this.enrolled();
+      list.push({ id: course.id, title: course.title, tutor: course.tutor, cost: course.cost, at: Date.now() });
+      write(KEY_ENROLL, list);
+      this._maybeAwardBadges();
+      return { ok: true };
+    },
+
+    // ---- Badges ----
+    badges() { return read(KEY_BADGES, ['beginner']); },
+    hasBadge(b) { return this.badges().includes(b); },
+    _maybeAwardBadges() {
+      const list = this.badges();
+      const enrolled = this.enrolled().length;
+      if (enrolled >= 2 && !list.includes('pro')) list.push('pro');
+      if (enrolled >= 4 && !list.includes('expert')) list.push('expert');
+      write(KEY_BADGES, list);
+    },
+
+    // ---- Page guard / nav rendering ----
+    requireAuth() {
+      if (!this.currentUser()) { window.location.href = './'; }
+    },
+
+    renderNav(activeKey) {
+      const u = this.currentUser();
+      const initial = (u?.name || '?').trim().charAt(0).toUpperCase();
+      const credits = this.getCredits();
+      const links = u ? [
+        { k:'home', label:'Home', href:'./home.html' },
+        { k:'dashboard', label:'Dashboard', href:'./dashboard.html' },
+        { k:'hiring', label:'AI Hiring', href:'./hiring.html' },
+      ] : [];
+      const linksHtml = links.map(l =>
+        `<a class="nav-link ${activeKey===l.k?'is-active':''}" href="${l.href}">${l.label}</a>`
+      ).join('');
+      const rightHtml = u
+        ? `
+          <span class="credits-pill" title="Your credits">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+            <span id="creditCount">${credits}</span> credits
+          </span>
+          <button class="profile-btn" id="profileBtn" title="${u.name || ''}">${initial}</button>
+          <button class="btn btn-ghost" id="logoutBtn">Log out</button>
+        `
+        : `
+          <a href="./" class="btn btn-ghost">Log in</a>
+          <a href="./#signup" class="btn btn-primary" id="navSignupBtn">Get started free</a>
+        `;
+
+      const cats = TALEX.data.exploreCategories;
+      const trending = TALEX.data.trending;
+      const catsHtml = cats.map(c => `
+        <a class="ex-cat" href="./home.html#courses?cat=${c.key}">
+          <span class="ex-cat-icon" style="background:${c.bg}">${c.emoji}</span>
+          <span class="ex-cat-text">
+            <strong>${c.name}</strong>
+            <span class="ex-cat-sub">${c.classes}</span>
+          </span>
+        </a>
+      `).join('');
+      const trendHtml = trending.map(t => `
+        <a class="ex-trend" href="./home.html#courses">
+          <span class="ex-trend-rank">${t.rank}</span>
+          <span class="ex-trend-text">
+            <strong>${t.title}</strong>
+            <span class="ex-cat-sub">${t.tag}</span>
+          </span>
+        </a>
+      `).join('');
+
+      return `
+        <nav class="nav">
+          <div class="nav-inner">
+            <a href="./home.html" class="brand">
+              <span class="brand-mark">T</span><span class="brand-name">TALEX</span>
+            </a>
+            <div class="nav-links">
+              <button class="nav-link nav-explore-btn" id="exploreBtn" aria-haspopup="true" aria-expanded="false">
+                Explore <span class="nav-caret">▾</span>
+              </button>
+              ${linksHtml}
+            </div>
+            <div class="nav-spacer"></div>
+            <div class="explore-panel" id="explorePanel" hidden>
+              <div class="ex-section">
+                <div class="ex-head">
+                  <h4>Browse top categories</h4>
+                  <p>Explore creative and professional skills across every discipline.</p>
+                </div>
+                <div class="ex-cat-grid">${catsHtml}</div>
+                <a href="./home.html#courses" class="ex-see-all">See all categories →</a>
+              </div>
+              <div class="ex-section ex-section-side">
+                <div class="ex-head"><h4>Trending now</h4></div>
+                <div class="ex-trend-list">${trendHtml}</div>
+              </div>
+            </div>
+            ${rightHtml}
+          </div>
+        </nav>
+      `;
+    },
+
+    mountNav(activeKey) {
+      const slot = document.getElementById('navSlot');
+      if (!slot) return;
+      slot.innerHTML = this.renderNav(activeKey);
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.addEventListener('click', () => {
+        this.logout();
+        window.location.href = './';
+      });
+      const profileBtn = document.getElementById('profileBtn');
+      if (profileBtn) profileBtn.addEventListener('click', () => {
+        window.location.href = './dashboard.html';
+      });
+
+      // Explore dropdown toggle
+      const exBtn = document.getElementById('exploreBtn');
+      const exPanel = document.getElementById('explorePanel');
+      if (exBtn && exPanel) {
+        const closePanel = () => { exPanel.hidden = true; exBtn.setAttribute('aria-expanded','false'); exBtn.classList.remove('is-active'); };
+        const openPanel  = () => { exPanel.hidden = false; exBtn.setAttribute('aria-expanded','true'); exBtn.classList.add('is-active'); };
+        exBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (exPanel.hidden) openPanel(); else closePanel();
+        });
+        document.addEventListener('click', (e) => {
+          if (!exPanel.hidden && !exPanel.contains(e.target) && e.target !== exBtn) closePanel();
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
+      }
+    },
+
+    refreshCredits() {
+      const el = document.getElementById('creditCount');
+      if (el) el.textContent = this.getCredits();
+    },
+
+    // ---- Toast ----
+    toast(message, type='success') {
+      let el = document.querySelector('.toast');
+      if (!el) {
+        el = document.createElement('div');
+        el.className = 'toast';
+        document.body.appendChild(el);
+      }
+      el.className = 'toast ' + (type||'') + ' show';
+      el.textContent = message;
+      clearTimeout(this._toastT);
+      this._toastT = setTimeout(() => { el.classList.remove('show'); }, 2400);
+    },
+  };
+
+  // ---- Demo data ----
+  TALEX.data = {
+    exploreCategories: [
+      { key:'ai',       name:'AI & ML',         classes:'3,200+ classes', emoji:'🤖', bg:'linear-gradient(135deg,#5b6cff,#8b5cf6)' },
+      { key:'web',      name:'Web Development', classes:'2,800+ classes', emoji:'💻', bg:'linear-gradient(135deg,#0ea5e9,#5b6cff)' },
+      { key:'design',   name:'UI/UX Design',    classes:'1,700+ classes', emoji:'🎨', bg:'linear-gradient(135deg,#ec4899,#7c3aed)' },
+      { key:'graphic',  name:'Graphic Design',  classes:'4,100+ classes', emoji:'🖌️', bg:'linear-gradient(135deg,#f59e0b,#ec4899)' },
+      { key:'film',     name:'Film & Video',    classes:'1,900+ classes', emoji:'🎬', bg:'linear-gradient(135deg,#10b981,#0ea5e9)' },
+      { key:'photo',    name:'Photography',     classes:'2,800+ classes', emoji:'📷', bg:'linear-gradient(135deg,#8b5cf6,#ec4899)' },
+      { key:'audio',    name:'Music & Audio',   classes:'1,400+ classes', emoji:'🎵', bg:'linear-gradient(135deg,#5b6cff,#0ea5e9)' },
+      { key:'marketing',name:'Marketing',       classes:'1,800+ classes', emoji:'📈', bg:'linear-gradient(135deg,#ec4899,#f59e0b)' },
+      { key:'writing',  name:'Writing',         classes:'2,100+ classes', emoji:'✍️', bg:'linear-gradient(135deg,#f59e0b,#10b981)' },
+    ],
+    trending: [
+      { rank:'01', title:'Modern Deep Learning',   tag:'AI · 12.4k learners' },
+      { rank:'02', title:'React from Scratch',     tag:'Web · 9.1k learners' },
+      { rank:'03', title:'UX Foundations',         tag:'Design · 8.7k learners' },
+      { rank:'04', title:'LLM App Engineering',    tag:'AI · 6.5k learners' },
+      { rank:'05', title:'Brand Identity Workshop',tag:'Design · 4.2k learners' },
+    ],
+    categories: [
+      { key:'ai',  name:'AI & Machine Learning', desc:'Build intelligent apps with modern ML.', tag:'AI' },
+      { key:'web', name:'Web Development', desc:'Master React, Node, and full-stack craft.', tag:'WD' },
+      { key:'des', name:'Design', desc:'UI, UX and product design fundamentals.', tag:'D' },
+    ],
+    tutors: [
+      { id:'t1', name:'Maya Chen',    role:'Senior AI Engineer', rating:4.9, badges:['expert','pro'] },
+      { id:'t2', name:'Jordan Reeves', role:'Full-stack Architect', rating:4.8, badges:['pro'] },
+      { id:'t3', name:'Sana Patel',    role:'Product Designer', rating:4.7, badges:['pro','beginner'] },
+    ],
+    courses: [
+      { id:'c1', title:'Modern Deep Learning', tutor:'Maya Chen',    cost:150, cat:'AI',     thumb:'' },
+      { id:'c2', title:'React from Scratch',   tutor:'Jordan Reeves', cost:75,  cat:'Web',    thumb:'alt-2' },
+      { id:'c3', title:'UX Foundations',       tutor:'Sana Patel',    cost:100, cat:'Design', thumb:'alt-1' },
+      { id:'c4', title:'LLM App Engineering',  tutor:'Maya Chen',    cost:150, cat:'AI',     thumb:'alt-3' },
+    ],
+    shorts: [
+      { id:'s1', title:'Prompt patterns that work', dur:'0:48', views:'12.4k', alt:'' },
+      { id:'s2', title:'CSS grid in 60 seconds',    dur:'1:02', views:'9.1k', alt:'alt-1' },
+      { id:'s3', title:'Color theory crash course', dur:'0:55', views:'6.7k', alt:'alt-2' },
+      { id:'s4', title:'Fine-tuning vs prompting',  dur:'1:14', views:'18.0k', alt:'alt-3' },
+      { id:'s5', title:'5 React patterns I love',   dur:'0:44', views:'4.2k', alt:'alt-4' },
+    ],
+    candidates: [
+      { name:'Ada Lovelace', role:'Frontend engineer', match:96, badges:['expert','pro'], top:true  },
+      { name:'Rohan Mehta',  role:'AI engineer',       match:91, badges:['pro']       },
+      { name:'Lina Park',    role:'Designer/dev',      match:87, badges:['pro','beginner'] },
+      { name:'Yuki Tanaka',  role:'Full-stack dev',    match:82, badges:['beginner'] },
+      { name:'Sam Cohen',    role:'ML engineer',       match:78, badges:['beginner'] },
+    ],
+    job: {
+      title:'Senior Frontend Engineer — AI Tools',
+      company:'Lumen Labs',
+      location:'Remote (Global)',
+      salary:'$130k – $170k · Equity',
+    }
+  };
+
+  window.TALEX = TALEX;
+})();

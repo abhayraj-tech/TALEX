@@ -1,0 +1,431 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;900&family=DM+Sans:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --em: #10B981;
+    --em-dark: #059669;
+    --em-light: #D1FAE5;
+    --ink: #0A0A0A;
+    --muted: #6B7280;
+    --surface: #F9FAFB;
+    --border: rgba(0,0,0,0.08);
+  }
+
+  body, .app { font-family: 'DM Sans', sans-serif; background: #fff; color: var(--ink); max-width: 380px; margin: 0 auto; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+  }
+  .nav-logo { font-family: 'Epilogue', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: -1px; }
+  .nav-logo span { color: var(--em); }
+  .nav-actions { display: flex; gap: 10px; align-items: center; }
+  .nav-link { font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; }
+  .nav-btn { background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 100px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* HERO */
+  .hero { padding: 48px 20px 40px; position: relative; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--em-light); color: var(--em-dark); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; }
+  .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--em); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} }
+  .hero h1 { font-family: 'Epilogue', sans-serif; font-size: 38px; font-weight: 900; line-height: 1.05; letter-spacing: -1.5px; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--em); }
+  .hero p { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+  .hero-ctas { display: flex; gap: 10px; align-items: center; }
+  .btn-primary { background: var(--em); color: #fff; font-size: 14px; font-weight: 600; padding: 14px 24px; border-radius: 100px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .btn-ghost { font-size: 14px; font-weight: 500; color: var(--ink); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .play-icon { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; }
+  .hero-visual { margin: 32px 0 0; position: relative; }
+  .hero-image-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 8px; }
+  .hero-img { border-radius: 16px; overflow: hidden; }
+  .hero-img.big { height: 200px; }
+  .hero-img.sm { height: 95px; }
+  .img-fill { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .hero-stat { position: absolute; bottom: 12px; left: 12px; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); display: flex; align-items: center; gap: 10px; }
+  .stat-num { font-family: 'Epilogue', sans-serif; font-weight: 900; font-size: 20px; }
+  .stat-label { font-size: 11px; color: var(--muted); }
+  .avatars { display: flex; }
+  .av { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; margin-left: -6px; overflow: hidden; }
+  .av:first-child { margin-left: 0; }
+  .av-fill { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+
+  /* LOGOS */
+  .logos { padding: 24px 20px; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+  .logos p { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 14px; text-align: center; }
+  .logo-row { display: flex; gap: 0; justify-content: space-between; align-items: center; }
+  .logo-item { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: 13px; color: #C9C9C9; letter-spacing: -0.5px; }
+
+  /* CATEGORIES */
+  .section { padding: 36px 0 0; }
+  .section-header { padding: 0 20px 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .section-title { font-family: 'Epilogue', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.8px; }
+  .section-link { font-size: 12px; color: var(--em); font-weight: 600; cursor: pointer; }
+  .cats-scroll { display: flex; gap: 10px; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
+  .cats-scroll::-webkit-scrollbar { display: none; }
+  .cat-pill { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+  .cat-icon { width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .cat-label { font-size: 11px; font-weight: 600; color: var(--ink); text-align: center; }
+  .cat-active .cat-icon { background: var(--em); }
+  .cat-pill:not(.cat-active) .cat-icon { background: var(--surface); }
+
+  /* BENEFITS */
+  .benefits { padding: 36px 20px 0; }
+  .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .benefit-card { background: var(--surface); border-radius: 14px; padding: 16px; }
+  .benefit-icon { font-size: 22px; margin-bottom: 8px; }
+  .benefit-title { font-family: 'Epilogue', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .benefit-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* TRENDING */
+  .cards-list { padding: 0 20px; display: flex; flex-direction: column; gap: 16px; }
+  .class-card { background: #fff; border-radius: 18px; overflow: hidden; border: 0.5px solid var(--border); transition: transform 0.2s; cursor: pointer; }
+  .class-card:active { transform: scale(0.98); }
+  .card-thumb { height: 160px; width: 100%; position: relative; }
+  .card-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: #fff; font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 100px; backdrop-filter: blur(4px); }
+  .card-heart { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
+  .card-body { padding: 14px 16px 16px; }
+  .card-tag { font-size: 10px; font-weight: 700; color: var(--em); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .card-title { font-family: 'Epilogue', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; line-height: 1.3; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; }
+  .card-instructor { display: flex; align-items: center; gap: 8px; }
+  .card-av { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; }
+  .card-av-fill { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+  .instr-name { font-size: 12px; font-weight: 500; color: var(--muted); }
+  .card-stats { display: flex; gap: 10px; align-items: center; }
+  .card-stat { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; }
+  .star { color: #F59E0B; font-size: 11px; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 36px 20px 0; }
+  .testi-card { background: var(--surface); border-radius: 18px; padding: 20px; margin-bottom: 12px; }
+  .testi-stars { color: #F59E0B; font-size: 13px; margin-bottom: 12px; }
+  .testi-quote { font-size: 14px; line-height: 1.6; margin-bottom: 16px; font-style: italic; color: #374151; }
+  .testi-person { display: flex; align-items: center; gap: 10px; }
+  .testi-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+  .testi-name { font-weight: 600; font-size: 13px; }
+  .testi-role { font-size: 11px; color: var(--muted); }
+
+  /* FAQ */
+  .faq { padding: 36px 20px 48px; }
+  .faq-item { border-bottom: 0.5px solid var(--border); }
+  .faq-q { padding: 16px 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 14px; font-weight: 600; font-family: 'Epilogue', sans-serif; }
+  .faq-icon { font-size: 18px; color: var(--em); transition: transform 0.25s; font-weight: 400; }
+  .faq-icon.open { transform: rotate(45deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .faq-a.open { max-height: 200px; padding-bottom: 16px; }
+
+  /* CTA BANNER */
+  .cta-banner { margin: 36px 20px 0; background: var(--ink); border-radius: 22px; padding: 32px 24px; text-align: center; }
+  .cta-banner h2 { font-family: 'Epilogue', sans-serif; font-size: 26px; font-weight: 900; color: #fff; letter-spacing: -1px; margin-bottom: 8px; }
+  .cta-banner p { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+  .btn-green { background: var(--em); color: #fff; font-size: 14px; font-weight: 700; padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* FOOTER */
+  footer { padding: 24px 20px; text-align: center; font-size: 11px; color: var(--muted); border-top: 0.5px solid var(--border); margin-top: 36px; }
+  footer strong { color: var(--em); font-weight: 700; }
+
+  /* ANIMATIONS */
+  .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+
+<div class="app">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">tal<span>ex</span></div>
+    <div class="nav-actions">
+      <span class="nav-link">Explore</span>
+      <button class="nav-btn">Sign In</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero fade-up">
+    <div class="hero-tag"><div class="hero-dot"></div>10,000+ classes live</div>
+    <h1>Learn from<br>the <em>best</em><br>creators.</h1>
+    <p>A curated studio of world-class courses in illustration, design, photography, and more.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary">Get Started Free</button>
+      <div class="btn-ghost">
+        <div class="play-icon">▶</div>
+        Watch Reel
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-image-grid">
+        <div class="hero-img big">
+          <div class="img-placeholder" style="background: linear-gradient(135deg,#10B981 0%,#34D399 100%); color:#fff;">🎨</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="hero-img sm"><div class="img-placeholder" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;">📸</div></div>
+          <div class="hero-img sm"><div class="img-placeholder" style="background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;">✏️</div></div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="avatars">
+          <div class="av"><div class="av-fill" style="background:#10B981;">A</div></div>
+          <div class="av"><div class="av-fill" style="background:#6366F1;">B</div></div>
+          <div class="av"><div class="av-fill" style="background:#F59E0B;">C</div></div>
+        </div>
+        <div>
+          <div class="stat-num">48k+</div>
+          <div class="stat-label">Active students</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <div class="logos fade-up">
+    <p>Featured In</p>
+    <div class="logo-row">
+      <span class="logo-item">Forbes</span>
+      <span class="logo-item">Wired</span>
+      <span class="logo-item">Dezeen</span>
+      <span class="logo-item">Monocle</span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section fade-up">
+    <div class="section-header">
+      <span class="section-title">Browse Topics</span>
+      <span class="section-link">See all →</span>
+    </div>
+    <div class="cats-scroll">
+      <div class="cat-pill cat-active">
+        <div class="cat-icon">🖌️</div>
+        <span class="cat-label">Illustration</span>
+      </div>
+      <div class="cat-pill">
+        <div class="cat-icon">💎</div>
+        <span class="cat-label">Design</span>
+      </div>
+      <div class="cat-pill">
+        <div class="cat-icon">📷</div>
+        <span class="cat-label">Photo</span>
+      </div>
+      <div class="cat-pill">
+        <div class="cat-icon">🎬</div>
+        <span class="cat-label">Film</span>
+      </div>
+      <div class="cat-pill">
+        <div class="cat-icon">✍️</div>
+        <span class="cat-label">Writing</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits fade-up">
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🎓</div>
+        <div class="benefit-title">Expert Instructors</div>
+        <div class="benefit-desc">Learn directly from working professionals and industry leaders.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <div class="benefit-title">Learn at Your Pace</div>
+        <div class="benefit-desc">Pause, rewind, and revisit any lesson — forever.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🏆</div>
+        <div class="benefit-title">Earn Certificates</div>
+        <div class="benefit-desc">Showcase your skills with shareable course certificates.</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💬</div>
+        <div class="benefit-title">Live Community</div>
+        <div class="benefit-desc">Connect with 48k+ learners in active project forums.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING CLASSES -->
+  <section class="section fade-up">
+    <div class="section-header">
+      <span class="section-title">Trending Now</span>
+      <span class="section-link">View all →</span>
+    </div>
+    <div class="cards-list">
+
+      <div class="class-card">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#10B981,#059669);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;">🖌️</div>
+          <div class="card-badge">Illustration</div>
+          <div class="card-heart">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">Illustration</div>
+          <div class="card-title">Digital Watercolor: From Brushstroke to Masterpiece</div>
+          <div class="card-meta">
+            <div class="card-instructor">
+              <div class="card-av"><div class="card-av-fill" style="background:#10B981;">SM</div></div>
+              <span class="instr-name">Sofia Marín</span>
+            </div>
+            <div class="card-stats">
+              <span class="card-stat"><span class="star">★</span> 4.9</span>
+              <span class="card-stat">3.2h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;">💎</div>
+          <div class="card-badge">Design</div>
+          <div class="card-heart">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">Design</div>
+          <div class="card-title">Brand Identity Design: Build a Visual Language</div>
+          <div class="card-meta">
+            <div class="card-instructor">
+              <div class="card-av"><div class="card-av-fill" style="background:#6366F1;">KO</div></div>
+              <span class="instr-name">Kenji Ota</span>
+            </div>
+            <div class="card-stats">
+              <span class="card-stat"><span class="star">★</span> 4.8</span>
+              <span class="card-stat">5.1h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#F59E0B,#EF4444);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;">📷</div>
+          <div class="card-badge">Photography</div>
+          <div class="card-heart">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">Photography</div>
+          <div class="card-title">Golden Hour Portraits: Light, Mood & Story</div>
+          <div class="card-meta">
+            <div class="card-instructor">
+              <div class="card-av"><div class="card-av-fill" style="background:#EF4444;">LA</div></div>
+              <span class="instr-name">Lena Adler</span>
+            </div>
+            <div class="card-stats">
+              <span class="card-stat"><span class="star">★</span> 4.7</span>
+              <span class="card-stat">2.8h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials fade-up">
+    <div class="section-header">
+      <span class="section-title">Students Love It</span>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"Talex completely changed how I approach my design work. The courses are curated at a level that no other platform matches."</div>
+      <div class="testi-person">
+        <div class="testi-av" style="background:#10B981;">JL</div>
+        <div>
+          <div class="testi-name">Juno Lee</div>
+          <div class="testi-role">UX Designer, Seoul</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"I landed three freelance clients within a month of finishing Sofia's illustration course. The quality here is exceptional."</div>
+      <div class="testi-person">
+        <div class="testi-av" style="background:#6366F1;">MP</div>
+        <div>
+          <div class="testi-name">Marco Pelosi</div>
+          <div class="testi-role">Freelance Illustrator, Milan</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner fade-up">
+    <h2>Start creating<br>today.</h2>
+    <p>7-day free trial. No credit card required.</p>
+    <button class="btn-green">Join Talex Free</button>
+  </div>
+
+  <!-- FAQ -->
+  <section class="faq fade-up">
+    <div class="section-header" style="padding-left:0;padding-right:0;">
+      <span class="section-title">Questions?</span>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        How does the free trial work?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Get full access to all 10,000+ classes free for 7 days. Cancel anytime before the trial ends and you won't be charged.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I download classes for offline viewing?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Yes — all classes can be downloaded to the Talex mobile app for offline access. Perfect for learning on the go without Wi-Fi.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Who are the instructors?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Our instructors are vetted working professionals — published illustrators, award-winning designers, and celebrated photographers. We accept fewer than 5% of applicants.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Is there a student community?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Every class has an active project gallery and discussion thread. You can share your work, get feedback, and connect with 48,000+ fellow learners worldwide.</div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 <strong>Talex</strong> · Learn boldly.
+  </footer>
+
+</div>
+
+<script>
+  function toggleFaq(el) {
+    const icon = el.querySelector('.faq-icon');
+    const ans = el.nextElementSibling;
+    const isOpen = ans.classList.contains('open');
+    document.querySelectorAll('.faq-a.open').forEach(a => { a.classList.remove('open'); a.previousElementSibling.querySelector('.faq-icon').classList.remove('open'); });
+    if (!isOpen) { ans.classList.add('open'); icon.classList.add('open'); }
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>

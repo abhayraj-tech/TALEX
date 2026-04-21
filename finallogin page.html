@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TALEX – Create Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(160deg, #c9dff5 0%, #ddeeff 40%, #b8d4f0 100%);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before, body::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    body::before { width: 520px; height: 320px; top: -80px; left: -100px; }
+    body::after  { width: 420px; height: 260px; bottom: -60px; right: -80px; }
+
+    .auth-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.18);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── LEFT PANEL ── */
+    .panel-left {
+      position: relative;
+      background: linear-gradient(160deg, #7c3aed 0%, #5b21b6 50%, #4c1d95 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2.5rem;
+      overflow: hidden;
+      min-height: 580px;
+    }
+
+    /* Floating skill badges */
+    .badge-orbit {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+    }
+
+    .skill-badge {
+      position: absolute;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+      animation: badgeFloat 5s ease-in-out infinite;
+    }
+
+    .skill-badge:nth-child(1)  { top: 12%; left: 8%;  animation-delay: 0s;   }
+    .skill-badge:nth-child(2)  { top: 22%; right: 10%; animation-delay: 0.8s; }
+    .skill-badge:nth-child(3)  { top: 38%; left: 5%;  animation-delay: 1.6s; }
+    .skill-badge:nth-child(4)  { top: 52%; right: 8%; animation-delay: 0.4s; }
+    .skill-badge:nth-child(5)  { top: 65%; left: 12%; animation-delay: 2s;   }
+    .skill-badge:nth-child(6)  { top: 75%; right: 5%; animation-delay: 1.2s; }
+
+    @keyframes badgeFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-10px) scale(1.04); }
+    }
+
+    /* Central icon */
+    .center-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      animation: iconPulse 3s ease-in-out infinite;
+      backdrop-filter: blur(12px);
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { transform: translate(-50%, -60%) scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+      50%       { transform: translate(-50%, -60%) scale(1.06); box-shadow: 0 0 0 20px rgba(255,255,255,0); }
+    }
+
+    .panel-tagline {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.9rem;
+      line-height: 1.15;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .panel-tagline span { display: block; }
+    .panel-sub {
+      position: relative;
+      z-index: 2;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.85rem;
+      margin-top: 0.6rem;
+      line-height: 1.5;
+    }
+
+    /* ── RIGHT PANEL ── */
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2.5rem 2.75rem;
+      background: #fff;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.4rem;
+    }
+    .brand-icon {
+      width: 44px; height: 44px;
+      background: #0a0a0f;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    .brand-icon svg { width: 24px; height: 24px; }
+    .brand-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      color: #0a0a0f;
+    }
+
+    .form-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: #0a0a0f;
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .form-subtitle {
+      font-size: 0.8rem;
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 1.4rem;
+    }
+
+    .field { margin-bottom: 0.9rem; }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.3rem;
+    }
+    .field input {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-family: 'Inter', sans-serif;
+      color: #111827;
+      background: #f9fafb;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input::placeholder { color: #9ca3af; }
+    .field input:focus {
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+      background: #fff;
+    }
+
+    /* Two-col row */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    /* Password strength */
+    .strength-bar {
+      display: flex; gap: 4px; margin-top: 6px;
+    }
+    .strength-seg {
+      flex: 1; height: 3px; border-radius: 2px;
+      background: #e5e7eb;
+      transition: background 0.3s;
+    }
+
+    .terms {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      font-size: 0.78rem; color: #6b7280;
+      margin-bottom: 1.1rem; margin-top: 0.25rem;
+    }
+    .terms input[type="checkbox"] {
+      width: 14px; height: 14px; margin-top: 1px;
+      accent-color: #7c3aed; cursor: pointer; flex-shrink: 0;
+    }
+    .terms a { color: #7c3aed; font-weight: 600; text-decoration: none; }
+    .terms a:hover { text-decoration: underline; }
+
+    .btn-signup {
+      width: 100%;
+      padding: 0.82rem;
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.93rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 0.85rem;
+    }
+    .btn-signup:hover { background: #6d28d9; transform: translateY(-1px); }
+
+    .btn-google {
+      width: 100%;
+      padding: 0.72rem;
+      background: #fff;
+      color: #374151;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 1.1rem;
+    }
+    .btn-google:hover { border-color: #9ca3af; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .divider {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
+    .divider span { font-size: 0.73rem; color: #9ca3af; white-space: nowrap; }
+
+    .signin-link {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+    .signin-link a { color: #7c3aed; font-weight: 700; text-decoration: none; }
+    .signin-link a:hover { text-decoration: underline; }
+
+    /* Credits badge */
+    .credits-badge {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.78rem;
+      color: #92400e;
+      font-weight: 600;
+      margin-bottom: 1.1rem;
+    }
+    .credits-badge span { font-size: 1.1rem; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      border-bottom: 1.5px solid #e5e7eb;
+      margin-bottom: 1.4rem;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.65rem;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #9ca3af;
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -1.5px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active {
+      color: #7c3aed;
+      border-bottom-color: #7c3aed;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      top: 1.5rem; left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      background: #111827;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      z-index: 9999;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      display: flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      max-width: 90vw;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { background: #059669; }
+    .toast.error   { background: #dc2626; }
+
+    /* ── Error message under field ── */
+    .field-error {
+      font-size: 0.73rem;
+      color: #dc2626;
+      margin-top: 4px;
+      display: none;
+    }
+    .field.has-error input { border-color: #dc2626; }
+    .field.has-error .field-error { display: block; }
+
+    /* ── Sign-in form (hidden by default) ── */
+    #signinPanel { display: none; }
+    #signupPanel { display: block; }
+
+    /* ── Loading spinner on button ── */
+    .btn-signup:disabled, .btn-signin-submit:disabled {
+      opacity: 0.7; cursor: not-allowed;
+    }
+
+    .btn-signin-submit {
+      width: 100%;
+      padding: 0.82rem;
+      background: #0a0a0f;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.93rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 0.85rem;
+    }
+    .btn-signin-submit:hover:not(:disabled) { background: #1e1e2e; transform: translateY(-1px); }
+
+    .field-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+    .remember { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: #6b7280; }
+    .remember input { accent-color: #7c3aed; }
+    .forgot { font-size: 0.78rem; color: #7c3aed; font-weight: 600; text-decoration: none; }
+    .forgot:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .auth-card { grid-template-columns: 1fr; max-width: 420px; }
+      .panel-left { display: none; }
+      .panel-right { padding: 2.5rem 1.75rem; }
+      .field-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+
+    <!-- ══ LEFT PANEL ══ -->
+    <div class="panel-left">
+      <div class="badge-orbit">
+        <div class="skill-badge">🐍 Python</div>
+        <div class="skill-badge">⚛️ React</div>
+        <div class="skill-badge">🤖 AI / ML</div>
+        <div class="skill-badge">🎨 UI Design</div>
+        <div class="skill-badge">📊 Data Science</div>
+        <div class="skill-badge">☁️ AWS Cloud</div>
+      </div>
+
+      <div class="center-icon">🚀</div>
+
+      <div class="panel-tagline">
+        <span>LEARN.</span>
+        <span>EARN.</span>
+        <span>GET HIRED.</span>
+      </div>
+      <p class="panel-sub">Join 50,000+ learners building real skills and landing real jobs.</p>
+    </div>
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <div class="panel-right">
+
+      <!-- Brand -->
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"
+                  fill="#ffe17c" stroke="#ffe17c" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">TALEX</span>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" id="tabSignup" onclick="switchTab('signup')">Create Account</button>
+        <button class="tab-btn" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
+      </div>
+
+      <!-- ── SIGN UP PANEL ── -->
+      <div id="signupPanel">
+        <p class="form-subtitle">Start your skill journey — free for 14 days</p>
+
+        <div class="credits-badge">
+          <span>🎁</span>
+          You'll receive <strong>&nbsp;100 free credits&nbsp;</strong> on sign-up!
+        </div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)" novalidate>
+          <div class="field-grid">
+            <div class="field" id="f-firstName">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" placeholder="Alex" required autocomplete="given-name"/>
+              <div class="field-error" id="e-firstName">First name is required</div>
+            </div>
+            <div class="field" id="f-lastName">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" placeholder="Rivera" required autocomplete="family-name"/>
+              <div class="field-error" id="e-lastName">Last name is required</div>
+            </div>
+          </div>
+
+          <div class="field" id="f-email">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="alex@example.com" required autocomplete="email"/>
+            <div class="field-error" id="e-email">Enter a valid email address</div>
+          </div>
+
+          <div class="field" id="f-password">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Min. 8 characters"
+                   required minlength="8" oninput="updateStrength(this.value)" autocomplete="new-password"/>
+            <div class="strength-bar">
+              <div class="strength-seg" id="s1"></div>
+              <div class="strength-seg" id="s2"></div>
+              <div class="strength-seg" id="s3"></div>
+              <div class="strength-seg" id="s4"></div>
+            </div>
+            <div class="field-error" id="e-password">Password must be at least 8 characters</div>
+          </div>
+
+          <div class="field" id="f-confirmPassword">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Repeat password" required autocomplete="new-password"/>
+            <div class="field-error" id="e-confirmPassword">Passwords do not match</div>
+          </div>
+
+          <label class="terms">
+            <input type="checkbox" id="termsCheck" required />
+            I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
+          </label>
+
+          <button type="submit" class="btn-signup" id="btnSignup">Create Free Account</button>
+        </form>
+
+        <div class="divider"><span>or</span></div>
+
+        <button class="btn-google" onclick="handleGoogle('signup')">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign up with Google
+        </button>
+      </div>
+
+      <!-- ── SIGN IN PANEL ── -->
+      <div id="signinPanel">
+        <p class="form-subtitle">Welcome back — enter your credentials</p>
+
+        <form id="signinForm" onsubmit="handleSignin(event)" novalidate>
+          <div class="field" id="f-siEmail">
+            <label for="siEmail">Email</label>
+            <input type="email" id="siEmail" placeholder="alex@example.com" required autocomplete="email"/>
+            <div class="field-error" id="e-siEmail">Enter a valid email address</div>
+          </div>
+
+          <div class="field" id="f-siPassword">
+            <label for="siPassword">Password</label>
+            <input type="password" id="siPassword" placeholder="Your password" required autocomplete="current-password"/>
+            <div class="field-error" id="e-siPassword">Password is required</div>
+          </div>
+
+          <div class="field-row">
+            <label class="remember">
+              <input type="checkbox" id="rememberMe"/> Remember me
+            </label>
+            <a href="#" class="forgot" onclick="showForgot(event)">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="btn-signin-submit" id="btnSignin">Sign In</button>
+        </form>
+
+        <div class="divider"><span>or</span></div>
+
+        <button class="btn-google" onclick="handleGoogle('signin')">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign in with Google
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════════
+       TALEX AUTH — Full backend integration
+       Connects to: POST /api/auth/signup  &  POST /api/auth/login
+       Falls back to localStorage mock when backend is offline
+    ═══════════════════════════════════════════════════════════════ */
+
+    const API = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+      ? 'http://localhost:5000'
+      : '';   // same-origin when deployed
+
+    // ── Toast ────────────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg, type = 'default') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast ${type} show`;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ── Tab switching ─────────────────────────────────────────────
+    function switchTab(tab) {
+      const isSignup = tab === 'signup';
+      document.getElementById('signupPanel').style.display = isSignup ? 'block' : 'none';
+      document.getElementById('signinPanel').style.display = isSignup ? 'none'  : 'block';
+      document.getElementById('tabSignup').classList.toggle('active', isSignup);
+      document.getElementById('tabSignin').classList.toggle('active', !isSignup);
+      clearAllErrors();
+    }
+
+    // ── Field validation helpers ──────────────────────────────────
+    function setError(fieldId, errorId, msg) {
+      const f = document.getElementById(fieldId);
+      const e = document.getElementById(errorId);
+      if (f) f.classList.add('has-error');
+      if (e) { e.textContent = msg; e.style.display = 'block'; }
+    }
+    function clearError(fieldId, errorId) {
+      const f = document.getElementById(fieldId);
+      const e = document.getElementById(errorId);
+      if (f) f.classList.remove('has-error');
+      if (e) e.style.display = 'none';
+    }
+    function clearAllErrors() {
+      ['f-firstName','f-lastName','f-email','f-password','f-confirmPassword','f-siEmail','f-siPassword']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('has-error'); });
+      document.querySelectorAll('.field-error').forEach(e => e.style.display = 'none');
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // ── Password strength ─────────────────────────────────────────
+    function updateStrength(val) {
+      const segs = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
+      const colors = ['#ef4444','#f59e0b','#3b82f6','#10b981'];
+      let score = 0;
+      if (val.length >= 8)           score++;
+      if (/[A-Z]/.test(val))         score++;
+      if (/[0-9]/.test(val))         score++;
+      if (/[^A-Za-z0-9]/.test(val))  score++;
+      segs.forEach((s, i) => {
+        if (s) s.style.background = i < score ? colors[score - 1] : '#e5e7eb';
+      });
+    }
+
+    // ── Mock backend (localStorage) ───────────────────────────────
+    const MockDB = {
+      getUsers: () => JSON.parse(localStorage.getItem('talex_users') || '[]'),
+      saveUsers: (u) => localStorage.setItem('talex_users', JSON.stringify(u)),
+      findByEmail: (email) => MockDB.getUsers().find(u => u.email === email.toLowerCase()),
+
+      signup(name, email, password) {
+        const users = MockDB.getUsers();
+        if (users.find(u => u.email === email.toLowerCase())) {
+          return { ok: false, message: 'An account with this email already exists.' };
+        }
+        const user = {
+          id: 'u_' + Date.now(),
+          name, email: email.toLowerCase(),
+          password: btoa(password), // simple obfuscation for demo
+          credits: 100, badges: [], courses: [],
+          createdAt: new Date().toISOString()
+        };
+        users.push(user);
+        MockDB.saveUsers(users);
+        const token = btoa(JSON.stringify({ id: user.id, email: user.email, exp: Date.now() + 7*86400000 }));
+        return { ok: true, token, user: { id: user.id, name: user.name, email: user.email, credits: 100 } };
+      },
+
+      login(email, password) {
+        const user = MockDB.findByEmail(email);
+        if (!user) return { ok: false, message: 'No account found with this email.' };
+        if (user.password !== btoa(password)) return { ok: false, message: 'Incorrect password.' };
+        const token = btoa(JSON.stringify({ id: user.id, email: user.email, exp: Date.now() + 7*86400000 }));
+        return { ok: true, token, user: { id: user.id, name: user.name, email: user.email, credits: user.credits } };
+      }
+    };
+
+    // ── API call with mock fallback ───────────────────────────────
+    async function apiCall(endpoint, body) {
+      try {
+        const res = await fetch(`${API}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(6000)
+        });
+        const data = await res.json();
+        return { ok: res.ok, status: res.status, ...data };
+      } catch (err) {
+        // Backend offline — use mock
+        console.warn('Backend offline, using mock:', err.message);
+        return null; // signals to use mock
+      }
+    }
+
+    // ── Session helpers ───────────────────────────────────────────
+    function saveSession(token, user, remember) {
+      const storage = remember ? localStorage : sessionStorage;
+      storage.setItem('talex_token', token);
+      storage.setItem('talex_user', JSON.stringify(user));
+    }
+
+    function redirectAfterAuth() {
+      const next = new URLSearchParams(window.location.search).get('next') || 'index.html';
+      window.location.href = next;
+    }
+
+    // ── SIGN UP ───────────────────────────────────────────────────
+    async function handleSignup(e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName  = document.getElementById('lastName').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const password  = document.getElementById('password').value;
+      const confirm   = document.getElementById('confirmPassword').value;
+      const terms     = document.getElementById('termsCheck').checked;
+
+      // Client-side validation
+      let valid = true;
+      if (!firstName) { setError('f-firstName','e-firstName','First name is required'); valid = false; }
+      if (!lastName)  { setError('f-lastName', 'e-lastName', 'Last name is required');  valid = false; }
+      if (!isValidEmail(email)) { setError('f-email','e-email','Enter a valid email address'); valid = false; }
+      if (password.length < 8)  { setError('f-password','e-password','Password must be at least 8 characters'); valid = false; }
+      if (password !== confirm)  { setError('f-confirmPassword','e-confirmPassword','Passwords do not match'); valid = false; }
+      if (!terms) { showToast('Please accept the Terms of Service', 'error'); valid = false; }
+      if (!valid) return;
+
+      const btn = document.getElementById('btnSignup');
+      btn.textContent = 'Creating account…';
+      btn.disabled = true;
+
+      const name = `${firstName} ${lastName}`;
+
+      // Try real backend first
+      let result = await apiCall('/api/auth/signup', { name, email, password, confirmPassword: confirm });
+
+      // Fall back to mock if backend is offline
+      if (result === null) {
+        result = MockDB.signup(name, email, password);
+        if (result.ok) result._mock = true;
+      }
+
+      if (result.ok) {
+        saveSession(result.token, result.user, true);
+        showToast('🎉 Account created! Welcome to TALEX.', 'success');
+        setTimeout(() => {
+          redirectAfterAuth();
+        }, 1200);
+      } else {
+        showToast(result.message || 'Sign-up failed. Please try again.', 'error');
+        if (result.message?.toLowerCase().includes('email')) {
+          setError('f-email','e-email', result.message);
+        }
+        btn.textContent = 'Create Free Account';
+        btn.disabled = false;
+      }
+    }
+
+    // ── SIGN IN ───────────────────────────────────────────────────
+    async function handleSignin(e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      const email    = document.getElementById('siEmail').value.trim();
+      const password = document.getElementById('siPassword').value;
+      const remember = document.getElementById('rememberMe').checked;
+
+      let valid = true;
+      if (!isValidEmail(email))  { setError('f-siEmail','e-siEmail','Enter a valid email address'); valid = false; }
+      if (!password)             { setError('f-siPassword','e-siPassword','Password is required'); valid = false; }
+      if (!valid) return;
+
+      const btn = document.getElementById('btnSignin');
+      btn.textContent = 'Signing in…';
+      btn.disabled = true;
+
+      let result = await apiCall('/api/auth/login', { email, password });
+
+      if (result === null) {
+        result = MockDB.login(email, password);
+        if (result.ok) result._mock = true;
+      }
+
+      if (result.ok) {
+        saveSession(result.token, result.user, remember);
+        showToast(`👋 Welcome back, ${result.user.name.split(' ')[0]}!`, 'success');
+        setTimeout(() => redirectAfterAuth(), 1000);
+      } else {
+        showToast(result.message || 'Invalid credentials.', 'error');
+        if (result.message?.toLowerCase().includes('email')) {
+          setError('f-siEmail','e-siEmail', result.message);
+        } else if (result.message?.toLowerCase().includes('password')) {
+          setError('f-siPassword','e-siPassword', result.message);
+        }
+        btn.textContent = 'Sign In';
+        btn.disabled = false;
+      }
+    }
+
+    // ── GOOGLE OAuth ──────────────────────────────────────────────
+    function handleGoogle(mode) {
+      // If backend is running, use real OAuth
+      const backendUrl = `${API}/api/auth/google`;
+      // Store intended mode so callback knows
+      sessionStorage.setItem('talex_oauth_mode', mode);
+      window.location.href = backendUrl;
+    }
+
+    // ── FORGOT PASSWORD ───────────────────────────────────────────
+    function showForgot(e) {
+      e.preventDefault();
+      const email = document.getElementById('siEmail').value.trim();
+      if (!isValidEmail(email)) {
+        setError('f-siEmail','e-siEmail','Enter your email first, then click Forgot Password');
+        return;
+      }
+      showToast(`📧 Password reset link sent to ${email}`, 'success');
+      // In production: POST /api/auth/forgot-password
+    }
+
+    // ── Check if already logged in ────────────────────────────────
+    (function checkSession() {
+      const token = localStorage.getItem('talex_token') || sessionStorage.getItem('talex_token');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token));
+          if (payload.exp > Date.now()) {
+            // Already logged in — redirect
+            const next = new URLSearchParams(window.location.search).get('next') || 'index.html';
+            // Only redirect if not already on the target page
+            if (!window.location.href.includes(next)) {
+              window.location.href = next;
+            }
+          }
+        } catch { /* invalid token, ignore */ }
+      }
+    })();
+
+    // ── URL param: ?tab=signin ────────────────────────────────────
+    (function checkTabParam() {
+      const tab = new URLSearchParams(window.location.search).get('tab');
+      if (tab === 'signin') switchTab('signin');
+    })();
+  </script>
+</body>
+</html>
