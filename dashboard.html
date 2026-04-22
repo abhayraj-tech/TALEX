@@ -74,6 +74,9 @@
         <span class="search-icon">🔍</span>
         <input type="text" placeholder="Search events..." id="searchInput">
       </div>
+      <button class="publish-btn">
+        <span class="btn-label">Publish</span>
+      </button>
       <button class="header-btn" id="notifBtn">
         🔔
         <span class="badge">3</span>
@@ -309,6 +312,19 @@
       <button class="btn-glass">Enable Anonymous Mode</button>
     </div>
 
+    <!-- PUBLISHED CONTENT SECTION -->
+    <div class="section-header" style="margin-top: 40px;">
+      <h1>Published Content</h1>
+      <p>Media you've shared with the community</p>
+    </div>
+    <div class="published-grid" id="publishedGrid">
+      <!-- Uploaded items will appear here -->
+      <div class="empty-published" id="emptyPublished">
+        <div class="empty-icon">📤</div>
+        <p>No content published yet. Click "Publish" to get started!</p>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -342,6 +358,29 @@
     </div>
   </div>
 </div>
+
+<!-- ── UPLOAD MODAL ── -->
+<div class="upload-modal-overlay" id="uploadModalOverlay">
+  <div class="upload-modal">
+    <div class="upload-modal-header">
+      <h3>Publish New Content</h3>
+      <button class="close-upload" id="closeUpload">✕</button>
+    </div>
+    <div class="upload-preview-container" id="uploadPreviewContainer">
+      <div class="upload-placeholder">
+        <div class="placeholder-icon">📁</div>
+        <p>Selected file will appear here</p>
+      </div>
+    </div>
+    <div class="upload-modal-footer">
+      <input type="text" id="uploadTitle" placeholder="Give your publication a title..." class="upload-title-input">
+      <button class="btn-publish-confirm" id="confirmUploadBtn" disabled>Upload & Publish</button>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN FILE INPUT -->
+<input type="file" id="publishInput" accept="image/*,video/*" style="display: none;">
 
 <script src="dashboard.js"></script>
 </body>

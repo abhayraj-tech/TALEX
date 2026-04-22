@@ -15,6 +15,7 @@ const userRoutes     = require('./routes/users');
 const waitlistRoutes = require('./routes/waitlist');
 const jobRoutes      = require('./routes/jobs');
 const contactRoutes  = require('./routes/contact');
+const uploadRoutes   = require('./routes/upload');
 
 // Passport config
 require('./config/passport');
@@ -59,6 +60,7 @@ app.use(passport.initialize());
 
 // ── Serve static frontend from project root ──────────────────────────────────
 app.use(express.static(path.join(__dirname, '..')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ── API Routes ───────────────────────────────────────────────────────────────
 app.use('/api/auth',     authRoutes);
@@ -68,6 +70,7 @@ app.use('/api/user',     userRoutes);
 app.use('/api/waitlist', waitlistRoutes);
 app.use('/api/jobs',     jobRoutes);
 app.use('/api/contact',  contactRoutes);
+app.use('/api/upload',   uploadRoutes);
 
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

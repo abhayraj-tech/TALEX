@@ -79,24 +79,28 @@ function showAuthModal(mode = 'signup') {
     const btn = e.target.querySelector('button');
     btn.disabled = true;
     btn.textContent = 'Please wait...';
+    const rect = btn.getBoundingClientRect();
+    const btnX = rect.left + rect.width / 2;
+    const btnY = rect.top + rect.height / 2;
+
     try {
       const data = await apiCall(`/auth/${mode}`, { method: 'POST', body: JSON.stringify(body) });
       authToken = data.token;
       currentUser = data.user;
+      localStorage.setItem('talex_token', authToken);
+      localStorage.setItem('talex_user', JSON.stringify(currentUser));
+      updateAuthUI();
+      // Trigger water ripple effect
+      triggerRipple(btnX, btnY);
     } catch (err) {
-      console.warn('API not available. Using mock login for demo purposes.');
-      // Mock login for demo so the animation plays
-      authToken = 'demo_token_123';
-      currentUser = { name: body.name || 'Demo User', email: body.email || 'demo@example.com', credits: 100 };
+      console.warn('[Demo Fallback] API error, bypassing to redirect:', err.message);
+      // Trigger water ripple effect
+      triggerRipple(btnX, btnY);
+      
+      // showToast(err.message, 'error');
+      // btn.disabled = false;
+      // btn.textContent = mode === 'signup' ? 'Create Account →' : 'Log In →';
     }
-    
-    localStorage.setItem('talex_token', authToken);
-    localStorage.setItem('talex_user', JSON.stringify(currentUser));
-    closeModal();
-    updateAuthUI();
-    
-    // 🔥 Cinematic tear transition → redirect to dashboard/profile
-    startCinematicTear();
   });
 }
 
@@ -163,69 +167,93 @@ if (heroForm) {
 }
 
 // ===== 🔥 CINEMATIC CENTER-TEAR PORTAL ANIMATION =====
-function spawnTearSparks(count = 18) {
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
-  for (let i = 0; i < count; i++) {
-    const spark = document.createElement('div');
-    spark.className = 'tear-spark';
-    // Scatter sparks along the diagonal with random offsets
-    const diagOffset = (Math.random() - 0.5) * Math.max(window.innerWidth, window.innerHeight) * 0.6;
-    const sparkX = cx + diagOffset * 0.707; // cos(45°)
-    const sparkY = cy + diagOffset * 0.707; // sin(45°)
-    spark.style.left = sparkX + 'px';
-    spark.style.top = sparkY + 'px';
-    // Random fly direction
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 60 + Math.random() * 120;
-    spark.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
-    spark.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
-    spark.style.animationDelay = (Math.random() * 0.3) + 's';
-    spark.style.width = (2 + Math.random() * 4) + 'px';
-    spark.style.height = spark.style.width;
-    document.body.appendChild(spark);
-    setTimeout(() => spark.remove(), 1200);
-  }
+// ===== 🔥 WATER RIPPLE TELEPORTATION ANIMATION =====
+function spawnRipple(x, y, delay, size, color, borderWidth) {
+  const rippleLayer = document.getElementById('ripple-layer');
+  if (!rippleLayer) return null;
+  const el = document.createElement('div');
+  el.className = 'ripple-ring';
+  const diameter = size;
+  Object.assign(el.style, {
+    left: x + 'px',
+    top: y + 'px',
+    width: diameter + 'px',
+    height: diameter + 'px',
+    border: `${borderWidth}px solid ${color}`,
+    boxShadow: `0 0 ${borderWidth * 6}px ${color}, inset 0 0 ${borderWidth * 3}px ${color}`,
+    animationDelay: delay + 'ms',
+    animationDuration: '700ms',
+    animationTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    animationFillMode: 'both',
+    animationName: 'rippleExpand',
+    filter: 'blur(0.4px)'
+  });
+  rippleLayer.appendChild(el);
+  return el;
 }
 
-function startCinematicTear() {
-  const tear = document.getElementById('center-tear');
-  const brand = document.getElementById('tearBrand');
-  if (!tear) return;
+function triggerRipple(x, y) {
+  const overlay = document.getElementById('overlay');
+  const rippleLayer = document.getElementById('ripple-layer');
+  if (!overlay || !rippleLayer) {
+    window.location.href = 'dashboard.html';
+    return;
+  }
 
-  // Phase 0: Subtle body cinematic zoom
-  document.body.classList.add('tear-active');
+  // Hide the modal slowly so it fades behind the dimming overlay
+  const modal = document.getElementById('authModal');
+  if (modal) modal.classList.remove('show');
 
-  // Phase 1: Start tear crack (thin diagonal line expanding)
+  // Dim + shrink body
+  overlay.classList.add('dimming');
+  document.body.classList.add('shrink-active');
+
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const maxD = Math.sqrt(W * W + H * H) * 2.2;
+
+  // Wave rings
+  const rings = [
+    { delay: 0,   size: maxD * 0.15, color: 'rgba(0,255,200,0.9)', bw: 2.5 },
+    { delay: 40,  size: maxD * 0.35, color: 'rgba(0,255,200,0.65)', bw: 1.8 },
+    { delay: 90, size: maxD * 0.6,  color: 'rgba(0,255,200,0.4)',  bw: 1.2 },
+    { delay: 155, size: maxD * 0.85, color: 'rgba(0,255,200,0.22)', bw: 0.8 },
+    { delay: 235, size: maxD,        color: 'rgba(0,255,200,0.1)',  bw: 0.5 }
+  ];
+
+  rings.forEach(r => spawnRipple(x, y, r.delay, r.size, r.color, r.bw));
+
+  // Radial fill wash
+  let fillStart = null;
+  const fillDuration = 550;
+  const fillCanvas = document.createElement('canvas');
+  fillCanvas.width = W; fillCanvas.height = H;
+  Object.assign(fillCanvas.style, {
+    position: 'absolute', inset: '0', pointerEvents: 'none', zIndex: '0'
+  });
+  rippleLayer.appendChild(fillCanvas);
+  const fc = fillCanvas.getContext('2d');
+
+  function animateFill(ts) {
+    if (!fillStart) fillStart = ts;
+    const p = Math.min((ts - fillStart) / fillDuration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const radius = (maxD / 2) * eased;
+    fc.clearRect(0, 0, W, H);
+    const g = fc.createRadialGradient(x, y, 0, x, y, radius);
+    g.addColorStop(0, `rgba(0,20,16,${0.72 * eased})`);
+    g.addColorStop(0.6, `rgba(0,30,22,${0.4 * eased})`);
+    g.addColorStop(1, 'transparent');
+    fc.fillStyle = g;
+    fc.fillRect(0, 0, W, H);
+    if (p < 1) requestAnimationFrame(animateFill);
+  }
+  requestAnimationFrame(animateFill);
+
+  // Navigate
   setTimeout(() => {
-    tear.classList.add('tearing');
-    // Show the initial crack — a thin diamond/slit expanding from center
-    tear.style.clipPath = 'polygon(48% 52%, 52% 48%, 52% 48%, 48% 52%)';
-    spawnTearSparks(12);
-  }, 150);
-
-  // Phase 2: Widen the crack into a visible diagonal band
-  setTimeout(() => {
-    tear.style.clipPath = 'polygon(40% 60%, 60% 40%, 60% 40%, 40% 60%)';
-    spawnTearSparks(10);
-  }, 450);
-
-  // Phase 3: Rip it wide open — full screen
-  setTimeout(() => {
-    tear.classList.add('open');
-    tear.style.clipPath = ''; // Let CSS class handle the final state
-    spawnTearSparks(20);
+    window.location.href = 'dashboard.html';
   }, 750);
-
-  // Phase 4: Show TALEX brand in the void
-  setTimeout(() => {
-    if (brand) brand.classList.add('visible');
-  }, 1100);
-
-  // Phase 5: Redirect to profile/dashboard
-  setTimeout(() => {
-    window.location.href = '/profile';
-  }, 2000);
 }
 
 // ===== LOAD COURSES FROM API =====
@@ -495,10 +523,10 @@ dynamicStyles.textContent = `
 `;
 document.head.appendChild(dynamicStyles);
 
-// Also add tear-active body overflow control
-const tearStyle = document.createElement('style');
-tearStyle.textContent = `body.tear-active { overflow: hidden; }`;
-document.head.appendChild(tearStyle);
+// Also add shrink-active body overflow control
+const shrinkStyle = document.createElement('style');
+shrinkStyle.textContent = `body.shrink-active { overflow: hidden; }`;
+document.head.appendChild(shrinkStyle);
 
 // ===== SPA ROUTING LOGIC =====
 function navigateTo(path) {

@@ -222,3 +222,183 @@ function renderSchedule() {
 
 // Initial render if modal is opened
 renderCalendar();
+
+// ════════════════════════════════════════
+// PUBLISH & UPLOAD LOGIC
+// ════════════════════════════════════════
+
+const publishBtn = document.querySelector('.publish-btn');
+const publishInput = document.getElementById('publishInput');
+const uploadModalOverlay = document.getElementById('uploadModalOverlay');
+const closeUpload = document.getElementById('closeUpload');
+const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
+const confirmUploadBtn = document.getElementById('confirmUploadBtn');
+const uploadTitle = document.getElementById('uploadTitle');
+const publishedGrid = document.getElementById('publishedGrid');
+const emptyPublished = document.getElementById('emptyPublished');
+
+let selectedFile = null;
+
+// Trigger file input
+if (publishBtn && publishInput) {
+  publishBtn.addEventListener('click', () => publishInput.click());
+}
+
+// Handle file selection
+if (publishInput) {
+  publishInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    selectedFile = file;
+    uploadModalOverlay.classList.add('open');
+    confirmUploadBtn.disabled = false;
+    renderPreview(file);
+  });
+}
+
+function renderPreview(file) {
+  uploadPreviewContainer.innerHTML = '';
+  const reader = new FileReader();
+
+  if (file.type.startsWith('image/')) {
+    reader.onload = (e) => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      uploadPreviewContainer.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  } else if (file.type.startsWith('video/')) {
+    const video = document.createElement('video');
+    video.src = URL.createObjectURL(file);
+    video.controls = true;
+    uploadPreviewContainer.appendChild(video);
+  }
+}
+
+// Close upload modal
+if (closeUpload) {
+  closeUpload.addEventListener('click', () => {
+    uploadModalOverlay.classList.remove('open');
+    publishInput.value = '';
+    selectedFile = null;
+    uploadTitle.value = '';
+  });
+}
+
+// Confirm upload
+if (confirmUploadBtn) {
+  confirmUploadBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('title', uploadTitle.value || 'Untitled Publication');
+
+    confirmUploadBtn.disabled = true;
+    confirmUploadBtn.textContent = 'Uploading...';
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Upload failed');
+
+      showToast('Published successfully!', 'success');
+      uploadModalOverlay.classList.remove('open');
+      fetchPublishedContent();
+      
+      // Reset
+      publishInput.value = '';
+      selectedFile = null;
+      uploadTitle.value = '';
+      confirmUploadBtn.textContent = 'Upload & Publish';
+    } catch (err) {
+      console.error(err);
+      showToast(err.message, 'error');
+      confirmUploadBtn.disabled = false;
+      confirmUploadBtn.textContent = 'Upload & Publish';
+    }
+  });
+}
+
+// Fetch and display published content
+async function fetchPublishedContent() {
+  if (!publishedGrid) return;
+  
+  try {
+    const res = await fetch('/api/upload', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
+      }
+    });
+    const data = await res.json();
+    
+    if (data.contents && data.contents.length > 0) {
+      if (emptyPublished) emptyPublished.style.display = 'none';
+      renderPublishedItems(data.contents);
+    } else {
+      if (emptyPublished) emptyPublished.style.display = 'block';
+      publishedGrid.querySelectorAll('.published-card').forEach(c => c.remove());
+    }
+  } catch (err) {
+    console.error('Error fetching content:', err);
+  }
+}
+
+function renderPublishedItems(items) {
+  // Remove existing cards
+  publishedGrid.querySelectorAll('.published-card').forEach(c => c.remove());
+
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'published-card';
+    
+    let mediaHtml = '';
+    if (item.fileType === 'image') {
+      mediaHtml = `<img src="${item.fileUrl}" alt="${item.title}">`;
+    } else {
+      mediaHtml = `<video src="${item.fileUrl}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`;
+    }
+
+    const date = new Date(item.createdAt).toLocaleDateString();
+
+    card.innerHTML = `
+      <div class="pub-media">${mediaHtml}</div>
+      <div class="pub-info">
+        <h4>${item.title}</h4>
+        <span>Published on ${date}</span>
+      </div>
+    `;
+    publishedGrid.appendChild(card);
+  });
+}
+
+// Global Toast helper (copied from script.js if not available)
+function showToast(msg, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = msg;
+  Object.assign(toast.style, {
+    position: 'fixed', bottom: '30px', right: '30px',
+    padding: '12px 24px', borderRadius: '10px',
+    background: type === 'success' ? '#10b981' : '#ef4444',
+    color: '#fff', fontWeight: '600', zIndex: '10000',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+    animation: 'toastIn 0.4s ease-out'
+  });
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// Load initial content
+if (localStorage.getItem('talex_token')) {
+  fetchPublishedContent();
+}
+
