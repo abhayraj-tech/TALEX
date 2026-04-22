@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TALEX — Dashboard</title>
+  <meta name="description" content="Your TALEX event dashboard — discover events, track skills, and grow your network.">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><img src="talex-logo.svg" alt="TALEX Logo"></div>
+    <h2>TALEX</h2>
+  </div>
+
+  <div class="nav-section-label">Main</div>
+  <div class="nav-item active" data-page="dashboard">
+    <span class="nav-icon">📊</span> Dashboard
+  </div>
+  <div class="nav-item" data-page="events">
+    <span class="nav-icon">🎪</span> Events
+  </div>
+  <div class="nav-item" data-page="calendar" id="sidebarCalBtn">
+    <span class="nav-icon">📅</span> Calendar
+  </div>
+  <div class="nav-item" data-page="communities">
+    <span class="nav-icon">👥</span> Communities
+  </div>
+
+  <div class="nav-section-label">Growth</div>
+  <div class="nav-item" data-page="skills">
+    <span class="nav-icon">⚡</span> Skills
+  </div>
+  <div class="nav-item" data-page="badges">
+    <span class="nav-icon">🏅</span> Badges
+  </div>
+  <div class="nav-item" data-page="settings">
+    <span class="nav-icon">⚙️</span> Settings
+  </div>
+
+  <div class="sidebar-cta">
+    <h4>Upgrade to Pro</h4>
+    <p>Unlock unlimited events, premium skill tracks, and AI career matching.</p>
+    <button>Learn More →</button>
+  </div>
+</aside>
+
+<!-- ═══ MAIN AREA ═══ -->
+<div class="main-area">
+
+  <!-- ── HEADER ── -->
+  <header class="top-header" id="topHeader">
+    <div class="header-left">
+      <div class="profile-trigger" id="profileTrigger">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <div class="profile-info">
+          <h4 id="profileName">User</h4>
+          <span id="profileRole">TALEX Member</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="calendar-trigger" id="calendarTrigger">
+        <div class="cal-date-stack">
+          <h3 id="calTriggerDay">--</h3>
+          <span id="calTriggerMonth">---</span>
+        </div>
+        <div class="cal-icon-box">📅</div>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search events..." id="searchInput">
+      </div>
+      <button class="header-btn" id="notifBtn">
+        🔔
+        <span class="badge">3</span>
+      </button>
+      <button class="header-btn btn-back-home" id="backBtn" title="Back to Home">🏠</button>
+    </div>
+  </header>
+
+  <!-- ── CONTENT ── -->
+  <main class="content">
+
+    <a href="new.html" class="btn-back">← Back to Home</a>
+
+    <div class="section-header">
+      <h1>Discover Events</h1>
+      <p>Upcoming events curated for your skills and interests</p>
+    </div>
+
+    <!-- EVENT GRID -->
+    <div class="event-grid" id="eventGrid">
+
+      <!-- Card 1 — Academic -->
+      <div class="event-card" data-category="academic">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=500&q=80" alt="AI Workshop 2026">
+          <span class="card-badge academic">Academic</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">AI & ML Workshop 2026</h3>
+          <div class="card-meta">
+            <span><span class="meta-icon">🕐</span> Apr 25, 10:00 AM</span>
+            <span><span class="meta-icon">📍</span> Innovation Lab, Block A</span>
+          </div>
+          <div class="card-footer">
+            <div class="avatar-stack">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#06b6d4,#14b8a6)">SC</div>
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">JR</div>
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">MP</div>
+              <div class="mini-avatar more">+12</div>
+            </div>
+            <button class="btn-register primary">Register</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Cultural -->
+      <div class="event-card" data-category="cultural">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80" alt="Cultural Night">
+          <span class="card-badge cultural">Cultural</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Neon Cultural Night</h3>
+          <div class="card-meta">
+            <span><span class="meta-icon">🕐</span> Apr 28, 6:00 PM</span>
+            <span><span class="meta-icon">📍</span> Main Auditorium</span>
+          </div>
+          <div class="card-footer">
+            <div class="avatar-stack">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#ec4899,#db2777)">AT</div>
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">LK</div>
+              <div class="mini-avatar more">+34</div>
+            </div>
+            <button class="btn-register primary">Register</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Startup -->
+      <div class="event-card" data-category="startup">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=500&q=80" alt="Startup Pitch Day">
+          <span class="card-badge startup">Startup</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Startup Pitch Day</h3>
+          <div class="card-meta">
+            <span><span class="meta-icon">🕐</span> May 2, 2:00 PM</span>
+            <span><span class="meta-icon">📍</span> Incubation Center</span>
+          </div>
+          <div class="card-footer">
+            <div class="avatar-stack">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">RK</div>
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">NP</div>
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">DS</div>
+              <div class="mini-avatar more">+8</div>
+            </div>
+            <button class="btn-register joined">Joined ✓</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 — Academic -->
+      <div class="event-card" data-category="academic">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=500&q=80" alt="Hackathon 2026">
+          <span class="card-badge academic">Academic</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">48-Hour Hackathon</h3>
+          <div class="card-meta">
+            <span><span class="meta-icon">🕐</span> May 5, 9:00 AM</span>
+            <span><span class="meta-icon">📍</span> CS Department Hall</span>
+          </div>
+          <div class="card-footer">
+            <div class="avatar-stack">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#06b6d4,#14b8a6)">AK</div>
+              <div class="mini-avatar more">+20</div>
+            </div>
+            <button class="btn-register primary">Register</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 — Cultural -->
+      <div class="event-card" data-category="cultural">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&q=80" alt="Design Sprint">
+          <span class="card-badge cultural">Cultural</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Creative Design Sprint</h3>
+          <div class="card-meta">
+            <span><span class="meta-icon">🕐</span> May 8, 11:00 AM</span>
+            <span><span class="meta-icon">📍</span> Art Studio, Block C</span>
+          </div>
+          <div class="card-footer">
+            <div class="avatar-stack">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#ec4899,#db2777)">SP</div>
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#f97316,#ea580c)">MK</div>
+              <div class="mini-avatar more">+15</div>
+            </div>
+            <button class="btn-register primary">Register</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 — Startup -->
+      <div class="event-card" data-category="startup">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Data Analytics">
+          <span class="card-badge startup">Startup</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Data Analytics Bootcamp</h3>
+          <div class="card-meta">
+            <span><span class="meta-icon">🕐</span> May 12, 10:00 AM</span>
+            <span><span class="meta-icon">📍</span> Virtual · Zoom</span>
+          </div>
+          <div class="card-footer">
+            <div class="avatar-stack">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">VR</div>
+              <div class="mini-avatar more">+42</div>
+            </div>
+            <button class="btn-register primary">Register</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BENTO WIDGETS -->
+    <div class="bento-grid">
+
+      <!-- Skill Corner -->
+      <div class="widget">
+        <div class="widget-title">Skill Corner</div>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <div class="skill-icon cyan-bg">💻</div>
+            <div>
+              <h4>Web Development</h4>
+              <p>12 courses · 3 badges earned</p>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon teal-bg">🤖</div>
+            <div>
+              <h4>AI & Machine Learning</h4>
+              <p>8 courses · 1 badge earned</p>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon rose-bg">🎨</div>
+            <div>
+              <h4>UI/UX Design</h4>
+              <p>6 courses · 2 badges earned</p>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon purple-bg">📊</div>
+            <div>
+              <h4>Data Science</h4>
+              <p>10 courses · 4 badges earned</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Panel -->
+      <div class="widget">
+        <div class="widget-title">Your Stats</div>
+        <div class="status-list">
+          <div class="status-item">
+            <span class="label">⚡ Credits</span>
+            <span class="value cyan" id="statCredits">0</span>
+          </div>
+          <div class="status-item">
+            <span class="label">🏅 Badges</span>
+            <span class="value teal">10</span>
+          </div>
+          <div class="status-item">
+            <span class="label">📚 Courses</span>
+            <span class="value">36</span>
+          </div>
+          <div class="status-item">
+            <span class="label">🔖 Bookmarks</span>
+            <span class="value rose">7</span>
+          </div>
+          <div class="status-item">
+            <span class="label">🎯 Events</span>
+            <span class="value">14</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anonymous Widget -->
+    <div class="anon-widget">
+      <span class="anon-ghost">👻</span>
+      <h3>Go Anonymous</h3>
+      <p>Ask questions, give feedback, and participate in polls without revealing your identity.</p>
+      <button class="btn-glass">Enable Anonymous Mode</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ CALENDAR MODAL ═══ -->
+<div class="cal-modal-overlay" id="calModalOverlay">
+  <div class="cal-modal">
+    <!-- Left Pane: Date Picker -->
+    <div class="cal-left">
+      <div class="cal-nav">
+        <button id="calPrev">◀</button>
+        <h3 id="calMonthYear">April 2026</h3>
+        <button id="calNext">▶</button>
+      </div>
+      <div class="cal-grid" id="calGrid">
+        <div class="day-header">Su</div><div class="day-header">Mo</div>
+        <div class="day-header">Tu</div><div class="day-header">We</div>
+        <div class="day-header">Th</div><div class="day-header">Fr</div>
+        <div class="day-header">Sa</div>
+        <!-- Days injected by JS -->
+      </div>
+    </div>
+    <!-- Right Pane: Schedule -->
+    <div class="cal-right">
+      <div class="cal-right-header" id="scheduleHeader">Schedule for Today</div>
+      <div class="schedule-list" id="scheduleList">
+        <div class="empty-schedule">
+          <div class="empty-icon">📅</div>
+          <p>No events scheduled</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
