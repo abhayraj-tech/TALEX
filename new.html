@@ -218,9 +218,140 @@
       100% { transform: rotate(360deg); }
     }
     .text-center { text-align: center; }
+
+    /* ═══ CINEMATIC CENTER-TEAR PORTAL ═══ */
+    #center-tear {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none;
+      background: linear-gradient(135deg, #08090f 0%, #0c1220 40%, #0f0a1e 100%);
+      clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+      transition: clip-path 1.1s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: clip-path;
+    }
+
+    /* Glowing diagonal tear-line */
+    #center-tear::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        transparent 42%,
+        rgba(0, 212, 170, 0.08) 44%,
+        rgba(0, 212, 170, 0.35) 47%,
+        rgba(255, 255, 255, 0.7) 49.5%,
+        rgba(255, 255, 255, 1) 50%,
+        rgba(255, 255, 255, 0.7) 50.5%,
+        rgba(0, 212, 170, 0.35) 53%,
+        rgba(0, 212, 170, 0.08) 56%,
+        transparent 58%
+      );
+      opacity: 0;
+      transition: opacity 0.5s ease 0.05s;
+      z-index: 1;
+    }
+
+    /* Ambient glow halo */
+    #center-tear::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,212,170,0.25), rgba(124,58,237,0.15), transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: width 1s ease 0.1s, height 1s ease 0.1s;
+      z-index: 0;
+    }
+
+    /* Phase 1: Tear line visible */
+    #center-tear.tearing::before {
+      opacity: 1;
+    }
+    #center-tear.tearing::after {
+      width: 200vmax;
+      height: 200vmax;
+    }
+
+    /* Phase 2: Full expansion */
+    #center-tear.open {
+      clip-path: polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%);
+    }
+    #center-tear.open::before {
+      opacity: 0;
+      transition: opacity 0.4s ease 0.6s;
+    }
+
+    /* Spark particles during tear */
+    .tear-spark {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #00d4aa;
+      z-index: 100000;
+      pointer-events: none;
+      animation: sparkFly 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      box-shadow: 0 0 6px 2px rgba(0, 212, 170, 0.6);
+    }
+    .tear-spark:nth-child(even) {
+      background: #7c3aed;
+      box-shadow: 0 0 6px 2px rgba(124, 58, 237, 0.6);
+    }
+
+    @keyframes sparkFly {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--sx), var(--sy)) scale(0);
+      }
+    }
+
+    /* Body zoom-out cinematic feel */
+    body.tear-active {
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.8s ease;
+      transform: scale(0.96);
+      filter: brightness(0.7);
+    }
+
+    /* TALEX loading text inside the tear */
+    .tear-brand {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100001;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .tear-brand.visible {
+      opacity: 1;
+    }
+    .tear-brand h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      background: linear-gradient(135deg, #00d4aa, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: tearBrandPulse 1s ease-in-out infinite;
+    }
+    @keyframes tearBrandPulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
   </style>
 </head>
 <body>
+
+<!-- ═══ CINEMATIC CENTER-TEAR PORTAL OVERLAY ═══ -->
+<div id="center-tear"></div>
+<div class="tear-brand" id="tearBrand"><h2>TALEX</h2></div>
 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar" id="navbar">

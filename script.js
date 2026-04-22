@@ -87,7 +87,8 @@ function showAuthModal(mode = 'signup') {
       localStorage.setItem('talex_user', JSON.stringify(currentUser));
       closeModal();
       updateAuthUI();
-      showToast(data.message);
+      // 🔥 Cinematic tear transition → redirect to dashboard/profile
+      startCinematicTear();
     } catch (err) {
       showToast(err.message, 'error');
       btn.disabled = false;
@@ -156,6 +157,72 @@ if (heroForm) {
       }
     }, 100);
   });
+}
+
+// ===== 🔥 CINEMATIC CENTER-TEAR PORTAL ANIMATION =====
+function spawnTearSparks(count = 18) {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  for (let i = 0; i < count; i++) {
+    const spark = document.createElement('div');
+    spark.className = 'tear-spark';
+    // Scatter sparks along the diagonal with random offsets
+    const diagOffset = (Math.random() - 0.5) * Math.max(window.innerWidth, window.innerHeight) * 0.6;
+    const sparkX = cx + diagOffset * 0.707; // cos(45°)
+    const sparkY = cy + diagOffset * 0.707; // sin(45°)
+    spark.style.left = sparkX + 'px';
+    spark.style.top = sparkY + 'px';
+    // Random fly direction
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 60 + Math.random() * 120;
+    spark.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+    spark.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
+    spark.style.animationDelay = (Math.random() * 0.3) + 's';
+    spark.style.width = (2 + Math.random() * 4) + 'px';
+    spark.style.height = spark.style.width;
+    document.body.appendChild(spark);
+    setTimeout(() => spark.remove(), 1200);
+  }
+}
+
+function startCinematicTear() {
+  const tear = document.getElementById('center-tear');
+  const brand = document.getElementById('tearBrand');
+  if (!tear) return;
+
+  // Phase 0: Subtle body cinematic zoom
+  document.body.classList.add('tear-active');
+
+  // Phase 1: Start tear crack (thin diagonal line expanding)
+  setTimeout(() => {
+    tear.classList.add('tearing');
+    // Show the initial crack — a thin diamond/slit expanding from center
+    tear.style.clipPath = 'polygon(48% 52%, 52% 48%, 52% 48%, 48% 52%)';
+    spawnTearSparks(12);
+  }, 150);
+
+  // Phase 2: Widen the crack into a visible diagonal band
+  setTimeout(() => {
+    tear.style.clipPath = 'polygon(40% 60%, 60% 40%, 60% 40%, 40% 60%)';
+    spawnTearSparks(10);
+  }, 450);
+
+  // Phase 3: Rip it wide open — full screen
+  setTimeout(() => {
+    tear.classList.add('open');
+    tear.style.clipPath = ''; // Let CSS class handle the final state
+    spawnTearSparks(20);
+  }, 750);
+
+  // Phase 4: Show TALEX brand in the void
+  setTimeout(() => {
+    if (brand) brand.classList.add('visible');
+  }, 1100);
+
+  // Phase 5: Redirect to profile/dashboard
+  setTimeout(() => {
+    window.location.href = '/profile';
+  }, 2000);
 }
 
 // ===== LOAD COURSES FROM API =====
@@ -424,6 +491,11 @@ dynamicStyles.textContent = `
   .btn-enroll.enrolled:hover{transform:none;box-shadow:none}
 `;
 document.head.appendChild(dynamicStyles);
+
+// Also add tear-active body overflow control
+const tearStyle = document.createElement('style');
+tearStyle.textContent = `body.tear-active { overflow: hidden; }`;
+document.head.appendChild(tearStyle);
 
 // ===== SPA ROUTING LOGIC =====
 function navigateTo(path) {
