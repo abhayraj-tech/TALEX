@@ -12,9 +12,11 @@ console.log('🌱 Seeding TALEX database...\n');
 const instructors = getCollection('instructors');
 const courses = getCollection('courses');
 const testimonials = getCollection('testimonials');
+const studentPerformance = getCollection('student_performance');
 instructors.clear();
 courses.clear();
 testimonials.clear();
+studentPerformance.clear();
 
 // ===== SEED INSTRUCTORS =====
 const instructorData = [
@@ -131,6 +133,103 @@ const testimonialData = [
 
 const savedTestimonials = testimonialData.map(t => testimonials.create(t));
 console.log(`✅ Seeded ${savedTestimonials.length} testimonials`);
+
+// ===== SEED STUDENT PERFORMANCE =====
+const studentData = [
+  {
+    name: 'Alex Mercer', avatar: 'AM', gradient: 'linear-gradient(135deg,#00d4aa,#00b894)',
+    problem_solving: { problems_solved: 210, accuracy_rate: 92, difficulty_breakdown: { easy: 80, medium: 90, hard: 40 } },
+    test_scores: [{ date: '2026-03-10', score: 95, max_score: 100 }, { date: '2026-04-10', score: 98, max_score: 100 }],
+    consistency: { active_days_last_30: 28, current_streak_days: 15, longest_streak_days: 45 },
+    badges: ['Platinum Solver', 'Gold Streak Master'],
+    peer_interactions: { solutions_upvoted: 250, discussions_started: 15, help_given_count: 50 },
+    improvement_rate: 25
+  },
+  {
+    name: 'Sarah Chen', avatar: 'SC', gradient: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+    problem_solving: { problems_solved: 180, accuracy_rate: 88, difficulty_breakdown: { easy: 70, medium: 80, hard: 30 } },
+    test_scores: [{ date: '2026-03-12', score: 85, max_score: 100 }, { date: '2026-04-15', score: 90, max_score: 100 }],
+    consistency: { active_days_last_30: 24, current_streak_days: 10, longest_streak_days: 30 },
+    badges: ['Gold Solver', 'Silver Streak Builder'],
+    peer_interactions: { solutions_upvoted: 180, discussions_started: 10, help_given_count: 35 },
+    improvement_rate: 18
+  },
+  {
+    name: 'David Kim', avatar: 'DK', gradient: 'linear-gradient(135deg,#3b82f6,#2563eb)',
+    problem_solving: { problems_solved: 150, accuracy_rate: 82, difficulty_breakdown: { easy: 60, medium: 70, hard: 20 } },
+    test_scores: [{ date: '2026-03-05', score: 75, max_score: 100 }, { date: '2026-04-05', score: 82, max_score: 100 }],
+    consistency: { active_days_last_30: 20, current_streak_days: 5, longest_streak_days: 20 },
+    badges: ['Silver Solver', 'Bronze Explorer'],
+    peer_interactions: { solutions_upvoted: 120, discussions_started: 5, help_given_count: 20 },
+    improvement_rate: 12
+  },
+  {
+    name: 'Emily Davis', avatar: 'ED', gradient: 'linear-gradient(135deg,#ec4899,#db2777)',
+    problem_solving: { problems_solved: 250, accuracy_rate: 95, difficulty_breakdown: { easy: 100, medium: 100, hard: 50 } },
+    test_scores: [{ date: '2026-03-20', score: 98, max_score: 100 }, { date: '2026-04-18', score: 100, max_score: 100 }],
+    consistency: { active_days_last_30: 30, current_streak_days: 30, longest_streak_days: 60 },
+    badges: ['Platinum Solver', 'Platinum Streak Legend', 'Gold Mentor'],
+    peer_interactions: { solutions_upvoted: 400, discussions_started: 25, help_given_count: 80 },
+    improvement_rate: 30
+  },
+  {
+    name: 'Michael Torres', avatar: 'MT', gradient: 'linear-gradient(135deg,#f59e0b,#d97706)',
+    problem_solving: { problems_solved: 120, accuracy_rate: 78, difficulty_breakdown: { easy: 50, medium: 60, hard: 10 } },
+    test_scores: [{ date: '2026-03-15', score: 70, max_score: 100 }, { date: '2026-04-20', score: 75, max_score: 100 }],
+    consistency: { active_days_last_30: 15, current_streak_days: 3, longest_streak_days: 12 },
+    badges: ['Bronze Explorer'],
+    peer_interactions: { solutions_upvoted: 50, discussions_started: 2, help_given_count: 10 },
+    improvement_rate: 8
+  },
+  {
+    name: 'Jessica Wong', avatar: 'JW', gradient: 'linear-gradient(135deg,#10b981,#059669)',
+    problem_solving: { problems_solved: 195, accuracy_rate: 89, difficulty_breakdown: { easy: 75, medium: 85, hard: 35 } },
+    test_scores: [{ date: '2026-03-25', score: 88, max_score: 100 }, { date: '2026-04-22', score: 92, max_score: 100 }],
+    consistency: { active_days_last_30: 26, current_streak_days: 12, longest_streak_days: 35 },
+    badges: ['Gold Solver', 'Silver Streak Builder'],
+    peer_interactions: { solutions_upvoted: 210, discussions_started: 12, help_given_count: 40 },
+    improvement_rate: 22
+  },
+  {
+    name: 'Daniel Smith', avatar: 'DS', gradient: 'linear-gradient(135deg,#6366f1,#4f46e5)',
+    problem_solving: { problems_solved: 140, accuracy_rate: 80, difficulty_breakdown: { easy: 60, medium: 65, hard: 15 } },
+    test_scores: [{ date: '2026-03-08', score: 78, max_score: 100 }, { date: '2026-04-12', score: 85, max_score: 100 }],
+    consistency: { active_days_last_30: 18, current_streak_days: 7, longest_streak_days: 18 },
+    badges: ['Silver Solver'],
+    peer_interactions: { solutions_upvoted: 90, discussions_started: 4, help_given_count: 15 },
+    improvement_rate: 15
+  },
+  {
+    name: 'Olivia Patel', avatar: 'OP', gradient: 'linear-gradient(135deg,#f43f5e,#e11d48)',
+    problem_solving: { problems_solved: 230, accuracy_rate: 94, difficulty_breakdown: { easy: 90, medium: 95, hard: 45 } },
+    test_scores: [{ date: '2026-03-01', score: 96, max_score: 100 }, { date: '2026-04-02', score: 97, max_score: 100 }],
+    consistency: { active_days_last_30: 29, current_streak_days: 20, longest_streak_days: 50 },
+    badges: ['Platinum Solver', 'Gold Streak Master'],
+    peer_interactions: { solutions_upvoted: 300, discussions_started: 20, help_given_count: 60 },
+    improvement_rate: 28
+  },
+  {
+    name: 'Ryan Johnson', avatar: 'RJ', gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)',
+    problem_solving: { problems_solved: 160, accuracy_rate: 85, difficulty_breakdown: { easy: 65, medium: 75, hard: 20 } },
+    test_scores: [{ date: '2026-03-18', score: 82, max_score: 100 }, { date: '2026-04-16', score: 88, max_score: 100 }],
+    consistency: { active_days_last_30: 22, current_streak_days: 8, longest_streak_days: 25 },
+    badges: ['Silver Solver', 'Silver Streak Builder'],
+    peer_interactions: { solutions_upvoted: 140, discussions_started: 8, help_given_count: 25 },
+    improvement_rate: 19
+  },
+  {
+    name: 'Sophia Lee', avatar: 'SL', gradient: 'linear-gradient(135deg,#14b8a6,#0d9488)',
+    problem_solving: { problems_solved: 175, accuracy_rate: 87, difficulty_breakdown: { easy: 70, medium: 80, hard: 25 } },
+    test_scores: [{ date: '2026-03-22', score: 84, max_score: 100 }, { date: '2026-04-25', score: 89, max_score: 100 }],
+    consistency: { active_days_last_30: 23, current_streak_days: 9, longest_streak_days: 28 },
+    badges: ['Gold Solver', 'Bronze Explorer'],
+    peer_interactions: { solutions_upvoted: 160, discussions_started: 9, help_given_count: 30 },
+    improvement_rate: 20
+  }
+];
+
+const savedStudents = studentData.map(s => studentPerformance.create(s));
+console.log(`✅ Seeded ${savedStudents.length} student performance records`);
 
 console.log('\n🎉 Database seeded successfully!');
 console.log('   Run "npm start" to launch the server.\n');

@@ -25,47 +25,7 @@ const currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
   document.getElementById('calTriggerMonth').textContent = `${month} ${year}`;
 })();
 
-// ── Sidebar Navigation ──
-const dashboardView = document.getElementById('dashboardView');
-const exploreView = document.getElementById('exploreView');
-const skillsView = document.getElementById('skillsView');
-const badgesView = document.getElementById('badgesView');
-const communitiesView = document.getElementById('communitiesView');
-const settingsView = document.getElementById('settingsView');
-
-function switchPage(pageId) {
-  // Hide all
-  [dashboardView, exploreView, skillsView, badgesView, communitiesView, settingsView].forEach(v => {
-    if (v) v.style.display = 'none';
-  });
-
-  // Show selected
-  if (pageId === 'courses') {
-    exploreView.style.display = 'block';
-  } else if (pageId === 'skills') {
-    window.location.href = 'skill-button.html';
-  } else if (pageId === 'badges') {
-    window.location.href = 'badge-button.html';
-  } else if (pageId === 'communities') {
-    window.location.href = 'community-button.html';
-  } else if (pageId === 'settings') {
-    settingsView.style.display = 'block';
-  } else {
-    dashboardView.style.display = 'block';
-  }
-}
-
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    item.classList.add('active');
-    
-    const page = item.getAttribute('data-page');
-    switchPage(page);
-
-    if (item.id === 'sidebarCalBtn') toggleCalendar();
-  });
-});
+// Sidebar navigation is now handled by the router in dashboard.html
 
 // ── Back to Home ──
 document.getElementById('backBtn').addEventListener('click', () => {
@@ -261,7 +221,8 @@ renderCalendar();
 // ════════════════════════════════════════
 
 const publishBtn = document.querySelector('.publish-btn');
-const publishInput = document.getElementById('publishInput');
+const publishInputImage = document.getElementById('publishInputImage');
+const publishInputVideo = document.getElementById('publishInputVideo');
 const uploadModalOverlay = document.getElementById('uploadModalOverlay');
 const closeUpload = document.getElementById('closeUpload');
 const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
@@ -269,25 +230,92 @@ const confirmUploadBtn = document.getElementById('confirmUploadBtn');
 const uploadTitle = document.getElementById('uploadTitle');
 const publishedGrid = document.getElementById('publishedGrid');
 const emptyPublished = document.getElementById('emptyPublished');
+const uploadStep1 = document.getElementById('uploadStep1');
+const uploadStep2 = document.getElementById('uploadStep2');
+const uploadModalTitle = document.getElementById('uploadModalTitle');
+const chooseImageBtn = document.getElementById('chooseImageBtn');
+const chooseVideoBtn = document.getElementById('chooseVideoBtn');
 
 let selectedFile = null;
+let selectedFileType = null;
 
-// Trigger file input
-if (publishBtn && publishInput) {
-  publishBtn.addEventListener('click', () => publishInput.click());
+// Open modal to step 1 (type selection)
+function openPublishModal() {
+  resetPublishModal();
+  uploadModalOverlay.style.display = 'flex';
 }
 
-// Handle file selection
-if (publishInput) {
-  publishInput.addEventListener('change', (e) => {
+function resetPublishModal() {
+  uploadStep1.style.display = 'block';
+  uploadStep2.style.display = 'none';
+  uploadModalTitle.textContent = 'What are you publishing?';
+  uploadPreviewContainer.innerHTML = `
+    <div class="upload-placeholder">
+      <div class="placeholder-icon">📁</div>
+      <p>Selected file will appear here</p>
+    </div>`;
+  uploadTitle.value = '';
+  confirmUploadBtn.disabled = true;
+  selectedFile = null;
+  selectedFileType = null;
+  publishInputImage.value = '';
+  publishInputVideo.value = '';
+}
+
+// Publish button opens modal
+if (publishBtn) {
+  publishBtn.addEventListener('click', openPublishModal);
+}
+
+// Also handle the onclick on the button in HTML (override it)
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.querySelector('.publish-btn');
+  if (btn) btn.onclick = openPublishModal;
+});
+
+// Step 1: Choose Image
+if (chooseImageBtn) {
+  chooseImageBtn.addEventListener('click', () => {
+    selectedFileType = 'image';
+    publishInputImage.click();
+  });
+}
+
+// Step 1: Choose Video
+if (chooseVideoBtn) {
+  chooseVideoBtn.addEventListener('click', () => {
+    selectedFileType = 'video';
+    publishInputVideo.click();
+  });
+}
+
+// Handle image file selected
+if (publishInputImage) {
+  publishInputImage.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     selectedFile = file;
-    uploadModalOverlay.classList.add('open');
-    confirmUploadBtn.disabled = false;
+    goToStep2('image');
     renderPreview(file);
   });
+}
+
+// Handle video file selected
+if (publishInputVideo) {
+  publishInputVideo.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedFile = file;
+    goToStep2('video');
+    renderPreview(file);
+  });
+}
+
+function goToStep2(type) {
+  uploadStep1.style.display = 'none';
+  uploadStep2.style.display = 'block';
+  uploadModalTitle.textContent = type === 'image' ? 'Preview & Publish Image' : 'Preview & Publish Video';
+  confirmUploadBtn.disabled = false;
 }
 
 function renderPreview(file) {
@@ -312,76 +340,64 @@ function renderPreview(file) {
 // Close upload modal
 if (closeUpload) {
   closeUpload.addEventListener('click', () => {
-    uploadModalOverlay.classList.remove('open');
-    publishInput.value = '';
-    selectedFile = null;
-    uploadTitle.value = '';
+    uploadModalOverlay.style.display = 'none';
+    resetPublishModal();
   });
 }
 
-// Confirm upload
+// Close on overlay click
+if (uploadModalOverlay) {
+  uploadModalOverlay.addEventListener('click', (e) => {
+    if (e.target === uploadModalOverlay) {
+      uploadModalOverlay.style.display = 'none';
+      resetPublishModal();
+    }
+  });
+}
+
+// Confirm publish — works locally without a server
 if (confirmUploadBtn) {
-  confirmUploadBtn.addEventListener('click', async () => {
+  confirmUploadBtn.addEventListener('click', () => {
     if (!selectedFile) return;
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('title', uploadTitle.value || 'Untitled Publication');
+    const title = uploadTitle.value.trim() || 'Untitled Publication';
+    const fileType = selectedFile.type.startsWith('image/') ? 'image' : 'video';
 
     confirmUploadBtn.disabled = true;
-    confirmUploadBtn.textContent = 'Uploading...';
+    confirmUploadBtn.textContent = 'Publishing...';
 
-    try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
-        },
-        body: formData
-      });
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const fileUrl = e.target.result;
+      const item = {
+        title,
+        fileType,
+        fileUrl,
+        createdAt: new Date().toISOString()
+      };
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Upload failed');
+      // Save to localStorage
+      const stored = JSON.parse(localStorage.getItem('talex_published') || '[]');
+      stored.unshift(item);
+      localStorage.setItem('talex_published', JSON.stringify(stored));
 
-      showToast('Published successfully!', 'success');
-      uploadModalOverlay.classList.remove('open');
-      fetchPublishedContent();
-      
-      // Reset
-      publishInput.value = '';
-      selectedFile = null;
-      uploadTitle.value = '';
-      confirmUploadBtn.textContent = 'Upload & Publish';
-    } catch (err) {
-      console.error(err);
-      showToast(err.message, 'error');
-      confirmUploadBtn.disabled = false;
-      confirmUploadBtn.textContent = 'Upload & Publish';
-    }
+      showToast('Published successfully! 🎉', 'success');
+      uploadModalOverlay.style.display = 'none';
+      resetPublishModal();
+      confirmUploadBtn.textContent = 'Publish';
+      renderPublishedItems(stored);
+    };
+    reader.readAsDataURL(selectedFile);
   });
 }
 
-// Fetch and display published content
-async function fetchPublishedContent() {
+// Load published content from localStorage
+function fetchPublishedContent() {
   if (!publishedGrid) return;
-  
-  try {
-    const res = await fetch('/api/upload', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
-      }
-    });
-    const data = await res.json();
-    
-    if (data.contents && data.contents.length > 0) {
-      if (emptyPublished) emptyPublished.style.display = 'none';
-      renderPublishedItems(data.contents);
-    } else {
-      if (emptyPublished) emptyPublished.style.display = 'block';
-      publishedGrid.querySelectorAll('.published-card').forEach(c => c.remove());
-    }
-  } catch (err) {
-    console.error('Error fetching content:', err);
+  const stored = JSON.parse(localStorage.getItem('talex_published') || '[]');
+  if (stored.length > 0) {
+    if (emptyPublished) emptyPublished.style.display = 'none';
+    renderPublishedItems(stored);
   }
 }
 
@@ -389,10 +405,17 @@ function renderPublishedItems(items) {
   // Remove existing cards
   publishedGrid.querySelectorAll('.published-card').forEach(c => c.remove());
 
+  if (items.length === 0) {
+    if (emptyPublished) emptyPublished.style.display = 'block';
+    return;
+  }
+
+  if (emptyPublished) emptyPublished.style.display = 'none';
+
   items.forEach(item => {
     const card = document.createElement('div');
     card.className = 'published-card';
-    
+
     let mediaHtml = '';
     if (item.fileType === 'image') {
       mediaHtml = `<img src="${item.fileUrl}" alt="${item.title}">`;
@@ -400,40 +423,22 @@ function renderPublishedItems(items) {
       mediaHtml = `<video src="${item.fileUrl}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`;
     }
 
-    const date = new Date(item.createdAt).toLocaleDateString();
+    const date = new Date(item.createdAt).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
+    const typeLabel = item.fileType === 'image' ? '🖼️ Image' : '🎬 Video';
 
     card.innerHTML = `
       <div class="pub-media">${mediaHtml}</div>
       <div class="pub-info">
         <h4>${item.title}</h4>
-        <span>Published on ${date}</span>
+        <span class="pub-meta">${typeLabel} · ${date}</span>
       </div>
     `;
     publishedGrid.appendChild(card);
   });
 }
 
-// Global Toast helper (copied from script.js if not available)
-function showToast(msg, type = 'success') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = msg;
-  Object.assign(toast.style, {
-    position: 'fixed', bottom: '30px', right: '30px',
-    padding: '12px 24px', borderRadius: '10px',
-    background: type === 'success' ? '#10b981' : '#ef4444',
-    color: '#fff', fontWeight: '600', zIndex: '10000',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-    animation: 'toastIn 0.4s ease-out'
-  });
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-// Load initial content
-if (localStorage.getItem('talex_token')) {
-  fetchPublishedContent();
-}
+// Load on page start
+fetchPublishedContent();
 
 // ════════════════════════════════════════
 // NOTIFICATION SYSTEM LOGIC
@@ -559,3 +564,19 @@ if (localStorage.getItem('talex_token')) {
   fetchNotifications();
 }
 
+
+// ── Toast helper ──
+function showToast(msg, type = 'success') {
+  const toast = document.createElement('div');
+  toast.textContent = msg;
+  Object.assign(toast.style, {
+    position: 'fixed', bottom: '30px', right: '30px',
+    padding: '12px 24px', borderRadius: '10px',
+    background: type === 'success' ? '#10b981' : '#ef4444',
+    color: '#fff', fontWeight: '600', zIndex: '10000',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+    transition: 'opacity 0.3s'
+  });
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+}
