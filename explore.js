@@ -74,7 +74,7 @@ const UI = (() => {
 
     grid().innerHTML = list.map((c, i) => `
       <div class="course-card" style="animation-delay:${i * 0.05}s" onclick="UI.openModal(${c.id})">
-        <div class="card-img" style="background:${c.gradient}">
+        <div class="card-img" style="background: url('${c.image || ""}') center/cover no-repeat, ${c.gradient}">
           <span class="cat-badge">${c.category}</span>
           ${c.enrolled ? '<span class="enrolled-badge">Enrolled ✓</span>' : ""}
           <div class="card-img-overlay"></div>
@@ -106,7 +106,7 @@ const UI = (() => {
     const c = res.data;
 
     modalBody().innerHTML = `
-      <div class="modal-img" style="background:${c.gradient}">
+      <div class="modal-img" style="background: url('${c.image || ""}') center/cover no-repeat, ${c.gradient}">
         <span class="cat-badge">${c.category}</span>
       </div>
       <div class="modal-body">

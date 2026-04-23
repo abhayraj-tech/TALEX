@@ -16,6 +16,7 @@ const DB = {
       description: "Master core AI and ML concepts — supervised learning, neural networks, and real-world projects using Python and TensorFlow.",
       duration: "8 hrs", lessons: 24, rating: 4.9, students: 3240, price: 120,
       tags: ["Python", "TensorFlow", "Neural Nets", "Data Science"],
+      image: "img/course_ai_ml_1776970676303.png",
       gradient: "linear-gradient(135deg,#0f2c5c,#0a3d62,#00D4C8 150%)",
       enrolled: false
     },
@@ -25,6 +26,7 @@ const DB = {
       description: "Learn the art of pitching to investors. Covers storytelling, deck design, handling tough Q&A, and your elevator pitch.",
       duration: "5 hrs", lessons: 15, rating: 4.7, students: 1890, price: 80,
       tags: ["Pitching", "Fundraising", "Storytelling", "VC"],
+      image: "img/course_startup_1776970690358.png",
       gradient: "linear-gradient(135deg,#2d1b69,#4a2080,#7B61FF 150%)",
       enrolled: false
     },
@@ -34,6 +36,7 @@ const DB = {
       description: "Ideate, prototype and test solutions in days using design thinking, Figma and rapid iteration techniques.",
       duration: "6 hrs", lessons: 18, rating: 4.8, students: 2105, price: 100,
       tags: ["Figma", "Design Thinking", "Prototyping", "UX"],
+      image: "img/course_design_1776970705223.png",
       gradient: "linear-gradient(135deg,#5c1a1a,#7a2e2e,#FF6B6B 150%)",
       enrolled: false
     },
@@ -43,6 +46,7 @@ const DB = {
       description: "Turn raw numbers into compelling stories with Matplotlib, Seaborn, and Plotly. Build dashboards that speak for themselves.",
       duration: "7 hrs", lessons: 21, rating: 4.6, students: 1560, price: 90,
       tags: ["Python", "Matplotlib", "Plotly", "Pandas"],
+      image: "img/course_data_1776970718400.png",
       gradient: "linear-gradient(135deg,#0a3d2e,#0d5c42,#00D4C8 150%)",
       enrolled: false
     },
@@ -52,6 +56,7 @@ const DB = {
       description: "From zero to job-ready: HTML, CSS, JavaScript, React and Node.js in one comprehensive bootcamp.",
       duration: "20 hrs", lessons: 60, rating: 4.9, students: 5400, price: 200,
       tags: ["HTML", "CSS", "React", "Node.js"],
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop",
       gradient: "linear-gradient(135deg,#1a2c1a,#2a441a,#4ade80 150%)",
       enrolled: false
     },
@@ -61,6 +66,7 @@ const DB = {
       description: "Understand cross-cultural communication, lead diverse teams, and build inclusive workplaces in the global economy.",
       duration: "4 hrs", lessons: 12, rating: 4.5, students: 980, price: 0,
       tags: ["Leadership", "Diversity", "Communication", "Teams"],
+      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop",
       gradient: "linear-gradient(135deg,#3d2a00,#6b4800,#FFD166 150%)",
       enrolled: false
     },
@@ -70,6 +76,7 @@ const DB = {
       description: "Deep dive into transformers, fine-tuning LLMs, prompt engineering, and building AI-powered applications from scratch.",
       duration: "12 hrs", lessons: 36, rating: 4.9, students: 4100, price: 180,
       tags: ["LLMs", "Transformers", "NLP", "Python"],
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop",
       gradient: "linear-gradient(135deg,#0f2c5c,#1a3a70,#3b82f6 150%)",
       enrolled: false
     },
@@ -79,6 +86,7 @@ const DB = {
       description: "Learn user interviews, usability testing, journey mapping and synthesis techniques that transform products.",
       duration: "5 hrs", lessons: 16, rating: 4.7, students: 1200, price: 70,
       tags: ["UX", "Research", "Usability", "Journey Maps"],
+      image: "img/course_uiux.png",
       gradient: "linear-gradient(135deg,#4a0020,#7a0030,#f43f5e 150%)",
       enrolled: false
     }
