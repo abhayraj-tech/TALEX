@@ -2,6 +2,15 @@
 const isLocalhost = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1');
 const isFile = window.location.origin.includes('file:') || window.location.origin === 'null';
 const API_BASE = (isLocalhost || isFile) ? 'http://localhost:5000/api' : window.location.origin + '/api';
+// Clear any stale demo tokens so nobody is auto-logged in
+(function clearDemoSession() {
+  const t = localStorage.getItem('talex_token');
+  if (!t || t === 'demo-token') {
+    localStorage.removeItem('talex_token');
+    localStorage.removeItem('talex_user');
+  }
+})();
+
 let authToken = localStorage.getItem('talex_token');
 let currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
 
@@ -90,14 +99,12 @@ function showAuthModal(mode = 'signup') {
       localStorage.setItem('talex_token', authToken);
       localStorage.setItem('talex_user', JSON.stringify(currentUser));
     } catch (err) {
-      console.warn('[Demo Fallback] API error, using dummy user for redirect:', err.message);
-      // Fallback for testing without backend
-      localStorage.setItem('talex_token', 'demo-token');
-      localStorage.setItem('talex_user', JSON.stringify({
-        name: body.name || 'TALEX Explorer',
-        email: body.email,
-        credits: 500
-      }));
+      console.warn('[Auth] Backend unavailable:', err.message);
+      // Show error to user instead of auto-logging in
+      btn.disabled = false;
+      btn.textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+      showToast('Could not connect to server. Please try again.', 'error');
+      return;
     }
 
     updateAuthUI();

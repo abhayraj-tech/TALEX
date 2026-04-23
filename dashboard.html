@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,9 +6,13 @@
   <title>TALEX — Dashboard</title>
   <meta name="description" content="Your TALEX event dashboard — discover events, track skills, and grow your network.">
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="dashboard-premium.css">
   <link rel="stylesheet" href="explore_courses.css">
 </head>
 <body>
+
+<!-- Cursor Glow -->
+<div id="cursor-glow"></div>
 
 <!-- ═══ SIDEBAR ═══ -->
 <aside class="sidebar" id="sidebar">
@@ -111,7 +115,19 @@
 
     <a href="new.html" class="btn-back">← Back to Home</a>
 
-    <div class="section-header">
+    <!-- Hero Welcome Strip -->
+    <div class="hero-welcome fade-up fade-up-1" id="heroWelcome">
+      <h2 id="welcomeGreeting">Good morning, Abhay 👋</h2>
+      <div class="welcome-date" id="welcomeDate"></div>
+      <div class="quick-actions">
+        <button class="quick-action-btn" onclick="document.getElementById('searchInput').focus()">🔍 Search Events</button>
+        <button class="quick-action-btn" onclick="document.querySelector('.publish-btn').click()">📤 Publish Content</button>
+        <button class="quick-action-btn" onclick="switchPage('courses')">📚 Browse Courses</button>
+        <button class="quick-action-btn" onclick="switchPage('badges')">🏅 View Badges</button>
+      </div>
+    </div>
+
+    <div class="section-header fade-up fade-up-2">
       <h1>Discover Events</h1>
       <p>Upcoming events curated for your skills and interests</p>
     </div>
@@ -120,7 +136,7 @@
     <div class="event-grid" id="eventGrid">
 
       <!-- Card 1 — Academic -->
-      <div class="event-card" data-category="academic">
+      <div class="event-card fade-up fade-up-3" data-category="academic">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=500&q=80" alt="AI Workshop 2026">
           <span class="card-badge academic">Academic</span>
@@ -144,7 +160,7 @@
       </div>
 
       <!-- Card 2 — Cultural -->
-      <div class="event-card" data-category="cultural">
+      <div class="event-card fade-up fade-up-4" data-category="cultural">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80" alt="Cultural Night">
           <span class="card-badge cultural">Cultural</span>
@@ -167,7 +183,7 @@
       </div>
 
       <!-- Card 3 — Startup -->
-      <div class="event-card" data-category="startup">
+      <div class="event-card fade-up fade-up-5" data-category="startup">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=500&q=80" alt="Startup Pitch Day">
           <span class="card-badge startup">Startup</span>
@@ -191,7 +207,7 @@
       </div>
 
       <!-- Card 4 — Academic -->
-      <div class="event-card" data-category="academic">
+      <div class="event-card fade-up fade-up-6" data-category="academic">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=500&q=80" alt="Hackathon 2026">
           <span class="card-badge academic">Academic</span>
@@ -213,7 +229,7 @@
       </div>
 
       <!-- Card 5 — Cultural -->
-      <div class="event-card" data-category="cultural">
+      <div class="event-card fade-up fade-up-7" data-category="cultural">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&q=80" alt="Design Sprint">
           <span class="card-badge cultural">Cultural</span>
@@ -236,7 +252,7 @@
       </div>
 
       <!-- Card 6 — Startup -->
-      <div class="event-card" data-category="startup">
+      <div class="event-card fade-up fade-up-8" data-category="startup">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Data Analytics">
           <span class="card-badge startup">Startup</span>
@@ -303,23 +319,23 @@
         <div class="status-list">
           <div class="status-item">
             <span class="label">⚡ Credits</span>
-            <span class="value cyan" id="statCredits">0</span>
+            <span class="value cyan" id="statCredits" data-count="100">0</span>
           </div>
           <div class="status-item">
             <span class="label">🏅 Badges</span>
-            <span class="value teal">10</span>
+            <span class="value teal" data-count="10">0</span>
           </div>
           <div class="status-item">
             <span class="label">📚 Courses</span>
-            <span class="value">36</span>
+            <span class="value" data-count="36">0</span>
           </div>
           <div class="status-item">
             <span class="label">🔖 Bookmarks</span>
-            <span class="value rose">7</span>
+            <span class="value rose" data-count="7">0</span>
           </div>
           <div class="status-item">
             <span class="label">🎯 Events</span>
-            <span class="value">14</span>
+            <span class="value" data-count="14">0</span>
           </div>
         </div>
       </div>
@@ -420,86 +436,47 @@
   </main>
 
   <!-- -- SKILLS VIEW -- -->
+    <!-- SKILLS VIEW -->
   <main class="content" id="skillsView" style="display:none; padding-top: 20px;">
     <div class="section-header">
       <h1>My Skills</h1>
       <p>Track your progress and master new domains</p>
     </div>
-    <div class="skills-overview-grid">
-      <div class="skill-main-card">
-        <div class="skill-header">
-          <div class="skill-icon-large">??</div>
-          <div><h3>Web Development</h3><p>Level 4 � Advanced</p></div>
-          <div class="skill-xp">2,450 / 3,000 XP</div>
-        </div>
-        <div class="xp-bar-container"><div class="xp-bar-fill" style="width: 82%;"></div></div>
-      </div>
+    <div class="skills-stats-bar" id="skillsStatsBar"></div>
+    <div class="skills-overview-grid" id="skillsList"></div>
+    <div class="section-header" style="margin-top: 40px;">
+      <h2>Suggested for You</h2>
+      <p>Based on your recent activity</p>
     </div>
+    <div class="suggested-skills-grid" id="suggestedSkillsGrid"></div>
   </main>
 
-  <!-- -- BADGES VIEW -- -->
+  <!-- BADGES VIEW -->
   <main class="content" id="badgesView" style="display:none; padding-top: 20px;">
     <div class="section-header">
       <h1>Badge Collection</h1>
       <p>Your verified proof of expertise</p>
     </div>
-    <div class="badge-cabinet" id="badgeCabinet">
-      <div class="badge-item earned"><div class="badge-hex">??</div><h4>Early Adopter</h4></div>
-    </div>
-  <!-- ── COMMUNITIES VIEW ── -->
+    <div class="badge-stats-bar" id="badgeStatsBar"></div>
+    <div class="badge-cabinet" id="badgeCabinet"></div>
+  </main>
+
+  <!-- COMMUNITIES VIEW -->
   <main class="content" id="communitiesView" style="display:none; padding-top: 20px;">
     <div class="section-header">
       <h1>Communities</h1>
       <p>Connect with people who share your passion</p>
     </div>
-
-    <div class="communities-grid">
-      <div class="community-card">
-        <div class="comm-banner" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf);"></div>
-        <div class="comm-info">
-          <h3>Full Stack Masters</h3>
-          <p>5.2k members · 12 active discussions</p>
-          <button class="btn-glass">Join Community</button>
-        </div>
-      </div>
-      <div class="community-card">
-        <div class="comm-banner" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);"></div>
-        <div class="comm-info">
-          <h3>AI Builders</h3>
-          <p>2.8k members · 8 active discussions</p>
-          <button class="btn-glass">Join Community</button>
-        </div>
-      </div>
-    </div>
+    <div class="communities-grid" id="communitiesGrid"></div>
   </main>
 
-  <!-- ── SETTINGS VIEW ── -->
+  <!-- SETTINGS VIEW -->
   <main class="content" id="settingsView" style="display:none; padding-top: 20px;">
     <div class="section-header">
       <h1>Settings</h1>
       <p>Manage your account and preferences</p>
     </div>
-
-    <div class="settings-container">
-      <div class="settings-group">
-        <h3>Profile Settings</h3>
-        <div class="setting-item">
-          <label>Display Name</label>
-          <input type="text" value="Abhay" class="upload-title-input" style="margin-bottom:0">
-        </div>
-        <div class="setting-item">
-          <label>Email Address</label>
-          <input type="email" value="abhay@example.com" class="upload-title-input" style="margin-bottom:0">
-        </div>
-      </div>
-      <div class="settings-group" style="margin-top:32px">
-        <h3>Notifications</h3>
-        <div class="setting-toggle">
-          <span>Email Notifications</span>
-          <button class="toggle-btn active"></button>
-        </div>
-      </div>
-    </div>
+    <div class="settings-container" id="settingsContainer"></div>
   </main>
   </main>
 </div>
@@ -559,6 +536,7 @@
 <input type="file" id="publishInput" accept="image/*,video/*" style="display: none;">
 
   <script src="dashboard.js"></script>
+  <script src="dashboard-premium.js"></script>
   <script src="explore_backend.js"></script>
   <script src="explore.js"></script>
 </body>
