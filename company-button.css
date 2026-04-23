@@ -40,8 +40,13 @@ body.is-embedded .dashboard-wrapper {
 /* Layout Container */
 .layout-container {
   display: grid;
+<<<<<<< HEAD
   grid-template-columns: 210px 1fr;
   gap: 24px;
+=======
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+>>>>>>> origin/main
   align-items: flex-start;
 }
 
