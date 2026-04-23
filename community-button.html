@@ -1,58 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Community Button – TALEX</title>
-  <link rel="stylesheet" href="community-button.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TALEX — Communities</title>
+  <link rel="stylesheet" href="community-button.css">
+  <style>
+    body.is-embedded .page-header { display: none !important; }
+    body.is-embedded .dashboard-wrapper { padding-top: 20px !important; }
+  </style>
 </head>
-<body>
-  <div class="preview-area">
-    <h2 class="label">Community Button</h2>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
 
-    <!-- Default join -->
-    <button class="community-btn">
-      <span class="community-avatars">
-        <span class="avatar" style="background:#4d9fff;">A</span>
-        <span class="avatar" style="background:#a78bfa;">B</span>
-        <span class="avatar" style="background:#f472b6;">C</span>
-      </span>
-      <span class="community-info">
-        <span class="community-name">Design Guild</span>
-        <span class="community-meta">1.2k members</span>
-      </span>
-      <span class="community-cta join">Join</span>
-    </button>
+  <!-- CURSOR GLOW -->
+  <div id="cursor-glow"></div>
 
-    <!-- Joined state -->
-    <button class="community-btn joined">
-      <span class="community-avatars">
-        <span class="avatar" style="background:#00e5c3;">D</span>
-        <span class="avatar" style="background:#f5a623;">E</span>
-        <span class="avatar" style="background:#f472b6;">F</span>
-      </span>
-      <span class="community-info">
-        <span class="community-name">AI Builders</span>
-        <span class="community-meta">3.8k members</span>
-      </span>
-      <span class="community-cta joined-tag">Joined ✓</span>
-    </button>
+  <div class="dashboard-wrapper">
+    <div class="layout-container">
+      <!-- SIDEBAR TABS -->
+      <nav class="side-tabs">
+        <div class="tabs-group">
+          <p class="tabs-label">Filter By</p>
+          <button class="tab active" data-filter="All">🌐 All Groups</button>
+          <button class="tab" data-filter="Tech">⚡ Tech & Dev</button>
+          <button class="tab" data-filter="Design">🎨 Design & Art</button>
+          <button class="tab" data-filter="Business">💼 Startup & Biz</button>
+        </div>
+        <div class="tabs-group">
+          <p class="tabs-label">My Activity</p>
+          <button class="tab" data-filter="Joined">👥 Joined</button>
+          <button class="tab" data-filter="Popular">📈 Popular</button>
+        </div>
+      </nav>
 
-    <!-- Featured / highlight -->
-    <button class="community-btn featured">
-      <span class="community-avatars">
-        <span class="avatar" style="background:#f5a623;">G</span>
-        <span class="avatar" style="background:#4d9fff;">H</span>
-        <span class="avatar" style="background:#00e5c3;">I</span>
-        <span class="avatar more">+9</span>
-      </span>
-      <span class="community-info">
-        <span class="community-name">Open Source Hub</span>
-        <span class="community-meta">12k members · Active now</span>
-      </span>
-      <span class="community-cta join">Join</span>
-    </button>
-  </div>
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content-area">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="title-section">
+        <h1>Global <span style="color:var(--accent);">Communities</span></h1>
+        <p>Connect with high-performers, share insights, and accelerate your growth alongside the world's most ambitious students.</p>
+      </div>
+      <button class="btn-back" onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }">Back to Dashboard</button>
+    </header>
+
+    <!-- Grid -->
+    <div class="communities-grid">
+      <!-- AI & ML -->
+      <div class="community-card">
+        <div class="card-top">
+          <div class="comm-icon">🤖</div>
+          <span class="member-badge">1.2k Members</span>
+        </div>
+        <div class="card-info">
+          <h3>AI Explorers</h3>
+          <p>Deep dive into Large Language Models, Computer Vision, and Neural Networks. Weekly paper reviews and model fine-tuning sessions.</p>
+        </div>
+        <div class="card-stats">
+          <div class="stat-item"><span class="stat-val">12</span><span class="stat-label">Active Projs</span></div>
+          <div class="stat-item"><span class="stat-val">4</span><span class="stat-label">Mentors</span></div>
+        </div>
+        <button class="btn-join" onclick="toggleJoin(this)">Join Community</button>
+      </div>
+
+      <!-- Startup -->
+      <div class="community-card">
+        <div class="card-top">
+          <div class="comm-icon">🚀</div>
+          <span class="member-badge">850 Members</span>
+        </div>
+        <div class="card-info">
+          <h3>Startup Founders</h3>
+          <p>Connecting the next generation of builders. Focus on MVP development, GTM strategy, and connecting with venture capital partners.</p>
+        </div>
+        <div class="card-stats">
+          <div class="stat-item"><span class="stat-val">28</span><span class="stat-label">Startups</span></div>
+          <div class="stat-item"><span class="stat-val">15</span><span class="stat-label">Partners</span></div>
+        </div>
+        <button class="btn-join" onclick="toggleJoin(this)">Join Community</button>
+      </div>
+
+      <!-- Web Dev -->
+      <div class="community-card">
+        <div class="card-top">
+          <div class="comm-icon">💻</div>
+          <span class="member-badge">2.4k Members</span>
+        </div>
+        <div class="card-info">
+          <h3>Full-Stack Mavericks</h3>
+          <p>Frontend polish meets Backend power. Building scalable applications using the modern MERN stack and Next.js frameworks.</p>
+        </div>
+        <div class="card-stats">
+          <div class="stat-item"><span class="stat-val">156</span><span class="stat-label">Repos</span></div>
+          <div class="stat-item"><span class="stat-val">10</span><span class="stat-label">Mentors</span></div>
+        </div>
+        <button class="btn-join joined" onclick="toggleJoin(this)">Joined</button>
+      </div>
+
+      <!-- Design -->
+      <div class="community-card">
+        <div class="card-top">
+          <div class="comm-icon">🎨</div>
+          <span class="member-badge">640 Members</span>
+        </div>
+        <div class="card-info">
+          <h3>UX Visionaries</h3>
+          <p>Focusing on human-centered design, pixel perfection, and motion design. Regular portfolio reviews and Figma workshops.</p>
+        </div>
+        <div class="card-stats">
+          <div class="stat-item"><span class="stat-val">45</span><span class="stat-label">Case Studies</span></div>
+          <div class="stat-item"><span class="stat-val">3</span><span class="stat-label">Art Dirs</span></div>
+        </div>
+        <button class="btn-join" onclick="toggleJoin(this)">Join Community</button>
+      </div>
+
+      <!-- Data -->
+      <div class="community-card">
+        <div class="card-top">
+          <div class="comm-icon">📊</div>
+          <span class="member-badge">920 Members</span>
+        </div>
+        <div class="card-info">
+          <h3>Data Architects</h3>
+          <p>Visualizing hidden patterns and building scalable data pipelines. Mastering Python, R, and modern BI tools for enterprise insights.</p>
+        </div>
+        <div class="card-stats">
+          <div class="stat-item"><span class="stat-val">12GB</span><span class="stat-label">Datasets</span></div>
+          <div class="stat-item"><span class="stat-val">6</span><span class="stat-label">Scientists</span></div>
+        </div>
+        <button class="btn-join" onclick="toggleJoin(this)">Join Community</button>
+      </div>
+
+      <!-- Web3 -->
+      <div class="community-card">
+        <div class="card-top">
+          <div class="comm-icon">⛓️</div>
+          <span class="member-badge">430 Members</span>
+        </div>
+        <div class="card-info">
+          <h3>Web3 Architects</h3>
+          <p>Decentralizing the future. Building smart contracts on Ethereum and Solana, exploring DeFi protocols and DAO governance models.</p>
+        </div>
+        <div class="card-stats">
+          <div class="stat-item"><span class="stat-val">8</span><span class="stat-label">Protocols</span></div>
+          <div class="stat-item"><span class="stat-val">2</span><span class="stat-label">Nodes</span></div>
+        </div>
+        <button class="btn-join" onclick="toggleJoin(this)">Join Community</button>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+  <script>
+    // Cursor Glow
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // Join Toggle
+    function toggleJoin(btn) {
+      if (btn.classList.contains('joined')) {
+        btn.classList.remove('joined');
+        btn.textContent = 'Join Community';
+      } else {
+        btn.classList.add('joined');
+        btn.textContent = 'Joined';
+      }
+    }
+  </script>
 </body>
 </html>

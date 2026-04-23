@@ -6,66 +6,62 @@
   <title>TALEX — Leaderboard & Performance</title>
   <meta name="description" content="TALEX Student Performance Leaderboard — see top performers, composite scores, rank tiers, and company recommendations.">
   <link rel="stylesheet" href="leaderboard.css">
+  <style>
+    body.is-embedded {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    body.is-embedded .sidebar { display: none !important; }
+    body.is-embedded .main-area { margin-left: 0 !important; margin-top: 0 !important; }
+    body.is-embedded .top-header { display: none !important; }
+    body.is-embedded .content { padding-top: 20px !important; }
+
+    .main-area {
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
-<body>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
 
-<!-- ═══ SIDEBAR ═══ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-icon"><img src="talex-logo.svg" alt="TALEX Logo"></div>
-    <h2>TALEX</h2>
-  </div>
+  <div class="dashboard-wrapper">
+    <div class="layout-container">
+      <!-- SIDEBAR TABS -->
+      <nav class="side-tabs">
+        <div class="tabs-group">
+          <p class="tabs-label">Global Rankings</p>
+          <button class="tab active" data-filter="All">🏆 All Time</button>
+          <button class="tab" data-filter="Monthly">📅 Monthly</button>
+          <button class="tab" data-filter="Weekly">⏳ Weekly</button>
+        </div>
+        <div class="tabs-group">
+          <p class="tabs-label">Tiers</p>
+          <button class="tab" data-filter="Grandmaster">👑 Grandmasters</button>
+          <button class="tab" data-filter="Diamond">💎 Diamond</button>
+          <button class="tab" data-filter="Gold">🥇 Gold</button>
+        </div>
+      </nav>
 
-  <div class="nav-section-label">Main</div>
-  <a href="dashboard.html"><div class="nav-item" data-page="dashboard">
-    <span class="nav-icon">📊</span> Dashboard
-  </div></a>
-  <a href="dashboard.html"><div class="nav-item" data-page="events">
-    <span class="nav-icon">🎪</span> Events
-  </div></a>
-  <a href="dashboard.html"><div class="nav-item" data-page="calendar">
-    <span class="nav-icon">📅</span> Calendar
-  </div></a>
-
-  <div class="nav-section-label">Growth</div>
-  <a href="dashboard.html"><div class="nav-item" data-page="skills">
-    <span class="nav-icon">⚡</span> Skills
-  </div></a>
-  <a href="dashboard.html"><div class="nav-item" data-page="badges">
-    <span class="nav-icon">🏅</span> Badges
-  </div></a>
-  <div class="nav-item active" data-page="leaderboard">
-    <span class="nav-icon">🏆</span> Leaderboard
-  </div>
-  <a href="dashboard.html"><div class="nav-item" data-page="settings">
-    <span class="nav-icon">⚙️</span> Settings
-  </div></a>
-</aside>
-
-<!-- ═══ MAIN AREA ═══ -->
-<div class="main-area">
-
-  <!-- ── HEADER ── -->
-  <header class="top-header" id="topHeader">
-    <div class="header-left">
-      <h1>🏆 <span>Leaderboard</span></h1>
-    </div>
-    <div class="header-right">
-      <div class="filter-pills">
-        <button class="pill active" data-filter="all">All Tiers</button>
-        <button class="pill" data-filter="grandmaster">🏆 Grandmaster</button>
-        <button class="pill" data-filter="diamond">💎 Diamond</button>
-        <button class="pill" data-filter="platinum">🥇 Platinum</button>
-        <button class="pill" data-filter="gold">🥈 Gold</button>
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content-area">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="title-section">
+        <h1>Global <span style="color:var(--cyan);">Leaderboard</span></h1>
+        <p>See how you stack up against the best talent on TALEX.</p>
       </div>
-      <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Search students..." id="searchInput">
-      </div>
-      <a href="dashboard.html"><button class="header-btn" title="Dashboard">📊</button></a>
-      <a href="new.html"><button class="header-btn" title="Home">🏠</button></a>
-    </div>
-  </header>
+      <button class="btn-back" onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }">Back to Dashboard</button>
+    </header>
 
   <!-- ── CONTENT ── -->
   <main class="content" id="mainContent">
@@ -99,8 +95,9 @@
       </table>
     </section>
 
-  </main>
-</div>
+      </main>
+    </div>
+  </div>
 
 <!-- ═══ DETAIL MODAL ═══ -->
 <div class="modal-overlay" id="modalOverlay">
@@ -175,6 +172,11 @@
   </div>
 </div>
 
-<script src="leaderboard.js"></script>
+  <script>
+    if (window.self !== window.top) {
+      document.body.classList.add('is-embedded');
+    }
+  </script>
+  <script src="leaderboard.js"></script>
 </body>
 </html>

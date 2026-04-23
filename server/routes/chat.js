@@ -70,22 +70,33 @@ router.post('/', async (req, res) => {
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      systemInstruction: 'You are TALEX AI, a helpful learning assistant for the TALEX skill-learning platform.',
-    });
 
-    const result = await model.generateContentStream(message.trim());
+    // Try models in order until one works
+    const modelsToTry = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+    let lastError = null;
 
-    for await (const chunk of result.stream) {
-      const text = chunk.text();
-      if (text) {
-        res.write(`data: ${JSON.stringify({ content: text })}\n\n`);
+    for (const modelName of modelsToTry) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const prompt = `You are TALEX AI, a helpful learning assistant for the TALEX skill-learning platform.\n\nUser: ${message.trim()}\n\nAssistant:`;
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+
+        // Send as SSE chunks (simulate streaming by splitting into sentences)
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+        for (const sentence of sentences) {
+          res.write(`data: ${JSON.stringify({ content: sentence + ' ' })}\n\n`);
+        }
+        res.write('data: [DONE]\n\n');
+        res.end();
+        return;
+      } catch (err) {
+        lastError = err;
+        continue;
       }
     }
 
-    res.write('data: [DONE]\n\n');
-    res.end();
+    throw lastError;
   } catch (err) {
     console.error('Gemini error:', err.message);
     if (res.headersSent) {

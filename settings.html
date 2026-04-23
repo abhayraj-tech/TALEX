@@ -6,8 +6,21 @@
   <title>TALEX – Settings</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="settings.css"/>
+  <style>
+    body.is-embedded .sidebar,
+    body.is-embedded .topbar { display: none !important; }
+    body.is-embedded .main { margin-left: 0 !important; margin-top: 0 !important; }
+    body.is-embedded .page-body { padding: 20px 24px !important; }
+    body.is-embedded .back-link { display: none !important; }
+    body.is-embedded .settings-tabs { top: 10px !important; }
+  </style>
 </head>
-<body>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
