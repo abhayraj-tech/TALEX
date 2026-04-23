@@ -123,7 +123,7 @@
             <p class="panel-desc">Update your personal details and public profile.</p>
 
             <div class="avatar-section">
-              <div class="avatar-large">AR</div>
+              <div class="avatar-large" id="settingsAvatar">?</div>
               <div>
                 <button class="btn-secondary">Change Photo</button>
                 <button class="btn-ghost">Remove</button>
@@ -133,15 +133,15 @@
             <div class="form-grid">
               <div class="form-group">
                 <label>First Name</label>
-                <input type="text" value="Abhay" />
+                <input type="text" id="settingsFirstName" placeholder="First name" />
               </div>
               <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" value="Raj" />
+                <input type="text" id="settingsLastName" placeholder="Last name" />
               </div>
               <div class="form-group full">
                 <label>Username</label>
-                <input type="text" value="@abhayraj" />
+                <input type="text" id="settingsUsername" placeholder="@username" />
               </div>
               <div class="form-group full">
                 <label>Bio</label>
@@ -175,7 +175,7 @@
             <div class="form-grid">
               <div class="form-group full">
                 <label>Email Address</label>
-                <input type="email" value="abhay@example.com" />
+                <input type="email" id="settingsEmail" placeholder="your@email.com" />
               </div>
               <div class="form-group full">
                 <label>Current Password</label>
@@ -312,9 +312,9 @@
                   <div class="theme-preview light-prev"></div>
                   <span>Light</span>
                 </div>
-                <div class="theme-opt" data-theme="system">
+                <div class="theme-opt" data-theme="mixed">
                   <div class="theme-preview system-prev"></div>
-                  <span>System</span>
+                  <span>Mixed</span>
                 </div>
               </div>
             </div>
@@ -474,20 +474,75 @@
       });
     });
 
-    // Theme picker
-    document.querySelectorAll('.theme-opt').forEach(opt => {
-      opt.addEventListener('click', () => {
-        document.querySelectorAll('.theme-opt').forEach(o => o.classList.remove('active'));
-        opt.classList.add('active');
+    // ── Populate profile from logged-in user ──────────────────────
+    (function populateProfile() {
+      const user = JSON.parse(sessionStorage.getItem('talex_user') || 'null');
+      if (!user) return;
+
+      const name = user.name || '';
+      const parts = name.trim().split(' ');
+      const firstName = parts[0] || '';
+      const lastName = parts.slice(1).join(' ') || '';
+      const username = user.username || user.email?.split('@')[0] || '';
+      const email = user.email || '';
+
+      // Avatar initials
+      const initials = (firstName[0] || '') + (lastName[0] || firstName[1] || '');
+      const avatarEl = document.getElementById('settingsAvatar');
+      if (avatarEl) avatarEl.textContent = initials.toUpperCase() || '?';
+
+      // Form fields
+      const fn = document.getElementById('settingsFirstName');
+      const ln = document.getElementById('settingsLastName');
+      const un = document.getElementById('settingsUsername');
+      const em = document.getElementById('settingsEmail');
+
+      if (fn) fn.value = firstName;
+      if (ln) ln.value = lastName;
+      if (un) un.value = username ? '@' + username.replace(/^@/, '') : '';
+      if (em) em.value = email;
+    })();
+
+    // Theme Switching Logic
+    const themeOpts = document.querySelectorAll('.theme-opt');
+    
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      if (window.parent && window.parent.document) {
+        window.parent.document.documentElement.setAttribute('data-theme', theme);
+        // Also notify the parent's iframe (which might be this one or another)
+        const frame = window.parent.document.getElementById('moduleFrame');
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage({ type: 'THEME_CHANGE', theme }, '*');
+        }
+      }
+      localStorage.setItem('talex_theme', theme);
+      
+      // Update UI active state
+      themeOpts.forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.theme === theme);
       });
+    }
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('talex_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeOpts.forEach(opt => {
+      opt.addEventListener('click', () => applyTheme(opt.dataset.theme));
     });
 
     // Accent picker
-    document.querySelectorAll('.accent-dot').forEach(dot => {
+    const accentDots = document.querySelectorAll('.accent-dot');
+    accentDots.forEach(dot => {
       dot.addEventListener('click', () => {
-        document.querySelectorAll('.accent-dot').forEach(d => d.classList.remove('active'));
+        accentDots.forEach(d => d.classList.remove('active'));
         dot.classList.add('active');
-        document.documentElement.style.setProperty('--accent', dot.style.background);
+        const color = dot.style.background;
+        document.documentElement.style.setProperty('--accent', color);
+        if (window.parent && window.parent.document) {
+          window.parent.document.documentElement.style.setProperty('--cyan', color);
+        }
       });
     });
   </script>
