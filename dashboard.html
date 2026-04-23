@@ -9,6 +9,13 @@
   <link rel="stylesheet" href="dashboard-premium.css">
   <link rel="stylesheet" href="explore_courses.css">
   <link rel="stylesheet" href="chatbot-widget.css">
+  <script>
+    // Immediate Theme Initialization to prevent FOUC
+    (function() {
+      const savedTheme = localStorage.getItem('talex_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 </head>
 <body>
 
