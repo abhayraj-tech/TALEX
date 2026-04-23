@@ -25,6 +25,8 @@ app.use('/api/courses', require('./routes/courses'));
 app.use('/api/enroll', require('./routes/enroll'));
 app.use('/api/instructors', require('./routes/instructors'));
 app.use('/api/testimonials', require('./routes/testimonials'));
+app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
 
 // Health check
 app.get('/api/health', (req, res) => {

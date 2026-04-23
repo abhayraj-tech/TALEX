@@ -89,18 +89,20 @@ function showAuthModal(mode = 'signup') {
       currentUser = data.user;
       localStorage.setItem('talex_token', authToken);
       localStorage.setItem('talex_user', JSON.stringify(currentUser));
-      updateAuthUI();
-      // Trigger water ripple effect
-      triggerRipple(btnX, btnY);
     } catch (err) {
-      console.warn('[Demo Fallback] API error, bypassing to redirect:', err.message);
-      // Trigger water ripple effect
-      triggerRipple(btnX, btnY);
-      
-      // showToast(err.message, 'error');
-      // btn.disabled = false;
-      // btn.textContent = mode === 'signup' ? 'Create Account →' : 'Log In →';
+      console.warn('[Demo Fallback] API error, using dummy user for redirect:', err.message);
+      // Fallback for testing without backend
+      localStorage.setItem('talex_token', 'demo-token');
+      localStorage.setItem('talex_user', JSON.stringify({
+        name: body.name || 'TALEX Explorer',
+        email: body.email,
+        credits: 500
+      }));
     }
+
+    updateAuthUI();
+    // Trigger water ripple effect
+    triggerRipple(btnX, btnY);
   });
 }
 
@@ -212,13 +214,13 @@ function triggerRipple(x, y) {
   const H = window.innerHeight;
   const maxD = Math.sqrt(W * W + H * H) * 2.2;
 
-  // Wave rings
+  // Wave rings (Cinematic Teal/Cyan Portal)
   const rings = [
-    { delay: 0,   size: maxD * 0.15, color: 'rgba(0,255,200,0.9)', bw: 2.5 },
-    { delay: 40,  size: maxD * 0.35, color: 'rgba(0,255,200,0.65)', bw: 1.8 },
-    { delay: 90, size: maxD * 0.6,  color: 'rgba(0,255,200,0.4)',  bw: 1.2 },
-    { delay: 155, size: maxD * 0.85, color: 'rgba(0,255,200,0.22)', bw: 0.8 },
-    { delay: 235, size: maxD,        color: 'rgba(0,255,200,0.1)',  bw: 0.5 }
+    { delay: 0,   size: maxD * 0.2,  color: 'rgba(0,255,220,1)',    bw: 3.5 },
+    { delay: 30,  size: maxD * 0.4,  color: 'rgba(0,255,200,0.8)',  bw: 2.5 },
+    { delay: 70,  size: maxD * 0.65, color: 'rgba(0,255,180,0.5)',  bw: 1.8 },
+    { delay: 130, size: maxD * 0.9,  color: 'rgba(0,255,160,0.3)',  bw: 1.2 },
+    { delay: 210, size: maxD * 1.2,  color: 'rgba(0,255,150,0.1)',  bw: 0.8 }
   ];
 
   rings.forEach(r => spawnRipple(x, y, r.delay, r.size, r.color, r.bw));
@@ -251,9 +253,10 @@ function triggerRipple(x, y) {
   requestAnimationFrame(animateFill);
 
   // Navigate
+  console.log('🚀 Redirecting to dashboard...');
   setTimeout(() => {
-    window.location.href = 'dashboard.html';
-  }, 750);
+    window.location.assign('dashboard.html');
+  }, 800);
 }
 
 // ===== LOAD COURSES FROM API =====

@@ -402,3 +402,127 @@ if (localStorage.getItem('talex_token')) {
   fetchPublishedContent();
 }
 
+// ════════════════════════════════════════
+// NOTIFICATION SYSTEM LOGIC
+// ════════════════════════════════════════
+
+const notifBtn = document.getElementById('notifBtn');
+const notifDropdown = document.getElementById('notifDropdown');
+const notifList = document.getElementById('notifList');
+const notifBadge = document.getElementById('notifBadge');
+const notifCount = document.getElementById('notifCount');
+
+let notificationsData = [];
+
+// Toggle dropdown
+if (notifBtn) {
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (notifDropdown) {
+      notifDropdown.classList.toggle('open');
+      if (notifDropdown.classList.contains('open')) {
+        fetchNotifications();
+      }
+    }
+  });
+}
+
+// Close on click outside
+document.addEventListener('click', (e) => {
+  if (notifDropdown && !notifDropdown.contains(e.target) && notifBtn && !notifBtn.contains(e.target)) {
+    notifDropdown.classList.remove('open');
+  }
+});
+
+// Fetch Notifications
+async function fetchNotifications() {
+  try {
+    const res = await fetch('/api/notifications', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
+      }
+    });
+    const data = await res.json();
+    if (data.success) {
+      notificationsData = data.notifications;
+      renderNotifications();
+      updateNotifBadge();
+    }
+  } catch (err) {
+    console.error('Error fetching notifications:', err);
+  }
+}
+
+function renderNotifications() {
+  if (!notifList) return;
+
+  if (notificationsData.length === 0) {
+    notifList.innerHTML = '<div class="notif-empty">No notifications yet</div>';
+    return;
+  }
+
+  notifList.innerHTML = notificationsData.map(n => {
+    const time = formatTime(n.createdAt);
+    return `
+      <div class="notif-item ${n.isRead ? '' : 'unread'}" data-id="${n._id}" onclick="markNotificationAsRead('${n._id}')">
+        <div class="notif-title">
+          ${n.title}
+        </div>
+        <div class="notif-msg">${n.message}</div>
+        <div class="notif-time">${time}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Renamed to avoid collision with potential global markAsRead
+window.markNotificationAsRead = async function(id) {
+  try {
+    const res = await fetch(`/api/notifications/${id}/read`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
+      }
+    });
+    const data = await res.json();
+    if (data.success) {
+      // Update local data and re-render
+      notificationsData = notificationsData.map(n => n._id === id ? { ...n, isRead: true } : n);
+      renderNotifications();
+      updateNotifBadge();
+    }
+  } catch (err) {
+    console.error('Error marking as read:', err);
+  }
+};
+
+function updateNotifBadge() {
+  if (!notifBadge || !notifCount) return;
+  const unreadCount = notificationsData.filter(n => !n.isRead).length;
+  if (unreadCount > 0) {
+    notifBadge.textContent = unreadCount;
+    notifBadge.classList.add('visible');
+    notifCount.textContent = `${unreadCount} New`;
+  } else {
+    notifBadge.classList.remove('visible');
+    notifCount.textContent = '0 New';
+  }
+}
+
+function formatTime(isoString) {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMin = Math.floor(diffMs / 60000);
+  
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 1440) return `${Math.floor(diffMin / 60)}h ago`;
+  return date.toLocaleDateString();
+}
+
+// Initial fetch to show badge on load
+if (localStorage.getItem('talex_token')) {
+  fetchNotifications();
+}
+

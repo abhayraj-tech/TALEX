@@ -248,10 +248,14 @@
       background: rgba(0,0,0,0.55);
     }
 
-    body.shrink-active {
-      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-      transform: scale(0.96);
+    /* Only hide the content, NOT the ripple layers */
+    body.shrink-active #landing-view, 
+    body.shrink-active .navbar, 
+    body.shrink-active #app-view {
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+      transform: scale(0.95);
       opacity: 0;
+      pointer-events: none;
     }
 
     @keyframes rippleExpand {

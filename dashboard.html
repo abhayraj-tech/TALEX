@@ -37,6 +37,9 @@
   <div class="nav-item" data-page="badges">
     <span class="nav-icon">🏅</span> Badges
   </div>
+  <a href="leaderboard.html"><div class="nav-item" data-page="leaderboard">
+    <span class="nav-icon">🏆</span> Leaderboard
+  </div></a>
   <div class="nav-item" data-page="settings">
     <span class="nav-icon">⚙️</span> Settings
   </div>
@@ -77,10 +80,24 @@
       <button class="publish-btn">
         <span class="btn-label">Publish</span>
       </button>
-      <button class="header-btn" id="notifBtn">
-        🔔
-        <span class="badge">3</span>
-      </button>
+      <div class="notif-wrapper">
+        <button class="header-btn" id="notifBtn">
+          🔔
+          <span class="badge" id="notifBadge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notifDropdown">
+          <div class="notif-header">
+            <h3>Notifications</h3>
+            <span class="notif-count" id="notifCount">0 New</span>
+          </div>
+          <div class="notif-list" id="notifList">
+            <div class="notif-empty">No new notifications</div>
+          </div>
+          <div class="notif-footer">
+            <button class="btn-view-all">View All Notifications</button>
+          </div>
+        </div>
+      </div>
       <button class="header-btn btn-back-home" id="backBtn" title="Back to Home">🏠</button>
     </div>
   </header>
