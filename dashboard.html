@@ -6,6 +6,7 @@
   <title>TALEX — Dashboard</title>
   <meta name="description" content="Your TALEX event dashboard — discover events, track skills, and grow your network.">
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="explore_courses.css">
 </head>
 <body>
 
@@ -28,6 +29,9 @@
   </div>
   <div class="nav-item" data-page="communities">
     <span class="nav-icon">👥</span> Communities
+  </div>
+  <div class="nav-item" data-page="courses" id="sidebarCoursesBtn">
+    <span class="nav-icon">📚</span> Courses
   </div>
 
   <div class="nav-section-label">Growth</div>
@@ -103,7 +107,7 @@
   </header>
 
   <!-- ── CONTENT ── -->
-  <main class="content">
+  <main class="content" id="dashboardView">
 
     <a href="new.html" class="btn-back">← Back to Home</a>
 
@@ -342,6 +346,77 @@
       </div>
     </div>
 
+    </div>
+  </main>
+
+  <!-- ── EXPLORE VIEW ── -->
+  <main class="content" id="exploreView" style="display:none; padding-top: 20px;">
+    <!-- HERO -->
+    <section class="hero" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 20px;">
+      <div class="hero-text">
+        <h1 style="font-size: clamp(28px,4vw,44px); font-weight: 800;">Explore <span class="accent" style="color: var(--cyan);">Courses</span></h1>
+        <p style="color: var(--muted); margin-top: 10px;">Curated learning paths tailored to your skills and goals.</p>
+      </div>
+      
+      <div class="search-bar" style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; min-width: 300px;">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="exploreSearchInput" placeholder="Search courses..." style="background: none; border: none; outline: none; color: var(--text); width: 100%;">
+      </div>
+
+      <div class="hero-stats" style="display: flex; gap: 16px;">
+        <div class="stat" style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 22px; min-width: 80px;">
+          <span class="stat-num" id="totalCount" style="font-size: 22px; font-weight: 700; color: var(--cyan);">—</span>
+          <span class="stat-label" style="font-size: 11px; color: var(--muted);">Courses</span>
+        </div>
+        <div class="stat" style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 22px; min-width: 80px;">
+          <span class="stat-num" style="font-size: 22px; font-weight: 700; color: var(--cyan);">12</span>
+          <span class="stat-label" style="font-size: 11px; color: var(--muted);">Categories</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTERS -->
+    <div class="filters" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; gap: 12px; flex-wrap: wrap;">
+      <div class="filter-chips" id="filterChips" style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="chip active" onclick="UI.setFilter('All',this)">All</button>
+        <button class="chip" onclick="UI.setFilter('AI & ML',this)">AI &amp; ML</button>
+        <button class="chip" onclick="UI.setFilter('Design',this)">Design</button>
+        <button class="chip" onclick="UI.setFilter('Startup',this)">Startup</button>
+        <button class="chip" onclick="UI.setFilter('Data',this)">Data</button>
+        <button class="chip" onclick="UI.setFilter('Web Dev',this)">Web Dev</button>
+      </div>
+      <select class="sort-select" onchange="UI.setSort(this.value)" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); padding: 8px 14px; outline: none; cursor: pointer;">
+        <option value="default">Sort: Featured</option>
+        <option value="rating">Highest Rated</option>
+        <option value="students">Most Popular</option>
+        <option value="price">Price: Low → High</option>
+      </select>
+    </div>
+
+    <!-- GRID -->
+    <div class="courses-grid" id="coursesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 22px;"></div>
+
+    <!-- LOADING STATE -->
+    <div id="loadingState" class="loading-state" style="display: flex; align-items: center; gap: 14px; padding: 60px 0; color: var(--muted);">
+      <div class="spinner"></div>
+      <span>Loading courses…</span>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState" style="display:none; flex-direction: column; align-items: center; gap: 14px; padding: 80px 20px; color: var(--muted);">
+      <p>No courses match your filter.</p>
+    </div>
+
+    <!-- EXPLORE MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="UI.closeModal()" style="position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .25s ease; padding: 20px;">
+      <div class="modal" onclick="event.stopPropagation()" id="modal" style="background: var(--bg-surface); border: 1px solid var(--cyan); border-radius: 20px; max-width: 520px; width: 100%; overflow: hidden; position: relative; max-height: 90vh; overflow-y: auto;">
+        <button class="modal-close" onclick="UI.closeModal()" style="position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: rgba(255,255,255,.08); border-radius: 50%; color: var(--muted); display: flex; align-items: center; justify-content: center;">✕</button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
   </main>
 </div>
 
@@ -399,6 +474,8 @@
 <!-- HIDDEN FILE INPUT -->
 <input type="file" id="publishInput" accept="image/*,video/*" style="display: none;">
 
-<script src="dashboard.js"></script>
+  <script src="dashboard.js"></script>
+  <script src="explore_backend.js"></script>
+  <script src="explore.js"></script>
 </body>
 </html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TALEX — Explore Courses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="explore_courses.css"/>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <rect x="2" y="2" width="8" height="8" rx="2" fill="#00D4C8"/>
+        <rect x="12" y="2" width="8" height="8" rx="2" fill="#00D4C8" opacity=".5"/>
+        <rect x="2" y="12" width="8" height="8" rx="2" fill="#00D4C8" opacity=".5"/>
+        <rect x="12" y="12" width="8" height="8" rx="2" fill="#00D4C8"/>
+      </svg>
+    </div>
+    TALEX
+  </div>
+  <nav>
+    <p class="nav-label">MAIN</p>
+    <a href="index.html" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="#" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      Events
+    </a>
+    <a href="#" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Calendar
+    </a>
+    <a href="#" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Communities
+    </a>
+    <p class="nav-label">GROWTH</p>
+    <a href="explore_courses.html" class="nav-item active">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Courses
+    </a>
+    <a href="#" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Skills
+    </a>
+    <a href="#" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+      Badges
+    </a>
+    <a href="#" class="nav-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Settings
+    </a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="user-chip">
+      <div class="avatar">A</div>
+      <div>
+        <div class="user-name">Abhay</div>
+        <div class="user-credits">500 ⚡ Credits</div>
+      </div>
+    </div>
+    <div class="date-chip">
+      <span class="date-num">23</span>
+      <span class="date-label">APR 2026</span>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    </div>
+    <div class="search-bar">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search courses…"/>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Explore <span class="accent">Courses</span></h1>
+      <p>Curated learning paths tailored to your skills and goals.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="totalCount">—</span><span class="stat-label">Courses</span></div>
+      <div class="stat"><span class="stat-num">12</span><span class="stat-label">Categories</span></div>
+      <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Avg Rating</span></div>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <div class="filter-chips" id="filterChips">
+      <button class="chip active" onclick="UI.setFilter('All',this)">All</button>
+      <button class="chip" onclick="UI.setFilter('AI & ML',this)">AI &amp; ML</button>
+      <button class="chip" onclick="UI.setFilter('Design',this)">Design</button>
+      <button class="chip" onclick="UI.setFilter('Startup',this)">Startup</button>
+      <button class="chip" onclick="UI.setFilter('Data',this)">Data</button>
+      <button class="chip" onclick="UI.setFilter('Web Dev',this)">Web Dev</button>
+      <button class="chip" onclick="UI.setFilter('Cultural',this)">Cultural</button>
+    </div>
+    <select class="sort-select" onchange="UI.setSort(this.value)">
+      <option value="default">Sort: Featured</option>
+      <option value="rating">Highest Rated</option>
+      <option value="students">Most Popular</option>
+      <option value="price">Price: Low → High</option>
+    </select>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div id="loadingState" class="loading-state">
+    <div class="spinner"></div>
+    <span>Loading courses…</span>
+  </div>
+
+  <!-- GRID -->
+  <div class="courses-grid" id="coursesGrid"></div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState" style="display:none">
+    <svg width="48" height="48" fill="none" stroke="#00D4C8" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p>No courses match your filter.</p>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="UI.closeModal()">
+  <div class="modal" onclick="event.stopPropagation()" id="modal">
+    <button class="modal-close" onclick="UI.closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="explore_courses_backend.js"></script>
+<script src="explore_courses.js"></script>
+</body>
+</html>

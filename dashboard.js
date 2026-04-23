@@ -26,10 +26,27 @@ const currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
 })();
 
 // ── Sidebar Navigation ──
+const dashboardView = document.getElementById('dashboardView');
+const exploreView = document.getElementById('exploreView');
+
+function switchPage(pageId) {
+  if (pageId === 'courses') {
+    dashboardView.style.display = 'none';
+    exploreView.style.display = 'block';
+  } else {
+    exploreView.style.display = 'none';
+    dashboardView.style.display = 'block';
+  }
+}
+
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     item.classList.add('active');
+    
+    const page = item.getAttribute('data-page');
+    switchPage(page);
+
     if (item.id === 'sidebarCalBtn') toggleCalendar();
   });
 });
