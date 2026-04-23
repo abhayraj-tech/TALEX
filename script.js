@@ -4,15 +4,15 @@ const isFile = window.location.origin.includes('file:') || window.location.origi
 const API_BASE = (isLocalhost || isFile) ? 'http://localhost:5000/api' : window.location.origin + '/api';
 // Clear any stale demo tokens so nobody is auto-logged in
 (function clearDemoSession() {
-  const t = localStorage.getItem('talex_token');
+  const t = sessionStorage.getItem('talex_token');
   if (!t || t === 'demo-token') {
-    localStorage.removeItem('talex_token');
-    localStorage.removeItem('talex_user');
+    sessionStorage.removeItem('talex_token');
+    sessionStorage.removeItem('talex_user');
   }
 })();
 
-let authToken = localStorage.getItem('talex_token');
-let currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
+let authToken = sessionStorage.getItem('talex_token');
+let currentUser = JSON.parse(sessionStorage.getItem('talex_user') || 'null');
 
 // ===== UTILITY FUNCTIONS =====
 async function apiCall(endpoint, options = {}) {
@@ -102,8 +102,8 @@ function showAuthModal(mode = 'signup') {
       const data = await apiCall(`/auth/${mode}`, { method: 'POST', body: JSON.stringify(body) });
       authToken = data.token;
       currentUser = data.user;
-      localStorage.setItem('talex_token', authToken);
-      localStorage.setItem('talex_user', JSON.stringify(currentUser));
+      sessionStorage.setItem('talex_token', authToken);
+      sessionStorage.setItem('talex_user', JSON.stringify(currentUser));
     } catch (err) {
       console.warn('[Auth] Backend unavailable:', err.message);
       // Show error to user instead of auto-logging in
@@ -151,8 +151,8 @@ function closeModal() {
 function logout() {
   authToken = null;
   currentUser = null;
-  localStorage.removeItem('talex_token');
-  localStorage.removeItem('talex_user');
+  sessionStorage.removeItem('talex_token');
+  sessionStorage.removeItem('talex_user');
   updateAuthUI();
   showToast('Logged out successfully');
   const menu = document.getElementById('userMenu');
@@ -320,7 +320,7 @@ async function enrollCourse(courseId) {
     const data = await apiCall('/enroll', { method: 'POST', body: JSON.stringify({ courseId }) });
     currentUser.credits = data.remainingCredits;
     currentUser.enrolledCourses = data.enrolledCourses;
-    localStorage.setItem('talex_user', JSON.stringify(currentUser));
+    sessionStorage.setItem('talex_user', JSON.stringify(currentUser));
     updateAuthUI();
     showToast(data.message);
     if (btn) {

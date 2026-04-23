@@ -3,12 +3,12 @@
 // ═══════════════════════════════════════════
 
 // ── Auth Check ──
-if (!localStorage.getItem('talex_token')) {
+if (!sessionStorage.getItem('talex_token')) {
   window.location.href = 'new.html';
 }
 
 // ── User Data ──
-const currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
+const currentUser = JSON.parse(sessionStorage.getItem('talex_user') || 'null');
 
 (function initProfile() {
   if (!currentUser) return;
@@ -482,7 +482,7 @@ async function fetchNotifications() {
   try {
     const res = await fetch('/api/notifications', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
+        'Authorization': `Bearer ${sessionStorage.getItem('talex_token')}`
       }
     });
     const data = await res.json();
@@ -524,7 +524,7 @@ window.markNotificationAsRead = async function(id) {
     const res = await fetch(`/api/notifications/${id}/read`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('talex_token')}`
+        'Authorization': `Bearer ${sessionStorage.getItem('talex_token')}`
       }
     });
     const data = await res.json();
@@ -565,7 +565,7 @@ function formatTime(isoString) {
 }
 
 // Initial fetch to show badge on load
-if (localStorage.getItem('talex_token')) {
+if (sessionStorage.getItem('talex_token')) {
   fetchNotifications();
 }
 
