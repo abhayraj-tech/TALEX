@@ -138,6 +138,9 @@ body.is-embedded .page-header { display: none !important; }
 body.is-embedded .dashboard-wrapper { 
   padding-top: 20px !important; 
   margin-top: 0 !important;
+  max-width: 100% !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
 }
 
 /* Header */

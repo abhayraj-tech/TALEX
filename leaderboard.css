@@ -79,6 +79,11 @@ body.is-embedded .sidebar,
 body.is-embedded .topbar,
 body.is-embedded .top-header { display: none !important; }
 body.is-embedded .main-area { margin-left: 0 !important; margin-top: 0 !important; }
+body.is-embedded .dashboard-wrapper {
+  max-width: 100% !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
 
 /* Layout Container */
 .layout-container {
