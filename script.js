@@ -43,14 +43,18 @@ function showToast(message, type = 'success') {
 function updateAuthUI() {
   const navLinks = document.getElementById('navLinks');
   const ctaBtn = navLinks.querySelector('.nav-cta');
+  const logoutBtn = document.getElementById('navLogout');
+  
   if (currentUser) {
     ctaBtn.textContent = `Hi, ${currentUser.name.split(' ')[0]} (${currentUser.credits || 0} ⚡)`;
     ctaBtn.style.cursor = 'pointer';
     ctaBtn.title = 'Go to Dashboard';
     ctaBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'dashboard.html'; };
+    if (logoutBtn) logoutBtn.style.display = 'inline-block';
   } else {
     ctaBtn.textContent = 'Get Started Free';
     ctaBtn.onclick = (e) => { e.preventDefault(); showAuthModal('signup'); };
+    if (logoutBtn) logoutBtn.style.display = 'none';
   }
 }
 

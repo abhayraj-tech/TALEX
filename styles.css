@@ -24,6 +24,8 @@ section{padding:100px 0}
 .nav-links a:hover{color:#fff}
 .nav-cta{padding:10px 24px;border-radius:50px;background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff!important;font-weight:600;font-size:.85rem;transition:transform .3s,box-shadow .3s}
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,212,170,.3)}
+.nav-logout{padding:8px 18px;border-radius:50px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text2);font-weight:600;font-size:.8rem;cursor:pointer;transition:all .3s;margin-left:8px}
+.nav-logout:hover{background:rgba(239,68,68,.1);border-color:#ef4444;color:#ef4444}
 .nav-menu-btn{display:none;background:none;color:#fff;font-size:1.5rem;cursor:pointer}
 
 /* ===== HERO ===== */

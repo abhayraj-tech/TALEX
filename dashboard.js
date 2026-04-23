@@ -2,6 +2,11 @@
 // TALEX Dashboard — Interactive Logic
 // ═══════════════════════════════════════════
 
+// ── Auth Check ──
+if (!localStorage.getItem('talex_token')) {
+  window.location.href = 'new.html';
+}
+
 // ── User Data ──
 const currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
 
