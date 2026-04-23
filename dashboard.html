@@ -654,7 +654,7 @@
       if (txt.includes('Browse Courses')) btn.onclick = () => switchPage('courses');
       if (txt.includes('View Badges'))    btn.onclick = () => switchPage('badges');
       if (txt.includes('Search Events'))  btn.onclick = () => document.getElementById('searchInput').focus();
-      if (txt.includes('Publish'))        btn.onclick = () => document.getElementById('uploadModalOverlay').style.display = 'flex';
+      if (txt.includes('Publish'))        btn.onclick = () => openPublishModal();
     });
 
     // Hover effect on stat items
