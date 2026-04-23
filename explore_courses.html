@@ -6,8 +6,18 @@
   <title>TALEX — Explore Courses</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="explore_courses.css"/>
+  <style>
+    body.is-embedded .page-header { display: none !important; }
+    body.is-embedded .dashboard-wrapper { padding-top: 20px !important; }
+  </style>
 </head>
-<body>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
+
 <!-- CURSOR GLOW -->
 <div id="cursor-glow"></div>
 
@@ -20,7 +30,7 @@
         <h1>Explore <span class="accent" style="color:var(--accent);">Courses</span></h1>
         <p>Curated learning paths tailored to your skills and goals.</p>
       </div>
-      <button class="btn-back" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+      <button class="btn-back" onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }">Back to Dashboard</button>
     </div>
   </header>
 
@@ -30,6 +40,7 @@
       <div class="stat"><span class="stat-num" id="totalCount">—</span><span class="stat-label">Courses</span></div>
       <div class="stat"><span class="stat-num">12</span><span class="stat-label">Categories</span></div>
       <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Avg Rating</span></div>
+      <div class="stat"><span class="stat-num">2.5k</span><span class="stat-label">Active Learners</span></div>
     </div>
 
   <!-- FILTERS -->
