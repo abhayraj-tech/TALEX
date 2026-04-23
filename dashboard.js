@@ -43,11 +43,11 @@ function switchPage(pageId) {
   if (pageId === 'courses') {
     exploreView.style.display = 'block';
   } else if (pageId === 'skills') {
-    skillsView.style.display = 'block';
+    window.location.href = 'skill-button.html';
   } else if (pageId === 'badges') {
-    badgesView.style.display = 'block';
+    window.location.href = 'badge-button.html';
   } else if (pageId === 'communities') {
-    communitiesView.style.display = 'block';
+    window.location.href = 'community-button.html';
   } else if (pageId === 'settings') {
     settingsView.style.display = 'block';
   } else {

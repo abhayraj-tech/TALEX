@@ -602,6 +602,21 @@
       return;
     }
 
+    if (page === 'badges' && !param) {
+      window.location.href = 'badge-button.html';
+      return;
+    }
+
+    if (page === 'skills' && !param) {
+      window.location.href = 'skill-button.html';
+      return;
+    }
+
+    if (page === 'communities' && !param) {
+      window.location.href = 'community-button.html';
+      return;
+    }
+
     if (page === 'settings') {
       window.location.href = 'settings.html';
       return;
