@@ -32,6 +32,14 @@
     if (window.parent === window) {
       document.body.classList.remove('is-embedded');
     }
+    // Theme sync
+    (function() {
+      const applyTheme = (theme) => document.documentElement.setAttribute('data-theme', theme);
+      applyTheme(localStorage.getItem('talex_theme') || 'dark');
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'THEME_CHANGE') applyTheme(e.data.theme);
+      });
+    })();
   </script>
 
   <div class="dashboard-wrapper">
