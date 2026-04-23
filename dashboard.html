@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="dashboard.css">
   <link rel="stylesheet" href="dashboard-premium.css">
   <link rel="stylesheet" href="explore_courses.css">
+  <link rel="stylesheet" href="chatbot-widget.css">
 </head>
 <body>
 
@@ -24,12 +25,6 @@
   <div class="nav-section-label">Main</div>
   <div class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard')">
     <span class="nav-icon">📊</span> Dashboard
-  </div>
-  <div class="nav-item" data-page="events" onclick="switchPage('events')">
-    <span class="nav-icon">🎪</span> Events
-  </div>
-  <div class="nav-item" data-page="calendar" id="sidebarCalBtn" onclick="switchPage('calendar')">
-    <span class="nav-icon">📅</span> Calendar
   </div>
   <div class="nav-item" data-page="communities" onclick="switchPage('communities')">
     <span class="nav-icon">👥</span> Communities
@@ -608,6 +603,21 @@
       return;
     }
 
+    if (page === 'badges' && !param) {
+      window.location.href = 'badge-button.html';
+      return;
+    }
+
+    if (page === 'skills' && !param) {
+      window.location.href = 'skill-button.html';
+      return;
+    }
+
+    if (page === 'communities' && !param) {
+      window.location.href = 'community-button.html';
+      return;
+    }
+
     if (page === 'settings') {
       window.location.href = 'settings.html';
       return;
@@ -892,6 +902,7 @@
     });
   });
   </script>
+  <script src="chatbot-widget.js"></script>
 </body>
 </html>
 

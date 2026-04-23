@@ -1,0 +1,730 @@
+/* ═══════════════════════════════════════════
+   TALEX Chatbot Widget — chatbot-widget.css
+   All selectors prefixed with .talex-chat-
+   Uses design tokens from dashboard.css:
+     --cyan, --bg-surface, --border, --text, --muted
+   ═══════════════════════════════════════════ */
+
+/* ── FLOATING ACTION BUTTON ──────────────────
+   Req 1.1: Fixed, bottom-right, z-index above dashboard (sidebar z=100, header z=90)
+   ─────────────────────────────────────────── */
+.talex-chat-toggle {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 110;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan, #06b6d4), #14b8a6);
+  color: #fff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.45);
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  /* Ensure icons stack correctly */
+  position: fixed;
+}
+
+.talex-chat-toggle:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 28px rgba(6, 182, 212, 0.6);
+}
+
+.talex-chat-toggle:active {
+  transform: scale(0.96);
+}
+
+.talex-chat-toggle:focus-visible {
+  outline: 2px solid var(--cyan, #06b6d4);
+  outline-offset: 3px;
+}
+
+.talex-chat-icon-bot,
+.talex-chat-icon-close {
+  position: absolute;
+  line-height: 1;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* When close icon is shown (panel open), bot icon is hidden via [hidden] attribute */
+.talex-chat-icon-bot[hidden],
+.talex-chat-icon-close[hidden] {
+  display: none;
+}
+
+/* ── CHAT PANEL ──────────────────────────────
+   Req 9.4: Adapts 320px–1920px without horizontal overflow
+   Req 9.5: Full viewport on < 480px
+   ─────────────────────────────────────────── */
+.talex-chat-panel {
+  position: fixed;
+  bottom: 96px;
+  right: 28px;
+  z-index: 109;
+  width: clamp(320px, 380px, calc(100vw - 56px));
+  height: clamp(480px, 60vh, 700px);
+  max-height: calc(100vh - 120px);
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #1e293b;
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(6, 182, 212, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  /* aria-hidden transition */
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transform-origin: bottom right;
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out, visibility 0.25s;
+  visibility: visible;
+}
+
+/* Hidden state — driven by aria-hidden="true" */
+.talex-chat-panel[aria-hidden="true"] {
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ── PANEL HEADER ────────────────────────────── */
+.talex-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #1e293b;
+  background: #0a1628;
+  flex-shrink: 0;
+}
+
+.talex-chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.talex-chat-avatar {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.talex-chat-header-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 2px;
+  line-height: 1.2;
+}
+
+.talex-chat-status {
+  font-size: 11px;
+  color: #22c55e;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.talex-chat-status::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+/* Clear button */
+.talex-chat-clear {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.talex-chat-clear:hover {
+  background: rgba(225, 29, 72, 0.12);
+  color: #e11d48;
+  border-color: rgba(225, 29, 72, 0.3);
+}
+
+.talex-chat-clear:focus-visible {
+  outline: 2px solid var(--cyan, #06b6d4);
+  outline-offset: 2px;
+}
+
+/* ── MESSAGES AREA ───────────────────────────
+   Req 2.1: Scrollable message history
+   ─────────────────────────────────────────── */
+.talex-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+  background: #0f172a;
+}
+
+/* Scrollbar styling */
+.talex-chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+.talex-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+.talex-chat-messages::-webkit-scrollbar-thumb {
+  background: var(--border, #1e293b);
+  border-radius: 2px;
+}
+.talex-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--muted, #64748b);
+}
+
+/* ── WELCOME MESSAGE ─────────────────────────── */
+.talex-chat-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+  gap: 10px;
+  flex: 1;
+  color: #94a3b8;
+}
+
+.talex-chat-welcome-icon {
+  font-size: 40px;
+  margin-bottom: 4px;
+}
+
+.talex-chat-welcome h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.talex-chat-welcome p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  color: #94a3b8;
+}
+
+/* ── MESSAGE BUBBLES ─────────────────────────── */
+.talex-chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+  gap: 4px;
+}
+
+.talex-chat-message--user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.talex-chat-message--assistant {
+  align-self: flex-start;
+  align-items: flex-start;
+  position: relative;
+}
+
+.talex-chat-message--error {
+  align-self: stretch;
+  align-items: center;
+  max-width: 100%;
+}
+
+.talex-chat-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* User bubble */
+.talex-chat-message--user .talex-chat-bubble {
+  background: linear-gradient(135deg, var(--cyan, #06b6d4), #14b8a6);
+  color: #000;
+  border-bottom-right-radius: 4px;
+  font-weight: 500;
+}
+
+/* Assistant bubble */
+.talex-chat-message--assistant .talex-chat-bubble {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  border-bottom-left-radius: 4px;
+}
+
+/* Error bubble */
+.talex-chat-message--error .talex-chat-bubble {
+  background: rgba(225, 29, 72, 0.1);
+  border: 1px solid rgba(225, 29, 72, 0.25);
+  color: #fca5a5;
+  border-radius: 12px;
+  font-size: 13px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Message timestamp */
+.talex-chat-message-time {
+  font-size: 10px;
+  color: var(--muted, #64748b);
+  padding: 0 4px;
+}
+
+/* File reference inside bubble */
+.talex-chat-file-ref {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted, #64748b);
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border: 1px solid var(--border, #1e293b);
+}
+
+.talex-chat-file-ref-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ── COPY BUTTON (visible on hover)
+   Req 7.1: Copy button visible on hover over assistant messages
+   ─────────────────────────────────────────── */
+.talex-chat-copy {
+  position: absolute;
+  top: 6px;
+  right: -36px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #1e293b);
+  background: var(--bg-surface, #0f172a);
+  color: var(--muted, #64748b);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+  pointer-events: none;
+}
+
+.talex-chat-message--assistant:hover .talex-chat-copy {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.talex-chat-copy:hover {
+  background: rgba(6, 182, 212, 0.12);
+  color: var(--cyan, #06b6d4);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.talex-chat-copy:focus-visible {
+  outline: 2px solid var(--cyan, #06b6d4);
+  outline-offset: 2px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── STREAMING INDICATOR (animated dots)
+   Req 4.2: Visual loading indicator while streaming
+   ─────────────────────────────────────────── */
+.talex-chat-streaming-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 2px;
+}
+
+.talex-chat-streaming-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan, #06b6d4);
+  animation: talex-chat-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.talex-chat-streaming-indicator span:nth-child(1) { animation-delay: 0s; }
+.talex-chat-streaming-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.talex-chat-streaming-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes talex-chat-dot-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* ── FILE PREVIEW STRIP
+   Req 6.4: File preview strip in input area
+   ─────────────────────────────────────────── */
+.talex-chat-file-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid #1e293b;
+  background: #0a1628;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.talex-chat-file-preview[hidden] {
+  display: none;
+}
+
+.talex-chat-preview-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #e2e8f0;
+  max-width: 200px;
+}
+
+.talex-chat-preview-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.talex-chat-preview-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.talex-chat-preview-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.talex-chat-preview-remove {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(225, 29, 72, 0.15);
+  color: #e11d48;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.talex-chat-preview-remove:hover {
+  background: rgba(225, 29, 72, 0.3);
+}
+
+/* ── INPUT AREA
+   Req 2.2: Text input and send button at bottom
+   ─────────────────────────────────────────── */
+.talex-chat-input-area {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-top: 1px solid #1e293b;
+  background: #0a1628;
+  flex-shrink: 0;
+}
+
+/* Text input */
+.talex-chat-text-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: none;
+}
+
+.talex-chat-text-input::placeholder {
+  color: #64748b;
+}
+
+.talex-chat-text-input:focus {
+  border-color: var(--cyan, #06b6d4);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
+}
+
+.talex-chat-text-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Shared icon button base */
+.talex-chat-attach,
+.talex-chat-mic,
+.talex-chat-send {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #94a3b8;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.talex-chat-attach:focus-visible,
+.talex-chat-mic:focus-visible,
+.talex-chat-send:focus-visible {
+  outline: 2px solid var(--cyan, #06b6d4);
+  outline-offset: 2px;
+}
+
+/* Attach button */
+.talex-chat-attach:hover {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--cyan, #06b6d4);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+/* Mic button */
+.talex-chat-mic:hover {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--cyan, #06b6d4);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+/* Mic recording state */
+.talex-chat-mic--recording {
+  background: rgba(225, 29, 72, 0.12) !important;
+  color: #e11d48 !important;
+  border-color: rgba(225, 29, 72, 0.4) !important;
+  animation: talex-chat-mic-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes talex-chat-mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(225, 29, 72, 0); }
+}
+
+/* Send button */
+.talex-chat-send {
+  background: linear-gradient(135deg, var(--cyan, #06b6d4), #14b8a6);
+  color: #000;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.talex-chat-send:hover:not(:disabled) {
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+}
+
+.talex-chat-send:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.talex-chat-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── TOAST NOTIFICATION
+   Req 7.2: Toast notification for copy confirmation
+   ─────────────────────────────────────────── */
+.talex-chat-toast {
+  position: fixed;
+  bottom: 96px;
+  right: 28px;
+  z-index: 120;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+  white-space: nowrap;
+}
+
+.talex-chat-toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── DRAG-OVER STATE ─────────────────────────── */
+.talex-chat-panel--drag-over {
+  border-color: var(--cyan, #06b6d4) !important;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3), 0 24px 64px rgba(0, 0, 0, 0.6) !important;
+}
+
+.talex-chat-panel--drag-over::after {
+  content: 'Drop file here';
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 182, 212, 0.08);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cyan, #06b6d4);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── RESPONSIVE ──────────────────────────────
+   Req 9.4: 320px–1920px without horizontal overflow
+   Req 9.5: Full viewport on < 480px
+   ─────────────────────────────────────────── */
+
+/* Medium screens: slightly narrower panel */
+@media (max-width: 640px) {
+  .talex-chat-panel {
+    right: 12px;
+    bottom: 84px;
+    width: calc(100vw - 24px);
+  }
+
+  .talex-chat-toggle {
+    right: 16px;
+    bottom: 20px;
+  }
+
+  .talex-chat-toast {
+    right: 12px;
+    bottom: 84px;
+    max-width: calc(100vw - 24px);
+    white-space: normal;
+  }
+}
+
+/* Small screens < 480px: full viewport width and height */
+@media (max-width: 479px) {
+  .talex-chat-panel {
+    position: fixed;
+    inset: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    border: none;
+    z-index: 115;
+  }
+
+  .talex-chat-toggle {
+    right: 16px;
+    bottom: 16px;
+    z-index: 116;
+  }
+
+  .talex-chat-toast {
+    bottom: 80px;
+    right: 12px;
+    left: 12px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  /* Copy button: always visible on mobile (no hover) */
+  .talex-chat-copy {
+    opacity: 1;
+    pointer-events: auto;
+    right: -32px;
+  }
+}
+
+/* Large screens: allow slightly wider panel */
+@media (min-width: 1280px) {
+  .talex-chat-panel {
+    width: 420px;
+  }
+}
+
+/* Very large screens: cap at comfortable width */
+@media (min-width: 1920px) {
+  .talex-chat-panel {
+    width: 440px;
+    right: 40px;
+    bottom: 108px;
+  }
+
+  .talex-chat-toggle {
+    right: 40px;
+    bottom: 40px;
+  }
+}

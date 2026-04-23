@@ -7,6 +7,9 @@ node_modules/
 # Database files (generated at runtime)
 server/data/*.json
 
+# Upload directory (runtime files)
+server/uploads/
+
 # OS files
 .DS_Store
 Thumbs.db
