@@ -22,40 +22,40 @@
   </div>
 
   <div class="nav-section-label">Main</div>
-  <div class="nav-item active" data-page="dashboard">
+  <div class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard')">
     <span class="nav-icon">📊</span> Dashboard
   </div>
-  <div class="nav-item" data-page="events">
+  <div class="nav-item" data-page="events" onclick="switchPage('events')">
     <span class="nav-icon">🎪</span> Events
   </div>
-  <div class="nav-item" data-page="calendar" id="sidebarCalBtn">
+  <div class="nav-item" data-page="calendar" id="sidebarCalBtn" onclick="switchPage('calendar')">
     <span class="nav-icon">📅</span> Calendar
   </div>
-  <div class="nav-item" data-page="communities">
+  <div class="nav-item" data-page="communities" onclick="switchPage('communities')">
     <span class="nav-icon">👥</span> Communities
   </div>
-  <div class="nav-item" data-page="courses" id="sidebarCoursesBtn">
+  <div class="nav-item" data-page="courses" id="sidebarCoursesBtn" onclick="switchPage('courses')">
     <span class="nav-icon">📚</span> Courses
   </div>
 
   <div class="nav-section-label">Growth</div>
-  <div class="nav-item" data-page="skills">
+  <div class="nav-item" data-page="skills" onclick="switchPage('skills')">
     <span class="nav-icon">⚡</span> Skills
   </div>
-  <div class="nav-item" data-page="badges">
+  <div class="nav-item" data-page="badges" onclick="switchPage('badges')">
     <span class="nav-icon">🏅</span> Badges
   </div>
-  <a href="leaderboard.html"><div class="nav-item" data-page="leaderboard">
+  <div class="nav-item" data-page="leaderboard" onclick="switchPage('leaderboard')">
     <span class="nav-icon">🏆</span> Leaderboard
-  </div></a>
-  <div class="nav-item" data-page="settings">
+  </div>
+  <div class="nav-item" data-page="settings" onclick="switchPage('settings')">
     <span class="nav-icon">⚙️</span> Settings
   </div>
 
   <div class="sidebar-cta">
     <h4>Upgrade to Pro</h4>
     <p>Unlock unlimited events, premium skill tracks, and AI career matching.</p>
-    <button>Learn More →</button>
+    <button onclick="switchPage('upgrade')">Learn More →</button>
   </div>
 </aside>
 
@@ -83,9 +83,10 @@
       </div>
       <div class="search-bar">
         <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Search events..." id="searchInput">
+        <input type="text" placeholder="Search events..." id="searchInput"
+               onkeydown="if(event.key==='Enter'){ switchPage('search', this.value); }">
       </div>
-      <button class="publish-btn">
+      <button class="publish-btn" onclick="document.getElementById('uploadModalOverlay').style.display='flex'">
         <span class="btn-label">Publish</span>
       </button>
       <div class="notif-wrapper">
@@ -106,14 +107,12 @@
           </div>
         </div>
       </div>
-      <button class="header-btn btn-back-home" id="backBtn" title="Back to Home">🏠</button>
+      <button class="header-btn btn-back-home" id="backBtn" title="Back to Home" onclick="window.location.href='new.html'">🏠</button>
     </div>
   </header>
 
   <!-- ── CONTENT ── -->
   <main class="content" id="dashboardView">
-
-    <a href="new.html" class="btn-back">← Back to Home</a>
 
     <!-- Hero Welcome Strip -->
     <div class="hero-welcome fade-up fade-up-1" id="heroWelcome">
@@ -136,7 +135,7 @@
     <div class="event-grid" id="eventGrid">
 
       <!-- Card 1 — Academic -->
-      <div class="event-card fade-up fade-up-3" data-category="academic">
+      <div class="event-card fade-up fade-up-3" data-category="academic" onclick="switchPage('events','event-ai-ml-2026')" style="cursor:pointer">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=500&q=80" alt="AI Workshop 2026">
           <span class="card-badge academic">Academic</span>
@@ -154,13 +153,13 @@
               <div class="mini-avatar" style="background:linear-gradient(135deg,#3b82f6,#2563eb)">MP</div>
               <div class="mini-avatar more">+12</div>
             </div>
-            <button class="btn-register primary">Register</button>
+            <button class="btn-register primary" onclick="event.stopPropagation(); registerEvent(this,'event-ai-ml-2026')">Register</button>
           </div>
         </div>
       </div>
 
       <!-- Card 2 — Cultural -->
-      <div class="event-card fade-up fade-up-4" data-category="cultural">
+      <div class="event-card fade-up fade-up-4" data-category="cultural" onclick="switchPage('events','event-neon-cultural')" style="cursor:pointer">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80" alt="Cultural Night">
           <span class="card-badge cultural">Cultural</span>
@@ -177,13 +176,13 @@
               <div class="mini-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">LK</div>
               <div class="mini-avatar more">+34</div>
             </div>
-            <button class="btn-register primary">Register</button>
+            <button class="btn-register primary" onclick="event.stopPropagation(); registerEvent(this,'event-neon-cultural')">Register</button>
           </div>
         </div>
       </div>
 
       <!-- Card 3 — Startup -->
-      <div class="event-card fade-up fade-up-5" data-category="startup">
+      <div class="event-card fade-up fade-up-5" data-category="startup" onclick="switchPage('events','event-startup-pitch')" style="cursor:pointer">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=500&q=80" alt="Startup Pitch Day">
           <span class="card-badge startup">Startup</span>
@@ -201,13 +200,13 @@
               <div class="mini-avatar" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">DS</div>
               <div class="mini-avatar more">+8</div>
             </div>
-            <button class="btn-register joined">Joined ✓</button>
+            <button class="btn-register joined" onclick="event.stopPropagation(); switchPage('events','event-startup-pitch')">Joined ✓</button>
           </div>
         </div>
       </div>
 
       <!-- Card 4 — Academic -->
-      <div class="event-card fade-up fade-up-6" data-category="academic">
+      <div class="event-card fade-up fade-up-6" data-category="academic" onclick="switchPage('events','event-hackathon-2026')" style="cursor:pointer">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=500&q=80" alt="Hackathon 2026">
           <span class="card-badge academic">Academic</span>
@@ -223,13 +222,13 @@
               <div class="mini-avatar" style="background:linear-gradient(135deg,#06b6d4,#14b8a6)">AK</div>
               <div class="mini-avatar more">+20</div>
             </div>
-            <button class="btn-register primary">Register</button>
+            <button class="btn-register primary" onclick="event.stopPropagation(); registerEvent(this,'event-hackathon-2026')">Register</button>
           </div>
         </div>
       </div>
 
       <!-- Card 5 — Cultural -->
-      <div class="event-card fade-up fade-up-7" data-category="cultural">
+      <div class="event-card fade-up fade-up-7" data-category="cultural" onclick="switchPage('events','event-design-sprint')" style="cursor:pointer">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&q=80" alt="Design Sprint">
           <span class="card-badge cultural">Cultural</span>
@@ -246,13 +245,13 @@
               <div class="mini-avatar" style="background:linear-gradient(135deg,#f97316,#ea580c)">MK</div>
               <div class="mini-avatar more">+15</div>
             </div>
-            <button class="btn-register primary">Register</button>
+            <button class="btn-register primary" onclick="event.stopPropagation(); registerEvent(this,'event-design-sprint')">Register</button>
           </div>
         </div>
       </div>
 
       <!-- Card 6 — Startup -->
-      <div class="event-card fade-up fade-up-8" data-category="startup">
+      <div class="event-card fade-up fade-up-8" data-category="startup" onclick="switchPage('events','event-data-bootcamp')" style="cursor:pointer">
         <div class="card-img">
           <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Data Analytics">
           <span class="card-badge startup">Startup</span>
@@ -268,7 +267,7 @@
               <div class="mini-avatar" style="background:linear-gradient(135deg,#14b8a6,#0d9488)">VR</div>
               <div class="mini-avatar more">+42</div>
             </div>
-            <button class="btn-register primary">Register</button>
+            <button class="btn-register primary" onclick="event.stopPropagation(); registerEvent(this,'event-data-bootcamp')">Register</button>
           </div>
         </div>
       </div>
@@ -278,32 +277,32 @@
     <!-- BENTO WIDGETS -->
     <div class="bento-grid">
 
-      <!-- Skill Corner -->
+  <!-- Skill Corner -->
       <div class="widget">
         <div class="widget-title">Skill Corner</div>
         <div class="skill-grid">
-          <div class="skill-card">
+          <div class="skill-card" onclick="switchPage('skills', 'web-development')" style="cursor:pointer" title="Go to Web Development">
             <div class="skill-icon cyan-bg">💻</div>
             <div>
               <h4>Web Development</h4>
               <p>12 courses · 3 badges earned</p>
             </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" onclick="switchPage('skills', 'ai-ml')" style="cursor:pointer" title="Go to AI & ML">
             <div class="skill-icon teal-bg">🤖</div>
             <div>
               <h4>AI & Machine Learning</h4>
               <p>8 courses · 1 badge earned</p>
             </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" onclick="switchPage('skills', 'ui-ux-design')" style="cursor:pointer" title="Go to UI/UX Design">
             <div class="skill-icon rose-bg">🎨</div>
             <div>
               <h4>UI/UX Design</h4>
               <p>6 courses · 2 badges earned</p>
             </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" onclick="switchPage('skills', 'data-science')" style="cursor:pointer" title="Go to Data Science">
             <div class="skill-icon purple-bg">📊</div>
             <div>
               <h4>Data Science</h4>
@@ -317,23 +316,23 @@
       <div class="widget">
         <div class="widget-title">Your Stats</div>
         <div class="status-list">
-          <div class="status-item">
+          <div class="status-item" onclick="switchPage('credits')" style="cursor:pointer" title="View Credits History">
             <span class="label">⚡ Credits</span>
             <span class="value cyan" id="statCredits" data-count="100">0</span>
           </div>
-          <div class="status-item">
+          <div class="status-item" onclick="switchPage('badges')" style="cursor:pointer" title="View Badges">
             <span class="label">🏅 Badges</span>
             <span class="value teal" data-count="10">0</span>
           </div>
-          <div class="status-item">
+          <div class="status-item" onclick="switchPage('courses')" style="cursor:pointer" title="View Courses">
             <span class="label">📚 Courses</span>
             <span class="value" data-count="36">0</span>
           </div>
-          <div class="status-item">
+          <div class="status-item" onclick="switchPage('bookmarks')" style="cursor:pointer" title="View Bookmarks">
             <span class="label">🔖 Bookmarks</span>
             <span class="value rose" data-count="7">0</span>
           </div>
-          <div class="status-item">
+          <div class="status-item" onclick="switchPage('events', 'mine')" style="cursor:pointer" title="View My Events">
             <span class="label">🎯 Events</span>
             <span class="value" data-count="14">0</span>
           </div>
@@ -346,7 +345,7 @@
       <span class="anon-ghost">👻</span>
       <h3>Go Anonymous</h3>
       <p>Ask questions, give feedback, and participate in polls without revealing your identity.</p>
-      <button class="btn-glass">Enable Anonymous Mode</button>
+      <button class="btn-glass" id="anonToggleBtn" onclick="toggleAnonymousMode(this)">Enable Anonymous Mode</button>
     </div>
 
     <!-- PUBLISHED CONTENT SECTION -->
@@ -539,6 +538,355 @@
   <script src="dashboard-premium.js"></script>
   <script src="explore_backend.js"></script>
   <script src="explore.js"></script>
+
+  <script>
+  /* ═══════════════════════════════════════════════════════════════
+     TALEX DASHBOARD — Client-Side Router
+     Handles all sidebar + card + stat navigation without page reload
+  ═══════════════════════════════════════════════════════════════ */
+
+  // ── Route map: page → view element ID ──────────────────────────
+  const VIEWS = {
+    dashboard:   'dashboardView',
+    events:      'dashboardView',   // events shown in main dashboard grid
+    courses:     'exploreView',
+    skills:      'skillsView',
+    badges:      'badgesView',
+    communities: 'communitiesView',
+    settings:    'settingsView',
+    calendar:    null,              // opens modal
+    leaderboard: 'leaderboard.html',// external page
+    upgrade:     null,              // opens upgrade modal
+    search:      'dashboardView',
+    credits:     'dashboardView',
+    bookmarks:   'dashboardView',
+  };
+
+  // ── Toast helper ────────────────────────────────────────────────
+  function dashToast(msg, type = 'info') {
+    let t = document.getElementById('dashRouterToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'dashRouterToast';
+      t.style.cssText = `
+        position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%);
+        background:#1e293b; color:#f1f5f9; padding:0.7rem 1.4rem;
+        border-radius:10px; font-size:0.88rem; font-weight:600;
+        z-index:99999; box-shadow:0 8px 32px rgba(0,0,0,0.4);
+        transition:opacity 0.3s; pointer-events:none;
+        border:1px solid rgba(255,255,255,0.1);
+      `;
+      document.body.appendChild(t);
+    }
+    const colors = { success:'#059669', error:'#dc2626', info:'#7c3aed' };
+    t.style.borderColor = colors[type] || colors.info;
+    t.textContent = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.style.opacity = '0', 3000);
+  }
+
+  // ── Update sidebar active state ─────────────────────────────────
+  function updateSidebarActive(page) {
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.page === page);
+    });
+  }
+
+  // ── Main switchPage function ────────────────────────────────────
+  function switchPage(page, param) {
+
+    // Special cases first
+    if (page === 'calendar') {
+      document.getElementById('calModalOverlay').style.display = 'flex';
+      updateSidebarActive('calendar');
+      return;
+    }
+
+    if (page === 'leaderboard') {
+      window.location.href = 'leaderboard.html';
+      return;
+    }
+
+    if (page === 'upgrade') {
+      showUpgradeModal();
+      return;
+    }
+
+    if (page === 'search' && param) {
+      document.getElementById('searchInput').value = param;
+      // Trigger existing search logic if available
+      const evt = new Event('input', { bubbles: true });
+      document.getElementById('searchInput').dispatchEvent(evt);
+      showView('dashboardView');
+      updateSidebarActive('events');
+      dashToast(`🔍 Searching for "${param}"`, 'info');
+      return;
+    }
+
+    if (page === 'credits') {
+      showView('dashboardView');
+      updateSidebarActive('dashboard');
+      dashToast('⚡ Credits history — coming soon!', 'info');
+      return;
+    }
+
+    if (page === 'bookmarks') {
+      showView('dashboardView');
+      updateSidebarActive('dashboard');
+      dashToast('🔖 Bookmarks — coming soon!', 'info');
+      return;
+    }
+
+    if (page === 'events' && param === 'mine') {
+      showView('dashboardView');
+      updateSidebarActive('events');
+      dashToast('🎯 Showing your registered events', 'success');
+      return;
+    }
+
+    // Event detail
+    if (page === 'events' && param && param.startsWith('event-')) {
+      showEventDetail(param);
+      return;
+    }
+
+    // Skill detail
+    if (page === 'skills' && param) {
+      showSkillDetail(param);
+      return;
+    }
+
+    // Standard view switch
+    const viewId = VIEWS[page];
+    if (viewId) {
+      showView(viewId);
+      updateSidebarActive(page);
+      // Trigger existing page init functions if they exist
+      if (page === 'courses' && typeof UI !== 'undefined') UI.init?.();
+      if (page === 'skills'  && typeof renderSkills !== 'undefined') renderSkills?.();
+      if (page === 'badges'  && typeof renderBadges !== 'undefined') renderBadges?.();
+    }
+  }
+
+  // ── Show a view, hide all others ────────────────────────────────
+  function showView(viewId) {
+    const allViews = ['dashboardView','exploreView','skillsView','badgesView','communitiesView','settingsView'];
+    allViews.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === viewId ? 'block' : 'none';
+    });
+  }
+
+  // ── Event detail modal ──────────────────────────────────────────
+  const EVENT_DATA = {
+    'event-ai-ml-2026':    { title:'AI & ML Workshop 2026',    date:'Apr 25, 10:00 AM', location:'Innovation Lab, Block A',  desc:'Deep dive into modern ML techniques with hands-on labs. Earn 50 credits on completion.' },
+    'event-neon-cultural': { title:'Neon Cultural Night',       date:'Apr 28, 6:00 PM',  location:'Main Auditorium',          desc:'A vibrant celebration of culture, art, and music. Open to all TALEX members.' },
+    'event-startup-pitch': { title:'Startup Pitch Day',         date:'May 2, 2:00 PM',   location:'Incubation Center',        desc:'Present your startup idea to investors and mentors. Top 3 teams win credits.' },
+    'event-hackathon-2026':{ title:'48-Hour Hackathon',         date:'May 5, 9:00 AM',   location:'CS Department Hall',       desc:'Build something amazing in 48 hours. Prizes, badges, and job opportunities await.' },
+    'event-design-sprint': { title:'Creative Design Sprint',    date:'May 8, 11:00 AM',  location:'Art Studio, Block C',      desc:'Rapid design challenges with real briefs from partner companies.' },
+    'event-data-bootcamp': { title:'Data Analytics Bootcamp',   date:'May 12, 10:00 AM', location:'Virtual · Zoom',           desc:'Master data storytelling with Python and Tableau. Certificate + badge on completion.' },
+  };
+
+  function showEventDetail(eventId) {
+    const ev = EVENT_DATA[eventId];
+    if (!ev) return;
+
+    let modal = document.getElementById('eventDetailModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'eventDetailModal';
+      modal.style.cssText = `
+        position:fixed; inset:0; background:rgba(0,0,0,0.75);
+        backdrop-filter:blur(8px); z-index:9999;
+        display:flex; align-items:center; justify-content:center; padding:1rem;
+      `;
+      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+      document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+      <div style="background:#1a1a2e; border:1px solid rgba(124,58,237,0.4);
+                  border-radius:20px; max-width:480px; width:100%; padding:2rem;
+                  position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('eventDetailModal').style.display='none'"
+                style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);
+                       border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;
+                       cursor:pointer;font-size:1rem;">✕</button>
+        <h2 style="color:#f1f5f9;font-size:1.4rem;margin-bottom:0.75rem;">${ev.title}</h2>
+        <div style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.4rem;">🕐 ${ev.date}</div>
+        <div style="color:#94a3b8;font-size:0.85rem;margin-bottom:1rem;">📍 ${ev.location}</div>
+        <p style="color:#cbd5e1;font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem;">${ev.desc}</p>
+        <button onclick="registerEvent(this,'${eventId}'); document.getElementById('eventDetailModal').style.display='none';"
+                style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);
+                       color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">
+          Register for this Event
+        </button>
+      </div>`;
+    modal.style.display = 'flex';
+  }
+
+  // ── Skill detail ────────────────────────────────────────────────
+  const SKILL_DATA = {
+    'web-development': { title:'Web Development', icon:'💻', courses:12, badges:3, desc:'Master HTML, CSS, JavaScript, React, Node.js and more.' },
+    'ai-ml':           { title:'AI & Machine Learning', icon:'🤖', courses:8, badges:1, desc:'From Python basics to deep learning and LLM engineering.' },
+    'ui-ux-design':    { title:'UI/UX Design', icon:'🎨', courses:6, badges:2, desc:'Figma, user research, prototyping, and design systems.' },
+    'data-science':    { title:'Data Science', icon:'📊', courses:10, badges:4, desc:'Statistics, pandas, visualization, and ML pipelines.' },
+  };
+
+  function showSkillDetail(skillId) {
+    const sk = SKILL_DATA[skillId];
+    if (!sk) { switchPage('skills'); return; }
+
+    let modal = document.getElementById('skillDetailModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'skillDetailModal';
+      modal.style.cssText = `
+        position:fixed; inset:0; background:rgba(0,0,0,0.75);
+        backdrop-filter:blur(8px); z-index:9999;
+        display:flex; align-items:center; justify-content:center; padding:1rem;
+      `;
+      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+      document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+      <div style="background:#1a1a2e; border:1px solid rgba(6,182,212,0.4);
+                  border-radius:20px; max-width:460px; width:100%; padding:2rem;
+                  position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('skillDetailModal').style.display='none'"
+                style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);
+                       border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;
+                       cursor:pointer;font-size:1rem;">✕</button>
+        <div style="font-size:3rem;margin-bottom:0.75rem;">${sk.icon}</div>
+        <h2 style="color:#f1f5f9;font-size:1.4rem;margin-bottom:0.5rem;">${sk.title}</h2>
+        <p style="color:#94a3b8;font-size:0.88rem;margin-bottom:1.25rem;">${sk.desc}</p>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem 1.25rem;text-align:center;flex:1;">
+            <div style="color:#06b6d4;font-size:1.5rem;font-weight:700;">${sk.courses}</div>
+            <div style="color:#94a3b8;font-size:0.75rem;">Courses</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem 1.25rem;text-align:center;flex:1;">
+            <div style="color:#f59e0b;font-size:1.5rem;font-weight:700;">${sk.badges}</div>
+            <div style="color:#94a3b8;font-size:0.75rem;">Badges Earned</div>
+          </div>
+        </div>
+        <button onclick="switchPage('courses'); document.getElementById('skillDetailModal').style.display='none';"
+                style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#06b6d4,#7c3aed);
+                       color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">
+          Browse ${sk.title} Courses →
+        </button>
+      </div>`;
+    modal.style.display = 'flex';
+  }
+
+  // ── Register for event ──────────────────────────────────────────
+  function registerEvent(btn, eventId) {
+    const ev = EVENT_DATA[eventId] || { title: 'this event' };
+    btn.textContent = 'Joined ✓';
+    btn.classList.remove('primary');
+    btn.classList.add('joined');
+    btn.disabled = true;
+    dashToast(`✅ Registered for ${ev.title}!`, 'success');
+
+    // POST to backend (non-blocking)
+    const token = localStorage.getItem('talex_token') || sessionStorage.getItem('talex_token');
+    if (token && token !== 'demo-token') {
+      fetch(`/api/events/${eventId}/register`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+      }).catch(() => {}); // silent fail — UI already updated
+    }
+  }
+
+  // ── Anonymous mode toggle ───────────────────────────────────────
+  function toggleAnonymousMode(btn) {
+    const isOn = btn.dataset.active === 'true';
+    btn.dataset.active = isOn ? 'false' : 'true';
+    btn.textContent = isOn ? 'Enable Anonymous Mode' : '👻 Anonymous Mode ON';
+    btn.style.background = isOn ? '' : 'rgba(124,58,237,0.3)';
+    btn.style.borderColor = isOn ? '' : '#7c3aed';
+    dashToast(isOn ? 'Anonymous mode disabled' : '👻 You are now anonymous!', isOn ? 'info' : 'success');
+
+    // PATCH to backend
+    const token = localStorage.getItem('talex_token') || sessionStorage.getItem('talex_token');
+    if (token && token !== 'demo-token') {
+      fetch('/api/user/anonymous-mode', {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled: !isOn })
+      }).catch(() => {});
+    }
+  }
+
+  // ── Upgrade modal ───────────────────────────────────────────────
+  function showUpgradeModal() {
+    let modal = document.getElementById('upgradeModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'upgradeModal';
+      modal.style.cssText = `
+        position:fixed; inset:0; background:rgba(0,0,0,0.8);
+        backdrop-filter:blur(10px); z-index:9999;
+        display:flex; align-items:center; justify-content:center; padding:1rem;
+      `;
+      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+      document.body.appendChild(modal);
+    }
+    modal.innerHTML = `
+      <div style="background:linear-gradient(135deg,#1a1a2e,#0f0f1a);
+                  border:1px solid rgba(124,58,237,0.5); border-radius:24px;
+                  max-width:500px; width:100%; padding:2.5rem; text-align:center;
+                  position:relative; box-shadow:0 32px 80px rgba(124,58,237,0.2);">
+        <button onclick="document.getElementById('upgradeModal').style.display='none'"
+                style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);
+                       border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;cursor:pointer;">✕</button>
+        <div style="font-size:3rem;margin-bottom:1rem;">⚡</div>
+        <h2 style="color:#f1f5f9;font-size:1.75rem;margin-bottom:0.5rem;">Upgrade to TALEX Pro</h2>
+        <p style="color:#94a3b8;margin-bottom:2rem;">Unlock unlimited events, premium skill tracks, AI career matching, and priority hiring.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;text-align:left;">
+          ${['Unlimited course access','AI hiring assistant','Priority badge verification','Exclusive events','Advanced analytics','Dedicated support'].map(f =>
+            `<div style="color:#cbd5e1;font-size:0.85rem;">✓ ${f}</div>`).join('')}
+        </div>
+        <button style="width:100%;padding:1rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);
+                       color:#fff;border:none;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;"
+                onclick="dashToast('🚀 Redirecting to upgrade page...','success'); setTimeout(()=>window.location.href='/upgrade',1000);">
+          Upgrade Now — ₹999/month
+        </button>
+        <p style="color:#64748b;font-size:0.75rem;margin-top:0.75rem;">Cancel anytime · No hidden fees</p>
+      </div>`;
+    modal.style.display = 'flex';
+  }
+
+  // ── Quick action buttons in hero strip ──────────────────────────
+  // Override the inline onclick for Browse Courses and View Badges
+  document.addEventListener('DOMContentLoaded', () => {
+    // Ensure quick action buttons use switchPage
+    const qaBtns = document.querySelectorAll('.quick-action-btn');
+    qaBtns.forEach(btn => {
+      const txt = btn.textContent.trim();
+      if (txt.includes('Browse Courses')) btn.onclick = () => switchPage('courses');
+      if (txt.includes('View Badges'))    btn.onclick = () => switchPage('badges');
+      if (txt.includes('Search Events'))  btn.onclick = () => document.getElementById('searchInput').focus();
+      if (txt.includes('Publish'))        btn.onclick = () => document.getElementById('uploadModalOverlay').style.display = 'flex';
+    });
+
+    // Hover effect on stat items
+    document.querySelectorAll('.status-item[onclick]').forEach(el => {
+      el.style.transition = 'background 0.2s, transform 0.15s';
+      el.addEventListener('mouseenter', () => { el.style.background = 'rgba(124,58,237,0.1)'; el.style.transform = 'translateX(4px)'; });
+      el.addEventListener('mouseleave', () => { el.style.background = ''; el.style.transform = ''; });
+    });
+
+    // Hover effect on skill cards
+    document.querySelectorAll('.skill-card[onclick]').forEach(el => {
+      el.style.transition = 'background 0.2s, transform 0.15s';
+      el.addEventListener('mouseenter', () => { el.style.background = 'rgba(6,182,212,0.08)'; el.style.transform = 'translateY(-2px)'; });
+      el.addEventListener('mouseleave', () => { el.style.background = ''; el.style.transform = ''; });
+    });
+  });
+  </script>
 </body>
 </html>
 
