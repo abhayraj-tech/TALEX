@@ -3,19 +3,19 @@
    ================================================ */
 
 :root {
-  --bg:       #0c0f14;
-  --surface:  #111620;
-  --card:     #161c28;
-  --card-h:   #1c2335;
-  --border:   rgba(255,255,255,0.06);
-  --glow:     rgba(0,212,200,0.22);
-  --accent:   #00D4C8;
-  --accent2:  #7B61FF;
-  --warm:     #FF6B6B;
-  --gold:     #FFD166;
-  --text:     #eef0f5;
-  --muted:    #8a95a8;
-  --hint:     #4e5a6e;
+  --bg:       #09090b;
+  --surface:  rgba(255, 255, 255, 0.03);
+  --card:     rgba(255, 255, 255, 0.02);
+  --card-h:   rgba(255, 255, 255, 0.06);
+  --border:   rgba(255, 255, 255, 0.08);
+  --glow:     rgba(6, 182, 212, 0.22);
+  --accent:   #06b6d4;
+  --accent2:  #a855f7;
+  --warm:     #f43f5e;
+  --gold:     #f59e0b;
+  --text:     #ffffff;
+  --muted:    #a1a1aa;
+  --hint:     #71717a;
   --sidebar:  230px;
   --font-h:   'Syne', sans-serif;
   --font-b:   'DM Sans', sans-serif;
@@ -23,9 +23,85 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-/* body styles removed for integration */
+
+body {
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(168, 85, 247, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.05), transparent 25%);
+  color: var(--text);
+  font-family: var(--font-b);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Cursor Glow */
+#cursor-glow {
+  position: fixed;
+  width: 40vw;
+  height: 40vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font-family: var(--font-b); }
+
+.dashboard-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.page-header {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.title-section h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  background: linear-gradient(to right, #fff, #a1a1aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.title-section p {
+  color: var(--hint);
+  font-size: 16px;
+}
+
+.btn-back {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.btn-back:hover {
+  background: var(--card-h);
+  border-color: rgba(255,255,255,0.2);
+}
 
 /* Sidebar styles removed for integration */
 
@@ -64,10 +140,12 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 .course-card {
   background: var(--card); border: 1px solid var(--border); border-radius: 16px;
   overflow: hidden; cursor: pointer;
-  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
+  backdrop-filter: blur(10px);
+  position: relative;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
   animation: fadeUp .4s ease both;
 }
-.course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,.4); border-color: var(--glow); background: var(--card-h); }
+.course-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); border-color: rgba(255, 255, 255, 0.15); background: var(--card-h); }
 @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 
 .card-img { height: 160px; position: relative; display: flex; align-items: flex-start; justify-content: space-between; padding: 14px; }
@@ -96,7 +174,7 @@ button { cursor: pointer; border: none; background: none; font-family: var(--fon
 /* ---- MODAL ---- */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .25s ease; padding: 20px; }
 .modal-overlay.active { opacity: 1; pointer-events: all; }
-.modal { background: var(--card); border: 1px solid var(--glow); border-radius: 20px; max-width: 520px; width: 100%; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,.6); position: relative; transform: translateY(16px); transition: transform .25s var(--ease); max-height: 90vh; overflow-y: auto; }
+.modal { background: #09090b; border: 1px solid var(--border); border-radius: 20px; max-width: 520px; width: 100%; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,.6); position: relative; transform: translateY(16px); transition: transform .25s var(--ease); max-height: 90vh; overflow-y: auto; }
 .modal-overlay.active .modal { transform: translateY(0); }
 .modal-close { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: rgba(255,255,255,.08); border-radius: 50%; color: var(--muted); font-size: 13px; z-index: 10; display: flex; align-items: center; justify-content: center; transition: .2s; }
 .modal-close:hover { background: rgba(255,255,255,.15); color: var(--text); }

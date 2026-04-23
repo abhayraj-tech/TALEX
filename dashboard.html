@@ -603,6 +603,11 @@
       return;
     }
 
+    if (page === 'courses') {
+      window.location.href = 'explore_courses.html';
+      return;
+    }
+
     if (page === 'badges' && !param) {
       window.location.href = 'badge-button.html';
       return;
