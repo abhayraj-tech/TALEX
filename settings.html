@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TALEX – Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="settings.css"/>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">T</div>
+      <span>TALEX</span>
+    </div>
+
+    <nav>
+      <p class="nav-label">MAIN</p>
+      <a href="#" class="nav-item">
+        <span class="icon">⊞</span> Dashboard
+      </a>
+      <a href="#" class="nav-item">
+        <span class="icon">✦</span> Events
+      </a>
+      <a href="#" class="nav-item">
+        <span class="icon">◫</span> Calendar
+      </a>
+      <a href="#" class="nav-item">
+        <span class="icon">⬡</span> Communities
+      </a>
+      <a href="#" class="nav-item">
+        <span class="icon">▤</span> Courses
+      </a>
+
+      <p class="nav-label">GROWTH</p>
+      <a href="#" class="nav-item">
+        <span class="icon">⚡</span> Skills
+      </a>
+      <a href="#" class="nav-item">
+        <span class="icon">◈</span> Badges
+      </a>
+      <a href="#" class="nav-item">
+        <span class="icon">🏆</span> Leaderboard
+      </a>
+      <a href="#" class="nav-item active">
+        <span class="icon">⚙</span> Settings
+      </a>
+    </nav>
+
+    <div class="upgrade-card">
+      <p class="upgrade-title">Upgrade to Pro</p>
+      <p class="upgrade-desc">Unlock unlimited events, premium skill tracks, and AI career matching.</p>
+      <button class="upgrade-btn">Upgrade Now</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="user-info">
+        <div class="avatar">AR</div>
+        <div>
+          <div class="user-name">Abhay Raj</div>
+          <div class="user-credits">⚡ 100 Credits</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="date-badge">
+          <span class="date-num">23</span>
+          <span class="date-month">APR 2026</span>
+        </div>
+        <div class="search-bar">🔍 Search settings...</div>
+        <button class="publish-btn">Publish</button>
+      </div>
+    </header>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+      <div class="page-header">
+        <a href="#" class="back-link">← Back to Home</a>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-sub">Manage your account, preferences, and privacy</p>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- LEFT: TABS -->
+        <nav class="settings-tabs">
+          <button class="tab active" data-tab="profile">👤 Profile</button>
+          <button class="tab" data-tab="account">🔐 Account & Security</button>
+          <button class="tab" data-tab="notifications">🔔 Notifications</button>
+          <button class="tab" data-tab="privacy">🛡 Privacy</button>
+          <button class="tab" data-tab="appearance">🎨 Appearance</button>
+          <button class="tab" data-tab="billing">💳 Billing & Plan</button>
+          <button class="tab" data-tab="integrations">🔗 Integrations</button>
+          <button class="tab danger-tab" data-tab="danger">⚠ Danger Zone</button>
+        </nav>
+
+        <!-- RIGHT: PANELS -->
+        <div class="settings-content">
+
+          <!-- PROFILE -->
+          <section class="panel active" id="tab-profile">
+            <h2 class="panel-title">Profile Information</h2>
+            <p class="panel-desc">Update your personal details and public profile.</p>
+
+            <div class="avatar-section">
+              <div class="avatar-large">AR</div>
+              <div>
+                <button class="btn-secondary">Change Photo</button>
+                <button class="btn-ghost">Remove</button>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" value="Abhay" />
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" value="Raj" />
+              </div>
+              <div class="form-group full">
+                <label>Username</label>
+                <input type="text" value="@abhayraj" />
+              </div>
+              <div class="form-group full">
+                <label>Bio</label>
+                <textarea rows="3" placeholder="Tell the community about yourself..."></textarea>
+              </div>
+              <div class="form-group full">
+                <label>Website / Portfolio</label>
+                <input type="url" placeholder="https://yoursite.com" />
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" placeholder="City, Country" />
+              </div>
+              <div class="form-group">
+                <label>Field of Study</label>
+                <input type="text" placeholder="e.g. Computer Science" />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-primary">Save Changes</button>
+              <button class="btn-ghost">Cancel</button>
+            </div>
+          </section>
+
+          <!-- ACCOUNT & SECURITY -->
+          <section class="panel" id="tab-account">
+            <h2 class="panel-title">Account & Security</h2>
+            <p class="panel-desc">Manage your login credentials and security settings.</p>
+
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>Email Address</label>
+                <input type="email" value="abhay@example.com" />
+              </div>
+              <div class="form-group full">
+                <label>Current Password</label>
+                <input type="password" placeholder="••••••••" />
+              </div>
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" placeholder="••••••••" />
+              </div>
+              <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" placeholder="••••••••" />
+              </div>
+            </div>
+
+            <div class="toggle-card">
+              <div>
+                <div class="toggle-title">Two-Factor Authentication</div>
+                <div class="toggle-desc">Add an extra layer of security to your account.</div>
+              </div>
+              <label class="toggle"><input type="checkbox"/><span class="slider"></span></label>
+            </div>
+
+            <div class="toggle-card">
+              <div>
+                <div class="toggle-title">Login Alerts</div>
+                <div class="toggle-desc">Get notified when a new device logs into your account.</div>
+              </div>
+              <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-primary">Update Security</button>
+            </div>
+          </section>
+
+          <!-- NOTIFICATIONS -->
+          <section class="panel" id="tab-notifications">
+            <h2 class="panel-title">Notifications</h2>
+            <p class="panel-desc">Choose what you want to be notified about.</p>
+
+            <div class="notif-group">
+              <div class="notif-group-title">Events</div>
+              <div class="toggle-card">
+                <div><div class="toggle-title">Event Reminders</div><div class="toggle-desc">Get reminded before events you've registered for.</div></div>
+                <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+              </div>
+              <div class="toggle-card">
+                <div><div class="toggle-title">New Events Near You</div><div class="toggle-desc">Discover events matching your skills.</div></div>
+                <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="notif-group">
+              <div class="notif-group-title">Community</div>
+              <div class="toggle-card">
+                <div><div class="toggle-title">New Followers</div><div class="toggle-desc">When someone follows your profile.</div></div>
+                <label class="toggle"><input type="checkbox"/><span class="slider"></span></label>
+              </div>
+              <div class="toggle-card">
+                <div><div class="toggle-title">Community Posts</div><div class="toggle-desc">Updates from communities you've joined.</div></div>
+                <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="notif-group">
+              <div class="notif-group-title">Badges & Credits</div>
+              <div class="toggle-card">
+                <div><div class="toggle-title">Badge Earned</div><div class="toggle-desc">Celebrate when you earn a new badge.</div></div>
+                <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+              </div>
+              <div class="toggle-card">
+                <div><div class="toggle-title">Credits Received</div><div class="toggle-desc">Know when credits are added to your account.</div></div>
+                <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-primary">Save Preferences</button>
+            </div>
+          </section>
+
+          <!-- PRIVACY -->
+          <section class="panel" id="tab-privacy">
+            <h2 class="panel-title">Privacy</h2>
+            <p class="panel-desc">Control who sees your information and activity.</p>
+
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>Profile Visibility</label>
+                <select>
+                  <option>Public – Anyone can view</option>
+                  <option>Community – Only members</option>
+                  <option>Private – Only me</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="toggle-card">
+              <div><div class="toggle-title">Anonymous Mode</div><div class="toggle-desc">Ask questions and give feedback without revealing your identity.</div></div>
+              <label class="toggle"><input type="checkbox"/><span class="slider"></span></label>
+            </div>
+            <div class="toggle-card">
+              <div><div class="toggle-title">Show Activity Status</div><div class="toggle-desc">Let others see when you're active.</div></div>
+              <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+            </div>
+            <div class="toggle-card">
+              <div><div class="toggle-title">Appear in Leaderboard</div><div class="toggle-desc">Display your rank publicly on the leaderboard.</div></div>
+              <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+            </div>
+            <div class="toggle-card">
+              <div><div class="toggle-title">Data Personalization</div><div class="toggle-desc">Allow TALEX to use your activity to personalize recommendations.</div></div>
+              <label class="toggle"><input type="checkbox" checked/><span class="slider"></span></label>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-primary">Save Privacy Settings</button>
+            </div>
+          </section>
+
+          <!-- APPEARANCE -->
+          <section class="panel" id="tab-appearance">
+            <h2 class="panel-title">Appearance</h2>
+            <p class="panel-desc">Customize how TALEX looks for you.</p>
+
+            <div class="form-group full">
+              <label>Theme</label>
+              <div class="theme-picker">
+                <div class="theme-opt active" data-theme="dark">
+                  <div class="theme-preview dark-prev"></div>
+                  <span>Dark</span>
+                </div>
+                <div class="theme-opt" data-theme="light">
+                  <div class="theme-preview light-prev"></div>
+                  <span>Light</span>
+                </div>
+                <div class="theme-opt" data-theme="system">
+                  <div class="theme-preview system-prev"></div>
+                  <span>System</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group full">
+              <label>Accent Color</label>
+              <div class="accent-picker">
+                <div class="accent-dot active" style="background:#00d4aa;"></div>
+                <div class="accent-dot" style="background:#6c63ff;"></div>
+                <div class="accent-dot" style="background:#ff6b6b;"></div>
+                <div class="accent-dot" style="background:#f7b731;"></div>
+                <div class="accent-dot" style="background:#45b7d1;"></div>
+              </div>
+            </div>
+
+            <div class="form-group full">
+              <label>Font Size</label>
+              <input type="range" min="12" max="20" value="14" class="range-input"/>
+              <div class="range-labels"><span>Small</span><span>Large</span></div>
+            </div>
+
+            <div class="toggle-card">
+              <div><div class="toggle-title">Reduce Motion</div><div class="toggle-desc">Minimize animations and transitions.</div></div>
+              <label class="toggle"><input type="checkbox"/><span class="slider"></span></label>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-primary">Apply Changes</button>
+            </div>
+          </section>
+
+          <!-- BILLING -->
+          <section class="panel" id="tab-billing">
+            <h2 class="panel-title">Billing & Plan</h2>
+            <p class="panel-desc">Manage your subscription and payment methods.</p>
+
+            <div class="plan-card free">
+              <div class="plan-badge">Current Plan</div>
+              <div class="plan-name">Free</div>
+              <div class="plan-price">₹0 / month</div>
+              <ul class="plan-features">
+                <li>✓ Up to 5 events/month</li>
+                <li>✓ Basic skill tracks</li>
+                <li>✓ Community access</li>
+                <li>✗ AI career matching</li>
+                <li>✗ Priority support</li>
+              </ul>
+            </div>
+
+            <div class="plan-card pro">
+              <div class="plan-badge pro-badge">Recommended</div>
+              <div class="plan-name">Pro</div>
+              <div class="plan-price">₹499 / month</div>
+              <ul class="plan-features">
+                <li>✓ Unlimited events</li>
+                <li>✓ Premium skill tracks</li>
+                <li>✓ AI career matching</li>
+                <li>✓ Analytics dashboard</li>
+                <li>✓ Priority support</li>
+              </ul>
+              <button class="btn-primary upgrade-plan-btn">Upgrade to Pro</button>
+            </div>
+
+            <div class="form-actions" style="margin-top:2rem;">
+              <button class="btn-ghost">View Billing History</button>
+            </div>
+          </section>
+
+          <!-- INTEGRATIONS -->
+          <section class="panel" id="tab-integrations">
+            <h2 class="panel-title">Integrations</h2>
+            <p class="panel-desc">Connect your external accounts and tools.</p>
+
+            <div class="integration-card">
+              <div class="int-icon" style="background:#24292e;">GH</div>
+              <div>
+                <div class="toggle-title">GitHub</div>
+                <div class="toggle-desc">Showcase your repos and contributions.</div>
+              </div>
+              <button class="btn-secondary small">Connect</button>
+            </div>
+
+            <div class="integration-card">
+              <div class="int-icon" style="background:#0077b5;">in</div>
+              <div>
+                <div class="toggle-title">LinkedIn</div>
+                <div class="toggle-desc">Import your professional profile.</div>
+              </div>
+              <button class="btn-secondary small">Connect</button>
+            </div>
+
+            <div class="integration-card">
+              <div class="int-icon" style="background:#1da1f2;">𝕏</div>
+              <div>
+                <div class="toggle-title">X / Twitter</div>
+                <div class="toggle-desc">Share your achievements automatically.</div>
+              </div>
+              <button class="btn-secondary small connected">Connected ✓</button>
+            </div>
+
+            <div class="integration-card">
+              <div class="int-icon" style="background:#5865f2;">D</div>
+              <div>
+                <div class="toggle-title">Discord</div>
+                <div class="toggle-desc">Join TALEX community via Discord.</div>
+              </div>
+              <button class="btn-secondary small">Connect</button>
+            </div>
+          </section>
+
+          <!-- DANGER ZONE -->
+          <section class="panel" id="tab-danger">
+            <h2 class="panel-title danger-title">Danger Zone</h2>
+            <p class="panel-desc">Irreversible actions. Proceed with caution.</p>
+
+            <div class="danger-card">
+              <div>
+                <div class="toggle-title">Deactivate Account</div>
+                <div class="toggle-desc">Temporarily hide your profile and pause activity. You can reactivate anytime.</div>
+              </div>
+              <button class="btn-warning">Deactivate</button>
+            </div>
+
+            <div class="danger-card">
+              <div>
+                <div class="toggle-title">Export My Data</div>
+                <div class="toggle-desc">Download all your data including events, badges, and activity logs.</div>
+              </div>
+              <button class="btn-secondary">Export</button>
+            </div>
+
+            <div class="danger-card">
+              <div>
+                <div class="toggle-title">Delete Account</div>
+                <div class="toggle-desc">Permanently delete your account and all associated data. This cannot be undone.</div>
+              </div>
+              <button class="btn-danger">Delete Account</button>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Theme picker
+    document.querySelectorAll('.theme-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.theme-opt').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+
+    // Accent picker
+    document.querySelectorAll('.accent-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        document.querySelectorAll('.accent-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        document.documentElement.style.setProperty('--accent', dot.style.background);
+      });
+    });
+  </script>
+
+</body>
+</html>

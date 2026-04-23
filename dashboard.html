@@ -553,7 +553,7 @@
     skills:      'skillsView',
     badges:      'badgesView',
     communities: 'communitiesView',
-    settings:    'settingsView',
+    settings:    'settings.html',  // external settings page
     calendar:    null,              // opens modal
     leaderboard: 'leaderboard.html',// external page
     upgrade:     null,              // opens upgrade modal
@@ -605,6 +605,11 @@
 
     if (page === 'leaderboard') {
       window.location.href = 'leaderboard.html';
+      return;
+    }
+
+    if (page === 'settings') {
+      window.location.href = 'settings.html';
       return;
     }
 
