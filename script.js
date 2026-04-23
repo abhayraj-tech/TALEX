@@ -45,7 +45,9 @@ function updateAuthUI() {
   const ctaBtn = navLinks.querySelector('.nav-cta');
   if (currentUser) {
     ctaBtn.textContent = `Hi, ${currentUser.name.split(' ')[0]} (${currentUser.credits || 0} ⚡)`;
-    ctaBtn.onclick = (e) => { e.preventDefault(); showUserMenu(); };
+    ctaBtn.style.cursor = 'pointer';
+    ctaBtn.title = 'Go to Dashboard';
+    ctaBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'dashboard.html'; };
   } else {
     ctaBtn.textContent = 'Get Started Free';
     ctaBtn.onclick = (e) => { e.preventDefault(); showAuthModal('signup'); };
