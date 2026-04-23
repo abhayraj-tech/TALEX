@@ -493,17 +493,28 @@
 
     const topHeader = document.getElementById('topHeader');
     const moduleView = document.getElementById('moduleView');
+    const sidebar = document.getElementById('sidebar');
     if (viewId === 'moduleView') {
-      if(topHeader) topHeader.style.display = 'none';
-      if(moduleView) {
-        moduleView.style.marginTop = '0';
+      if (topHeader) topHeader.style.display = 'none';
+      if (sidebar) sidebar.style.display = 'none';
+      if (moduleView) {
+        moduleView.style.position = 'fixed';
+        moduleView.style.inset = '0';
+        moduleView.style.width = '100vw';
         moduleView.style.height = '100vh';
+        moduleView.style.marginTop = '0';
+        moduleView.style.zIndex = '50';
       }
     } else {
-      if(topHeader) topHeader.style.display = 'flex';
-      if(moduleView) {
-        moduleView.style.marginTop = '';
+      if (topHeader) topHeader.style.display = 'flex';
+      if (sidebar) sidebar.style.display = 'flex';
+      if (moduleView) {
+        moduleView.style.position = '';
+        moduleView.style.inset = '';
+        moduleView.style.width = '';
         moduleView.style.height = '';
+        moduleView.style.marginTop = '';
+        moduleView.style.zIndex = '';
       }
     }
   }
