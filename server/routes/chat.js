@@ -2,19 +2,18 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const OpenAI = require('openai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const router = express.Router();
 
 // ===== API KEY CHECK AT MODULE LOAD =====
-if (!process.env.OPENAI_API_KEY) {
-  console.warn('⚠️  WARNING: OPENAI_API_KEY is not set. Chat endpoint will return 503.');
+if (!process.env.GEMINI_API_KEY) {
+  console.warn('⚠️  WARNING: GEMINI_API_KEY is not set. Chat endpoint will return 503.');
 }
 
 // ===== MULTER SETUP FOR FILE UPLOADS =====
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 
-// Ensure uploads directory exists
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -28,13 +27,10 @@ const ACCEPTED_MIME_TYPES = [
 ];
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const ext = path.extname(file.originalname);
-    cb(null, `${uniqueSuffix}${ext}`);
+    cb(null, `${uniqueSuffix}${path.extname(file.originalname)}`);
   },
 });
 
@@ -52,7 +48,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
 });
 
-// ===== POST / — Stream chat completion =====
+// ===== POST / — Stream chat completion via Gemini =====
 router.post('/', async (req, res) => {
   const { message } = req.body;
 
@@ -62,7 +58,7 @@ router.post('/', async (req, res) => {
   }
 
   // Check API key
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return res.status(503).json({ error: 'AI service is not configured' });
   }
 
@@ -73,32 +69,25 @@ router.post('/', async (req, res) => {
   res.flushHeaders();
 
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-    const stream = await openai.chat.completions.create({
-      model: req.body.model || 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are TALEX AI, a helpful learning assistant for the TALEX skill-learning platform.',
-        },
-        { role: 'user', content: message.trim() },
-      ],
-      stream: true,
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-1.5-flash',
+      systemInstruction: 'You are TALEX AI, a helpful learning assistant for the TALEX skill-learning platform.',
     });
 
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content;
-      if (content) {
-        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+    const result = await model.generateContentStream(message.trim());
+
+    for await (const chunk of result.stream) {
+      const text = chunk.text();
+      if (text) {
+        res.write(`data: ${JSON.stringify({ content: text })}\n\n`);
       }
     }
 
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (err) {
-    // If headers already sent, write an SSE error event and close
+    console.error('Gemini error:', err.message);
     if (res.headersSent) {
       res.write(`data: ${JSON.stringify({ error: 'Failed to generate response' })}\n\n`);
       res.end();
