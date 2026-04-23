@@ -29,6 +29,64 @@
   --transition: 0.3s ease-out;
 }
 
+/* Light Theme */
+[data-theme="light"] {
+  --bg-deep: #f1f5f9;
+  --bg-surface: #ffffff;
+  --text: #0f172a;
+  --text-dim: #475569;
+  --border: #e2e8f0;
+  --muted: #94a3b8;
+}
+
+/* Mixed Theme (Classic - Cyan) */
+[data-theme="mixed"] {
+  --bg-deep: #020617;
+  --bg-surface: #ffffff;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --border: #e2e8f0;
+  --cyan: #06b6d4;
+}
+
+/* Mixed Emerald (Green) */
+[data-theme="mixed-emerald"] {
+  --bg-deep: #020617;
+  --bg-surface: #ffffff;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --border: #e2e8f0;
+  --cyan: #10b981;
+}
+
+/* Mixed Ocean (Blue) */
+[data-theme="mixed-ocean"] {
+  --bg-deep: #020617;
+  --bg-surface: #ffffff;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --border: #e2e8f0;
+  --cyan: #3b82f6;
+}
+
+/* Mixed Sunset (Rose) */
+[data-theme="mixed-sunset"] {
+  --bg-deep: #020617;
+  --bg-surface: #ffffff;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --border: #e2e8f0;
+  --cyan: #f43f5e;
+}
+
+/* Adjustments for all Mixed Themes */
+[data-theme^="mixed"] .sidebar, 
+[data-theme^="mixed"] .top-header {
+  --text: #0f172a;
+  --text-dim: #475569;
+  --border: #e2e8f0;
+}
+
 html {
   scroll-behavior: smooth;
 }

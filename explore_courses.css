@@ -22,6 +22,21 @@
   --ease:     cubic-bezier(0.4,0,0.2,1);
 }
 
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --surface: rgba(0, 0, 0, 0.03);
+  --card: rgba(0, 0, 0, 0.015);
+  --card-h: rgba(0, 0, 0, 0.05);
+  --border: rgba(0, 0, 0, 0.1);
+  --text: #0f172a;
+  --muted: #475569;
+  --hint: #64748b;
+}
+
+[data-theme^="mixed"] {
+  --bg: #09090b;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {

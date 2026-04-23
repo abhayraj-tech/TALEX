@@ -417,7 +417,7 @@
   display: none;
 }
 
-.talex-chat-preview-item {
+.talex-chat-file-preview-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -430,7 +430,7 @@
   max-width: 200px;
 }
 
-.talex-chat-preview-thumb {
+.talex-chat-file-preview-thumb {
   width: 36px;
   height: 36px;
   border-radius: 6px;
@@ -438,12 +438,12 @@
   flex-shrink: 0;
 }
 
-.talex-chat-preview-icon {
+.talex-chat-file-preview-icon {
   font-size: 20px;
   flex-shrink: 0;
 }
 
-.talex-chat-preview-name {
+.talex-chat-file-preview-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -451,7 +451,7 @@
   min-width: 0;
 }
 
-.talex-chat-preview-remove {
+.talex-chat-file-preview-remove {
   width: 18px;
   height: 18px;
   border-radius: 50%;
