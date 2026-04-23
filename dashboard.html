@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -418,6 +418,90 @@
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
   </main>
+
+  <!-- -- SKILLS VIEW -- -->
+  <main class="content" id="skillsView" style="display:none; padding-top: 20px;">
+    <div class="section-header">
+      <h1>My Skills</h1>
+      <p>Track your progress and master new domains</p>
+    </div>
+    <div class="skills-overview-grid">
+      <div class="skill-main-card">
+        <div class="skill-header">
+          <div class="skill-icon-large">??</div>
+          <div><h3>Web Development</h3><p>Level 4 � Advanced</p></div>
+          <div class="skill-xp">2,450 / 3,000 XP</div>
+        </div>
+        <div class="xp-bar-container"><div class="xp-bar-fill" style="width: 82%;"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- -- BADGES VIEW -- -->
+  <main class="content" id="badgesView" style="display:none; padding-top: 20px;">
+    <div class="section-header">
+      <h1>Badge Collection</h1>
+      <p>Your verified proof of expertise</p>
+    </div>
+    <div class="badge-cabinet" id="badgeCabinet">
+      <div class="badge-item earned"><div class="badge-hex">??</div><h4>Early Adopter</h4></div>
+    </div>
+  <!-- ── COMMUNITIES VIEW ── -->
+  <main class="content" id="communitiesView" style="display:none; padding-top: 20px;">
+    <div class="section-header">
+      <h1>Communities</h1>
+      <p>Connect with people who share your passion</p>
+    </div>
+
+    <div class="communities-grid">
+      <div class="community-card">
+        <div class="comm-banner" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf);"></div>
+        <div class="comm-info">
+          <h3>Full Stack Masters</h3>
+          <p>5.2k members · 12 active discussions</p>
+          <button class="btn-glass">Join Community</button>
+        </div>
+      </div>
+      <div class="community-card">
+        <div class="comm-banner" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);"></div>
+        <div class="comm-info">
+          <h3>AI Builders</h3>
+          <p>2.8k members · 8 active discussions</p>
+          <button class="btn-glass">Join Community</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── SETTINGS VIEW ── -->
+  <main class="content" id="settingsView" style="display:none; padding-top: 20px;">
+    <div class="section-header">
+      <h1>Settings</h1>
+      <p>Manage your account and preferences</p>
+    </div>
+
+    <div class="settings-container">
+      <div class="settings-group">
+        <h3>Profile Settings</h3>
+        <div class="setting-item">
+          <label>Display Name</label>
+          <input type="text" value="Abhay" class="upload-title-input" style="margin-bottom:0">
+        </div>
+        <div class="setting-item">
+          <label>Email Address</label>
+          <input type="email" value="abhay@example.com" class="upload-title-input" style="margin-bottom:0">
+        </div>
+      </div>
+      <div class="settings-group" style="margin-top:32px">
+        <h3>Notifications</h3>
+        <div class="setting-toggle">
+          <span>Email Notifications</span>
+          <button class="toggle-btn active"></button>
+        </div>
+      </div>
+    </div>
+  </main>
+  </main>
 </div>
 
 <!-- ═══ CALENDAR MODAL ═══ -->
@@ -479,3 +563,4 @@
   <script src="explore.js"></script>
 </body>
 </html>
+

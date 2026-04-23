@@ -28,13 +28,29 @@ const currentUser = JSON.parse(localStorage.getItem('talex_user') || 'null');
 // ── Sidebar Navigation ──
 const dashboardView = document.getElementById('dashboardView');
 const exploreView = document.getElementById('exploreView');
+const skillsView = document.getElementById('skillsView');
+const badgesView = document.getElementById('badgesView');
+const communitiesView = document.getElementById('communitiesView');
+const settingsView = document.getElementById('settingsView');
 
 function switchPage(pageId) {
+  // Hide all
+  [dashboardView, exploreView, skillsView, badgesView, communitiesView, settingsView].forEach(v => {
+    if (v) v.style.display = 'none';
+  });
+
+  // Show selected
   if (pageId === 'courses') {
-    dashboardView.style.display = 'none';
     exploreView.style.display = 'block';
+  } else if (pageId === 'skills') {
+    skillsView.style.display = 'block';
+  } else if (pageId === 'badges') {
+    badgesView.style.display = 'block';
+  } else if (pageId === 'communities') {
+    communitiesView.style.display = 'block';
+  } else if (pageId === 'settings') {
+    settingsView.style.display = 'block';
   } else {
-    exploreView.style.display = 'none';
     dashboardView.style.display = 'block';
   }
 }
