@@ -15,7 +15,7 @@
     if (hour < 12) greeting = 'Good morning';
     else if (hour < 17) greeting = 'Good afternoon';
     
-    const user = JSON.parse(localStorage.getItem('talex_user') || 'null');
+    const user = JSON.parse(sessionStorage.getItem('talex_user') || 'null');
     const name = user?.name?.split(' ')[0] || 'Abhay';
     greetEl.textContent = `${greeting}, ${name} 👋`;
   }
@@ -107,7 +107,7 @@
   });
 
   // ── 7. Update credits from user data ──
-  const user = JSON.parse(localStorage.getItem('talex_user') || 'null');
+  const user = JSON.parse(sessionStorage.getItem('talex_user') || 'null');
   if (user && user.credits) {
     const creditsEl = document.getElementById('statCredits');
     if (creditsEl) creditsEl.setAttribute('data-count', user.credits);
