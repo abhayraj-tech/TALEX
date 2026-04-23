@@ -6,12 +6,40 @@
   <title>Badge Collection – TALEX</title>
   <link rel="stylesheet" href="badge-button.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body.is-embedded .page-header { display: none !important; }
+    body.is-embedded .dashboard-wrapper { padding-top: 20px !important; }
+  </style>
 </head>
-<body>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
+
   
   <div id="cursor-glow"></div>
   
   <div class="dashboard-wrapper">
+    <div class="layout-container">
+      <!-- SIDEBAR TABS -->
+      <nav class="side-tabs">
+        <div class="tabs-group">
+          <p class="tabs-label">Collection</p>
+          <button class="tab active" data-filter="All">💎 All Badges</button>
+          <button class="tab" data-filter="Earned">✅ Earned</button>
+          <button class="tab" data-filter="Locked">🔒 Locked</button>
+        </div>
+        <div class="tabs-group">
+          <p class="tabs-label">Rarity</p>
+          <button class="tab" data-filter="Legendary">🔥 Legendary</button>
+          <button class="tab" data-filter="Rare">🌟 Rare</button>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content-area">
     <!-- Header -->
     <header class="page-header">
       <div class="header-content">
@@ -19,7 +47,7 @@
           <h1>My Badges</h1>
           <p>Your verified proof of expertise. Show them off.</p>
         </div>
-        <button class="btn-back" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+        <button class="btn-back" onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }">Back to Dashboard</button>
       </div>
     </header>
 
@@ -38,13 +66,11 @@
 
       <div class="badges-grid" id="badgesGrid">
         <!-- Badges will be loaded dynamically here -->
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Loading your professional badges...</p>
-        </div>
       </div>
     </main>
-  </div>
+  </main>
+</div>
+</div>
 
   <script>
     // Cursor Glow Effect

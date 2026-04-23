@@ -5,19 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TALEX — Communities</title>
   <link rel="stylesheet" href="community-button.css">
+  <style>
+    body.is-embedded .page-header { display: none !important; }
+    body.is-embedded .dashboard-wrapper { padding-top: 20px !important; }
+  </style>
 </head>
-<body>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
+
   <!-- CURSOR GLOW -->
   <div id="cursor-glow"></div>
 
   <div class="dashboard-wrapper">
+    <div class="layout-container">
+      <!-- SIDEBAR TABS -->
+      <nav class="side-tabs">
+        <div class="tabs-group">
+          <p class="tabs-label">Filter By</p>
+          <button class="tab active" data-filter="All">🌐 All Groups</button>
+          <button class="tab" data-filter="Tech">⚡ Tech & Dev</button>
+          <button class="tab" data-filter="Design">🎨 Design & Art</button>
+          <button class="tab" data-filter="Business">💼 Startup & Biz</button>
+        </div>
+        <div class="tabs-group">
+          <p class="tabs-label">My Activity</p>
+          <button class="tab" data-filter="Joined">👥 Joined</button>
+          <button class="tab" data-filter="Popular">📈 Popular</button>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content-area">
     <!-- Header -->
     <header class="page-header">
       <div class="title-section">
         <h1>Global <span style="color:var(--accent);">Communities</span></h1>
         <p>Connect with high-performers, share insights, and accelerate your growth alongside the world's most ambitious students.</p>
       </div>
-      <button class="btn-back" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+      <button class="btn-back" onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }">Back to Dashboard</button>
     </header>
 
     <!-- Grid -->
@@ -124,7 +153,9 @@
         <button class="btn-join" onclick="toggleJoin(this)">Join Community</button>
       </div>
     </div>
-  </div>
+  </main>
+</div>
+</div>
 
   <script>
     // Cursor Glow

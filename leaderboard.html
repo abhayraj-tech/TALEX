@@ -6,8 +6,33 @@
   <title>TALEX — Leaderboard & Performance</title>
   <meta name="description" content="TALEX Student Performance Leaderboard — see top performers, composite scores, rank tiers, and company recommendations.">
   <link rel="stylesheet" href="leaderboard.css">
+  <style>
+    body.is-embedded {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    body.is-embedded .sidebar { display: none !important; }
+    body.is-embedded .main-area { margin-left: 0 !important; margin-top: 0 !important; }
+    body.is-embedded .top-header { display: none !important; }
+    body.is-embedded .content { padding-top: 20px !important; }
+
+    .main-area {
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
-<body>
+<body class="is-embedded">
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
 
 <!-- ═══ SIDEBAR ═══ -->
 <aside class="sidebar" id="sidebar">
@@ -62,7 +87,7 @@
         <span class="search-icon">🔍</span>
         <input type="text" placeholder="Search students..." id="searchInput">
       </div>
-      <a href="dashboard.html"><button class="header-btn" title="Dashboard">📊</button></a>
+      <a href="javascript:void(0)" onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }"><button class="header-btn" title="Dashboard">📊</button></a>
       <a href="new.html"><button class="header-btn" title="Home">🏠</button></a>
     </div>
   </header>
@@ -175,6 +200,11 @@
   </div>
 </div>
 
-<script src="leaderboard.js"></script>
+  <script>
+    if (window.self !== window.top) {
+      document.body.classList.add('is-embedded');
+    }
+  </script>
+  <script src="leaderboard.js"></script>
 </body>
 </html>

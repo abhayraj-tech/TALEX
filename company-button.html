@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TALEX — Hiring Partners</title>
+  <link rel="stylesheet" href="company-button.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class="is-embedded">
+  <!-- IFRAME DETECTION -->
+  <script>
+    if (window.parent === window) {
+      document.body.classList.remove('is-embedded');
+    }
+  </script>
+
+  <!-- CURSOR GLOW -->
+  <div id="cursor-glow"></div>
+
+  <div class="dashboard-wrapper">
+    <div class="layout-container">
+      <!-- SIDEBAR TABS -->
+      <nav class="side-tabs">
+        <div class="tabs-group">
+          <p class="tabs-label">Categories</p>
+          <button class="tab active" data-filter="All">🌍 All Partners</button>
+          <button class="tab" data-filter="Tech">💻 Big Tech</button>
+          <button class="tab" data-filter="Fintech">💳 Fintech</button>
+          <button class="tab" data-filter="AI">🤖 AI & ML</button>
+          <button class="tab" data-filter="Automotive">🏎 Automotive</button>
+        </div>
+        <div class="tabs-group">
+          <p class="tabs-label">Hiring Status</p>
+          <button class="tab" data-filter="Active">🔥 Hiring Now</button>
+          <button class="tab" data-filter="Internship">🎓 Internships</button>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content-area">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="title-section">
+        <h1>Partner <span style="color:var(--accent);">Companies</span></h1>
+        <p>Connect with top tech companies looking for talent like you.</p>
+      </div>
+      <button class="btn-back"
+        onclick="if(window.parent && window.parent.switchPage){ window.parent.switchPage('dashboard'); } else { window.location.href='dashboard.html'; }">Back
+        to Dashboard</button>
+    </header>
+
+    <!-- Hero Stats -->
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-value">45+</span>
+        <span class="stat-label">Partner Companies</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">120+</span>
+        <span class="stat-label">Open Roles</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">1.5L</span>
+        <span class="stat-label">Avg. Package</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">85%</span>
+        <span class="stat-label">Placement Rate</span>
+      </div>
+    </div>
+
+    <!-- Company Grid -->
+    <div class="company-grid">
+      <!-- Google -->
+      <div class="company-card">
+        <div class="company-header">
+          <div class="company-logo" style="background: rgba(66, 133, 244, 0.1);">G</div>
+          <div class="company-name">
+            <h3>Google</h3>
+            <span class="company-sector">Cloud & AI</span>
+          </div>
+        </div>
+        <p class="company-desc">Leading the AI revolution. Looking for passionate software engineers to join our cloud
+          infrastructure and search teams.</p>
+        <div class="open-roles">
+          <div class="role-tag">
+            <span>Software Engineer II (AI)</span>
+            <span class="role-salary">₹24 - 35 LPA</span>
+          </div>
+          <div class="role-tag">
+            <span>Cloud Solutions Architect</span>
+            <span class="role-salary">₹18 - 28 LPA</span>
+          </div>
+        </div>
+        <button class="btn-apply" onclick="applyJob('Google')">Explore Roles</button>
+      </div>
+
+      <!-- Microsoft -->
+      <div class="company-card">
+        <div class="company-header">
+          <div class="company-logo" style="background: rgba(243, 80, 34, 0.1);">M</div>
+          <div class="company-name">
+            <h3>Microsoft</h3>
+            <span class="company-sector">Enterprise Software</span>
+          </div>
+        </div>
+        <p class="company-desc">Empowering every person on the planet. Hiring full-stack developers for Azure and modern
+          work platforms.</p>
+        <div class="open-roles">
+          <div class="role-tag">
+            <span>Full-stack Developer</span>
+            <span class="role-salary">₹22 - 32 LPA</span>
+          </div>
+          <div class="role-tag">
+            <span>Product Design Intern</span>
+            <span class="role-salary">₹45k/mo</span>
+          </div>
+        </div>
+        <button class="btn-apply" onclick="applyJob('Microsoft')">Explore Roles</button>
+      </div>
+
+      <!-- NVIDIA -->
+      <div class="company-card">
+        <div class="company-header">
+          <div class="company-logo" style="background: rgba(118, 185, 0, 0.1);">N</div>
+          <div class="company-name">
+            <h3>NVIDIA</h3>
+            <span class="company-sector">Hardware & AI</span>
+          </div>
+        </div>
+        <p class="company-desc">The engine of modern AI. Looking for hardware engineers and CUDA developers to build the
+          future of compute.</p>
+        <div class="open-roles">
+          <div class="role-tag">
+            <span>CUDA Software Engineer</span>
+            <span class="role-salary">₹30 - 45 LPA</span>
+          </div>
+          <div class="role-tag">
+            <span>Deep Learning Researcher</span>
+            <span class="role-salary">₹35 - 55 LPA</span>
+          </div>
+        </div>
+        <button class="btn-apply" onclick="applyJob('NVIDIA')">Explore Roles</button>
+      </div>
+
+      <!-- Stripe -->
+      <div class="company-card">
+        <div class="company-header">
+          <div class="company-logo" style="background: rgba(103, 114, 229, 0.1);">S</div>
+          <div class="company-name">
+            <h3>Stripe</h3>
+            <span class="company-sector">Fintech</span>
+          </div>
+        </div>
+        <p class="company-desc">The financial infrastructure of the internet. Hiring backend engineers to scale our
+          global payment network.</p>
+        <div class="open-roles">
+          <div class="role-tag">
+            <span>Backend Engineer (Ruby/Go)</span>
+            <span class="role-salary">₹28 - 42 LPA</span>
+          </div>
+          <div class="role-tag">
+            <span>Security Engineer</span>
+            <span class="role-salary">₹25 - 38 LPA</span>
+          </div>
+        </div>
+        <button class="btn-apply" onclick="applyJob('Stripe')">Explore Roles</button>
+      </div>
+
+      <!-- Tesla -->
+      <div class="company-card">
+        <div class="company-header">
+          <div class="company-logo" style="background: rgba(232, 33, 39, 0.1);">T</div>
+          <div class="company-name">
+            <h3>Tesla</h3>
+            <span class="company-sector">AI & Autonomy</span>
+          </div>
+        </div>
+        <p class="company-desc">Accelerating the world's transition to sustainable energy. Hiring Autopilot engineers
+          and robotics experts.</p>
+        <div class="open-roles">
+          <div class="role-tag">
+            <span>Computer Vision Engineer</span>
+            <span class="role-salary">₹32 - 48 LPA</span>
+          </div>
+          <div class="role-tag">
+            <span>Embedded Systems Lead</span>
+            <span class="role-salary">₹26 - 40 LPA</span>
+          </div>
+        </div>
+        <button class="btn-apply" onclick="applyJob('Tesla')">Explore Roles</button>
+      </div>
+
+      <!-- Meta -->
+      <div class="company-card">
+        <div class="company-header">
+          <div class="company-logo" style="background: rgba(6, 104, 228, 0.1);">M</div>
+          <div class="company-name">
+            <h3>Meta</h3>
+            <span class="company-sector">Social & Metaverse</span>
+          </div>
+        </div>
+        <p class="company-desc">Building the future of social connection. Looking for VR/AR engineers and data
+          scientists for the metaverse.</p>
+        <div class="open-roles">
+          <div class="role-tag">
+            <span>Unity/AR Developer</span>
+            <span class="role-salary">₹20 - 30 LPA</span>
+          </div>
+          <div class="role-tag">
+            <span>Data Scientist (Ads)</span>
+            <span class="role-salary">₹24 - 36 LPA</span>
+          </div>
+        </div>
+        <button class="btn-apply" onclick="applyJob('Meta')">Explore Roles</button>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+  <script>
+    // Cursor Glow
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // Mock Apply
+    function applyJob(company) {
+      alert(`Redirecting to ${company}'s TALEX portal for role selection...`);
+    }
+  </script>
+</body>
+
+</html>
