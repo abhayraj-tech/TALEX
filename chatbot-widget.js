@@ -400,6 +400,37 @@ function initChatWidget() {
     }
   }
 
+  /**
+   * Simulate a chat response for Demo Mode (when backend is unavailable).
+   * @param {string} msgId
+   * @param {string} userText
+   */
+  async function simulateDemoResponse(msgId, userText) {
+    const input = userText.toLowerCase();
+    let responseText = "I'm currently in Demo Mode because the backend server is unreachable. How can I help you with TALEX today?";
+
+    if (input.includes('hello') || input.includes('hi')) {
+      responseText = "Hi there! I'm TALEX AI. I can help you find courses, track your skills, or explain how our credit system works. What's on your mind?";
+    } else if (input.includes('course') || input.includes('learn')) {
+      responseText = "We have amazing courses in AI, Web Development, Design, and more! You can check the 'Explore' tab to see the full catalog. Do you have a specific skill you want to master?";
+    } else if (input.includes('credit') || input.includes('earn')) {
+      responseText = "In TALEX, you earn credits by completing courses and proving your skills. You can use these credits to unlock premium content or even get rewards! Want to know your current balance?";
+    } else if (input.includes('skill')) {
+      responseText = "Skills are the core of TALEX. Every course you take adds to your skill profile. You can see your progress in the 'Skills' section of your dashboard.";
+    } else if (input.includes('who are you') || input.includes('talex ai')) {
+      responseText = "I am TALEX AI, your personal learning companion. My goal is to help you navigate the platform and reach your career goals faster!";
+    }
+
+    // Simulate streaming
+    const words = responseText.split(' ');
+    let currentText = '';
+    for (let i = 0; i < words.length; i++) {
+      currentText += words[i] + ' ';
+      updateStreamingMessage(msgId, currentText, i === words.length - 1);
+      await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
+    }
+  }
+
   /* ── sendMessage ────────────────────────────────────────────────────── */
 
   /**
@@ -502,7 +533,7 @@ function initChatWidget() {
       textInput.focus();
     }
 
-    /* 9. Fetch POST /api/chat */
+    /* 9. Fetch POST /api/chat with Demo Mode Fallback */
     let response;
     try {
       response = await fetch('/api/chat', {
@@ -511,14 +542,22 @@ function initChatWidget() {
         body: JSON.stringify({ message: messageText }),
       });
     } catch (networkErr) {
-      /* 13. Handle fetch/network errors */
-      updateStreamingMessage(assistantMsg.id, 'Connection error. Please try again.', true);
+      /* FALLBACK TO DEMO MODE if server is unreachable */
+      console.warn('[Chat] Server unreachable, switching to Demo Mode.');
+      await simulateDemoResponse(assistantMsg.id, messageText);
       reenableControls();
       return;
     }
 
     /* 12. Handle HTTP error responses */
     if (!response.ok) {
+      // If server returns error but is reachable, still try to fallback for specific codes
+      if (response.status === 404 || response.status === 503) {
+        await simulateDemoResponse(assistantMsg.id, messageText);
+        reenableControls();
+        return;
+      }
+
       let errorMessage;
       try {
         const errBody = await response.json();
