@@ -365,27 +365,27 @@
   </main>
 
   <!-- ── EXPLORE VIEW ── -->
-  <main class="content" id="exploreView" style="display:none; padding-top: 20px;">
+  <main class="content" id="exploreView" style="display:none; padding-top: 8px;">
     <!-- HERO -->
-    <section class="hero" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 20px;">
+    <section style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; padding: 0; min-height: unset; background: none;">
       <div class="hero-text">
-        <h1 style="font-size: clamp(28px,4vw,44px); font-weight: 800;">Explore <span class="accent" style="color: var(--cyan);">Courses</span></h1>
-        <p style="color: var(--muted); margin-top: 10px;">Curated learning paths tailored to your skills and goals.</p>
+        <h1 style="font-size: clamp(22px,3vw,36px); font-weight: 800;">Explore <span class="accent" style="color: var(--cyan);">Courses</span></h1>
+        <p style="color: var(--muted); margin-top: 6px; font-size: 0.9rem;">Curated learning paths tailored to your skills and goals.</p>
       </div>
       
-      <div class="search-bar" style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; min-width: 300px;">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="exploreSearchInput" placeholder="Search courses..." style="background: none; border: none; outline: none; color: var(--text); width: 100%;">
+      <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; min-width: 260px; max-width: 340px; flex: 1;">
+        <span>🔍</span>
+        <input type="text" id="exploreSearchInput" placeholder="Search courses..." style="background: none; border: none; outline: none; color: var(--text); width: 100%; font-size: 0.88rem;">
       </div>
 
-      <div class="hero-stats" style="display: flex; gap: 16px;">
-        <div class="stat" style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 22px; min-width: 80px;">
-          <span class="stat-num" id="totalCount" style="font-size: 22px; font-weight: 700; color: var(--cyan);">—</span>
-          <span class="stat-label" style="font-size: 11px; color: var(--muted);">Courses</span>
+      <div style="display: flex; gap: 12px;">
+        <div style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 18px; min-width: 70px;">
+          <span id="totalCount" style="font-size: 20px; font-weight: 700; color: var(--cyan);">—</span>
+          <span style="font-size: 10px; color: var(--muted);">Courses</span>
         </div>
-        <div class="stat" style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 22px; min-width: 80px;">
-          <span class="stat-num" style="font-size: 22px; font-weight: 700; color: var(--cyan);">12</span>
-          <span class="stat-label" style="font-size: 11px; color: var(--muted);">Categories</span>
+        <div style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 18px; min-width: 70px;">
+          <span style="font-size: 20px; font-weight: 700; color: var(--cyan);">12</span>
+          <span style="font-size: 10px; color: var(--muted);">Categories</span>
         </div>
       </div>
     </section>
