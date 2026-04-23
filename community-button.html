@@ -15,6 +15,15 @@
     if (window.parent === window) {
       document.body.classList.remove('is-embedded');
     }
+    // Theme Sync
+    (function() {
+      const applyTheme = (theme) => document.documentElement.setAttribute('data-theme', theme);
+      const saved = localStorage.getItem('talex_theme') || 'dark';
+      applyTheme(saved);
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'THEME_CHANGE') applyTheme(e.data.theme);
+      });
+    })();
   </script>
 
   <!-- CURSOR GLOW -->

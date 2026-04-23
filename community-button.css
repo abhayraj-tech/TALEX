@@ -19,6 +19,22 @@
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --surface: rgba(0, 0, 0, 0.03);
+  --surface-hover: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-bright: rgba(0, 0, 0, 0.15);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-dim: #64748b;
+}
+
+[data-theme="mixed"] {
+  /* Inherit dark content, as mixed usually means dark main area */
+  --bg: #030712;
+}
+
 * {
   margin: 0;
   padding: 0;
