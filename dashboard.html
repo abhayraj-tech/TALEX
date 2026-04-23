@@ -84,7 +84,7 @@
         <input type="text" placeholder="Search events..." id="searchInput"
                onkeydown="if(event.key==='Enter'){ switchPage('search', this.value); }">
       </div>
-      <button class="publish-btn" onclick="document.getElementById('uploadModalOverlay').style.display='flex'">
+      <button class="publish-btn" onclick="openPublishModal()">
         <span class="btn-label">Publish</span>
       </button>
       <div class="notif-wrapper">
@@ -118,7 +118,7 @@
       <div class="welcome-date" id="welcomeDate"></div>
       <div class="quick-actions">
         <button class="quick-action-btn" onclick="document.getElementById('searchInput').focus()">🔍 Search Events</button>
-        <button class="quick-action-btn" onclick="document.querySelector('.publish-btn').click()">📤 Publish Content</button>
+        <button class="quick-action-btn" onclick="openPublishModal()">📤 Publish Content</button>
         <button class="quick-action-btn" onclick="switchPage('courses')">📚 Browse Courses</button>
         <button class="quick-action-btn" onclick="switchPage('badges')">🏅 View Badges</button>
       </div>
@@ -362,119 +362,11 @@
     </div>
   </main>
 
-  <!-- ── EXPLORE VIEW ── -->
-  <main class="content" id="exploreView" style="display:none; padding-top: 8px;">
-    <!-- HERO -->
-    <section style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; padding: 0; min-height: unset; background: none;">
-      <div class="hero-text">
-        <h1 style="font-size: clamp(22px,3vw,36px); font-weight: 800;">Explore <span class="accent" style="color: var(--cyan);">Courses</span></h1>
-        <p style="color: var(--muted); margin-top: 6px; font-size: 0.9rem;">Curated learning paths tailored to your skills and goals.</p>
-      </div>
-      
-      <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; min-width: 260px; max-width: 340px; flex: 1;">
-        <span>🔍</span>
-        <input type="text" id="exploreSearchInput" placeholder="Search courses..." style="background: none; border: none; outline: none; color: var(--text); width: 100%; font-size: 0.88rem;">
-      </div>
 
-      <div style="display: flex; gap: 12px;">
-        <div style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 18px; min-width: 70px;">
-          <span id="totalCount" style="font-size: 20px; font-weight: 700; color: var(--cyan);">—</span>
-          <span style="font-size: 10px; color: var(--muted);">Courses</span>
-        </div>
-        <div style="display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 18px; min-width: 70px;">
-          <span style="font-size: 20px; font-weight: 700; color: var(--cyan);">12</span>
-          <span style="font-size: 10px; color: var(--muted);">Categories</span>
-        </div>
-      </div>
-    </section>
 
-    <!-- FILTERS -->
-    <div class="filters" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; gap: 12px; flex-wrap: wrap;">
-      <div class="filter-chips" id="filterChips" style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button class="chip active" onclick="UI.setFilter('All',this)">All</button>
-        <button class="chip" onclick="UI.setFilter('AI & ML',this)">AI &amp; ML</button>
-        <button class="chip" onclick="UI.setFilter('Design',this)">Design</button>
-        <button class="chip" onclick="UI.setFilter('Startup',this)">Startup</button>
-        <button class="chip" onclick="UI.setFilter('Data',this)">Data</button>
-        <button class="chip" onclick="UI.setFilter('Web Dev',this)">Web Dev</button>
-      </div>
-      <select class="sort-select" onchange="UI.setSort(this.value)" style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); padding: 8px 14px; outline: none; cursor: pointer;">
-        <option value="default">Sort: Featured</option>
-        <option value="rating">Highest Rated</option>
-        <option value="students">Most Popular</option>
-        <option value="price">Price: Low → High</option>
-      </select>
-    </div>
 
-    <!-- GRID -->
-    <div class="courses-grid" id="coursesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 22px;"></div>
 
-    <!-- LOADING STATE -->
-    <div id="loadingState" class="loading-state" style="display: flex; align-items: center; gap: 14px; padding: 60px 0; color: var(--muted);">
-      <div class="spinner"></div>
-      <span>Loading courses…</span>
-    </div>
 
-    <!-- EMPTY STATE -->
-    <div class="empty-state" id="emptyState" style="display:none; flex-direction: column; align-items: center; gap: 14px; padding: 80px 20px; color: var(--muted);">
-      <p>No courses match your filter.</p>
-    </div>
-
-    <!-- EXPLORE MODAL -->
-    <div class="modal-overlay" id="modalOverlay" onclick="UI.closeModal()" style="position: fixed; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .25s ease; padding: 20px;">
-      <div class="modal" onclick="event.stopPropagation()" id="modal" style="background: var(--bg-surface); border: 1px solid var(--cyan); border-radius: 20px; max-width: 520px; width: 100%; overflow: hidden; position: relative; max-height: 90vh; overflow-y: auto;">
-        <button class="modal-close" onclick="UI.closeModal()" style="position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: rgba(255,255,255,.08); border-radius: 50%; color: var(--muted); display: flex; align-items: center; justify-content: center;">✕</button>
-        <div id="modalContent"></div>
-      </div>
-    </div>
-
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
-  </main>
-
-  <!-- -- SKILLS VIEW -- -->
-    <!-- SKILLS VIEW -->
-  <main class="content" id="skillsView" style="display:none; padding-top: 20px;">
-    <div class="section-header">
-      <h1>My Skills</h1>
-      <p>Track your progress and master new domains</p>
-    </div>
-    <div class="skills-stats-bar" id="skillsStatsBar"></div>
-    <div class="skills-overview-grid" id="skillsList"></div>
-    <div class="section-header" style="margin-top: 40px;">
-      <h2>Suggested for You</h2>
-      <p>Based on your recent activity</p>
-    </div>
-    <div class="suggested-skills-grid" id="suggestedSkillsGrid"></div>
-  </main>
-
-  <!-- BADGES VIEW -->
-  <main class="content" id="badgesView" style="display:none; padding-top: 20px;">
-    <div class="section-header">
-      <h1>Badge Collection</h1>
-      <p>Your verified proof of expertise</p>
-    </div>
-    <div class="badge-stats-bar" id="badgeStatsBar"></div>
-    <div class="badge-cabinet" id="badgeCabinet"></div>
-  </main>
-
-  <!-- COMMUNITIES VIEW -->
-  <main class="content" id="communitiesView" style="display:none; padding-top: 20px;">
-    <div class="section-header">
-      <h1>Communities</h1>
-      <p>Connect with people who share your passion</p>
-    </div>
-    <div class="communities-grid" id="communitiesGrid"></div>
-  </main>
-
-  <!-- SETTINGS VIEW -->
-  <main class="content" id="settingsView" style="display:none; padding-top: 20px;">
-    <div class="section-header">
-      <h1>Settings</h1>
-      <p>Manage your account and preferences</p>
-    </div>
-    <div class="settings-container" id="settingsContainer"></div>
-  </main>
 
   <!-- MODULE VIEW (IFRAME EMBED) -->
   <main class="content" id="moduleView" style="display:none; padding:0; height: calc(100vh - var(--header-h)); overflow: hidden;">
@@ -517,24 +409,45 @@
 <div class="upload-modal-overlay" id="uploadModalOverlay">
   <div class="upload-modal">
     <div class="upload-modal-header">
-      <h3>Publish New Content</h3>
+      <h3 id="uploadModalTitle">What are you publishing?</h3>
       <button class="close-upload" id="closeUpload">✕</button>
     </div>
-    <div class="upload-preview-container" id="uploadPreviewContainer">
-      <div class="upload-placeholder">
-        <div class="placeholder-icon">📁</div>
-        <p>Selected file will appear here</p>
+
+    <!-- Step 1: Choose file type -->
+    <div id="uploadStep1" class="upload-step">
+      <div class="file-type-grid">
+        <button class="file-type-btn" id="chooseImageBtn">
+          <span class="file-type-icon">🖼️</span>
+          <span class="file-type-label">Image</span>
+          <span class="file-type-sub">JPG, PNG, GIF, WebP</span>
+        </button>
+        <button class="file-type-btn" id="chooseVideoBtn">
+          <span class="file-type-icon">🎬</span>
+          <span class="file-type-label">Video</span>
+          <span class="file-type-sub">MP4, MOV, WebM</span>
+        </button>
       </div>
     </div>
-    <div class="upload-modal-footer">
-      <input type="text" id="uploadTitle" placeholder="Give your publication a title..." class="upload-title-input">
-      <button class="btn-publish-confirm" id="confirmUploadBtn" disabled>Upload & Publish</button>
+
+    <!-- Step 2: Preview + title + publish -->
+    <div id="uploadStep2" class="upload-step" style="display:none;">
+      <div class="upload-preview-container" id="uploadPreviewContainer">
+        <div class="upload-placeholder">
+          <div class="placeholder-icon">📁</div>
+          <p>Selected file will appear here</p>
+        </div>
+      </div>
+      <div class="upload-modal-footer">
+        <input type="text" id="uploadTitle" placeholder="Give your publication a title..." class="upload-title-input">
+        <button class="btn-publish-confirm" id="confirmUploadBtn" disabled>Publish</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- HIDDEN FILE INPUT -->
-<input type="file" id="publishInput" accept="image/*,video/*" style="display: none;">
+<!-- HIDDEN FILE INPUTS -->
+<input type="file" id="publishInputImage" accept="image/*" style="display: none;">
+<input type="file" id="publishInputVideo" accept="video/*" style="display: none;">
 
   <script src="dashboard.js"></script>
   <script src="dashboard-premium.js"></script>
@@ -543,29 +456,59 @@
 
   <script>
   /* ═══════════════════════════════════════════════════════════════
-     TALEX DASHBOARD — Client-Side Router
+     TALEX DASHBOARD — Unified Client-Side Router
      Handles all sidebar + card + stat navigation without page reload
   ═══════════════════════════════════════════════════════════════ */
 
-  // ── Route map: page → view element ID ──────────────────────────
+  // ── Route Mapping ──────────────────────────────────────────────
   const VIEWS = {
-    dashboard:   'dashboardView',
-    events:      'dashboardView',
-    courses:     'moduleView',
-    skills:      'moduleView',
-    badges:      'moduleView',
-    communities: 'moduleView',
-    companies:   'moduleView',
-    settings:    'moduleView',
-    calendar:    null,
-    leaderboard: 'moduleView',
-    upgrade:     null,
-    search:      'dashboardView',
-    credits:     'dashboardView',
-    bookmarks:   'dashboardView',
+    'dashboard':   'dashboardView',
+    'events':      'dashboardView',
+    'leaderboard': 'moduleView',
+    'courses':     'moduleView',
+    'skills':      'moduleView',
+    'badges':      'moduleView',
+    'communities': 'moduleView',
+    'companies':   'moduleView',
+    'settings':    'moduleView',
+    'credits':     'dashboardView',
+    'bookmarks':   'dashboardView',
+    'search':      'dashboardView'
   };
 
-  // ── Toast helper ────────────────────────────────────────────────
+  // ── Helper: Sidebar Active State ───────────────────────────────
+  function updateSidebarActive(page) {
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.page === page);
+    });
+  }
+
+  // ── Helper: Show View ───────────────────────────────────────────
+  function showView(viewId) {
+    const allViews = ['dashboardView', 'moduleView'];
+    allViews.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = (id === viewId) ? 'block' : 'none';
+    });
+
+    const topHeader = document.getElementById('topHeader');
+    const moduleView = document.getElementById('moduleView');
+    if (viewId === 'moduleView') {
+      if(topHeader) topHeader.style.display = 'none';
+      if(moduleView) {
+        moduleView.style.marginTop = '0';
+        moduleView.style.height = '100vh';
+      }
+    } else {
+      if(topHeader) topHeader.style.display = 'flex';
+      if(moduleView) {
+        moduleView.style.marginTop = '';
+        moduleView.style.height = '';
+      }
+    }
+  }
+
+  // ── Helper: Toast ───────────────────────────────────────────────
   function dashToast(msg, type = 'info') {
     let t = document.getElementById('dashRouterToast');
     if (!t) {
@@ -589,134 +532,62 @@
     t._timer = setTimeout(() => t.style.opacity = '0', 3000);
   }
 
-  // ── Update sidebar active state ─────────────────────────────────
-  function updateSidebarActive(page) {
-    document.querySelectorAll('.nav-item').forEach(el => {
-      el.classList.toggle('active', el.dataset.page === page);
-    });
-  }
-
-  // ── Main switchPage function ────────────────────────────────────
+  // ── MAIN: switchPage ────────────────────────────────────────────
   function switchPage(page, param) {
+    if (!page) return;
 
-    // Special cases first
+    // Special: Calendar
     if (page === 'calendar') {
-      document.getElementById('calModalOverlay').style.display = 'flex';
+      const cal = document.getElementById('calModalOverlay');
+      if(cal) cal.style.display = 'flex';
       updateSidebarActive('calendar');
       return;
     }
 
-    if (page === 'leaderboard') {
-      document.getElementById('moduleFrame').src = 'leaderboard.html';
-    }
+    // Special: Upgrade
+    if (page === 'upgrade') { showUpgradeModal(); return; }
 
-    if (page === 'courses') {
-      document.getElementById('moduleFrame').src = 'explore_courses.html';
-    }
+    // Module Loader (Iframe)
+    const frame = document.getElementById('moduleFrame');
+    if (page === 'leaderboard') frame.src = 'leaderboard.html';
+    if (page === 'courses')     frame.src = 'explore_courses.html';
+    if (page === 'badges' && !param)      frame.src = 'badge-button.html';
+    if (page === 'skills' && !param)      frame.src = 'skill-button.html';
+    if (page === 'communities' && !param) frame.src = 'community-button.html';
+    if (page === 'companies')   frame.src = 'company-button.html';
+    if (page === 'settings')    frame.src = 'settings.html';
 
-    if (page === 'badges' && !param) {
-      document.getElementById('moduleFrame').src = 'badge-button.html';
-    }
-
-    if (page === 'skills' && !param) {
-      document.getElementById('moduleFrame').src = 'skill-button.html';
-    }
-
-    if (page === 'communities' && !param) {
-      document.getElementById('moduleFrame').src = 'community-button.html';
-    }
-
-    if (page === 'companies') {
-      document.getElementById('moduleFrame').src = 'company-button.html';
-    }
-
-    if (page === 'settings') {
-      document.getElementById('moduleFrame').src = 'settings.html';
-    }
-
-    if (page === 'upgrade') {
-      showUpgradeModal();
-      return;
-    }
-
+    // Search logic
     if (page === 'search' && param) {
-      document.getElementById('searchInput').value = param;
-      // Trigger existing search logic if available
-      const evt = new Event('input', { bubbles: true });
-      document.getElementById('searchInput').dispatchEvent(evt);
+      const inp = document.getElementById('searchInput');
+      if(inp) {
+        inp.value = param;
+        inp.dispatchEvent(new Event('input', { bubbles: true }));
+      }
       showView('dashboardView');
       updateSidebarActive('events');
       dashToast(`🔍 Searching for "${param}"`, 'info');
       return;
     }
 
-    if (page === 'credits') {
-      showView('dashboardView');
-      updateSidebarActive('dashboard');
-      dashToast('⚡ Credits history — coming soon!', 'info');
-      return;
-    }
+    // Tab switches
+    if (page === 'credits')   { showView('dashboardView'); updateSidebarActive('dashboard'); dashToast('⚡ Credits history — coming soon!', 'info'); return; }
+    if (page === 'bookmarks') { showView('dashboardView'); updateSidebarActive('dashboard'); dashToast('🔖 Bookmarks — coming soon!', 'info'); return; }
+    if (page === 'events' && param === 'mine') { showView('dashboardView'); updateSidebarActive('events'); dashToast('🎯 Showing your registered events', 'success'); return; }
 
-    if (page === 'bookmarks') {
-      showView('dashboardView');
-      updateSidebarActive('dashboard');
-      dashToast('🔖 Bookmarks — coming soon!', 'info');
-      return;
-    }
-
-    if (page === 'events' && param === 'mine') {
-      showView('dashboardView');
-      updateSidebarActive('events');
-      dashToast('🎯 Showing your registered events', 'success');
-      return;
-    }
-
-    // Event detail
-    if (page === 'events' && param && param.startsWith('event-')) {
-      showEventDetail(param);
-      return;
-    }
-
-    // Skill detail
-    if (page === 'skills' && param) {
-      showSkillDetail(param);
-      return;
-    }
+    // Details logic
+    if (page === 'events' && param && param.startsWith('event-')) { showEventDetail(param); return; }
+    if (page === 'skills' && param) { showSkillDetail(param); return; }
 
     // Standard view switch
     const viewId = VIEWS[page];
     if (viewId) {
       showView(viewId);
       updateSidebarActive(page);
-      // Trigger existing page init functions if they exist
-      if (page === 'courses' && typeof UI !== 'undefined') UI.init?.();
-      if (page === 'skills'  && typeof renderSkills !== 'undefined') renderSkills?.();
-      if (page === 'badges'  && typeof renderBadges !== 'undefined') renderBadges?.();
     }
   }
 
-  // ── Show a view, hide all others ────────────────────────────────
-  function showView(viewId) {
-    const allViews = ['dashboardView','exploreView','skillsView','badgesView','communitiesView','settingsView','moduleView'];
-    allViews.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = (id === viewId) ? 'block' : 'none';
-    });
-
-    // Special: if in moduleView, hide the main top header to avoid double headers
-    const topHeader = document.getElementById('topHeader');
-    if (viewId === 'moduleView') {
-      topHeader.style.display = 'none';
-      document.getElementById('moduleView').style.marginTop = '0';
-      document.getElementById('moduleView').style.height = '100vh';
-    } else {
-      topHeader.style.display = 'flex';
-      document.getElementById('moduleView').style.marginTop = '';
-      document.getElementById('moduleView').style.height = '';
-    }
-  }
-
-  // ── Event detail modal ──────────────────────────────────────────
+  // ── Modals & Data ───────────────────────────────────────────────
   const EVENT_DATA = {
     'event-ai-ml-2026':    { title:'AI & ML Workshop 2026',    date:'Apr 25, 10:00 AM', location:'Innovation Lab, Block A',  desc:'Deep dive into modern ML techniques with hands-on labs. Earn 50 credits on completion.' },
     'event-neon-cultural': { title:'Neon Cultural Night',       date:'Apr 28, 6:00 PM',  location:'Main Auditorium',          desc:'A vibrant celebration of culture, art, and music. Open to all TALEX members.' },
@@ -726,45 +597,6 @@
     'event-data-bootcamp': { title:'Data Analytics Bootcamp',   date:'May 12, 10:00 AM', location:'Virtual · Zoom',           desc:'Master data storytelling with Python and Tableau. Certificate + badge on completion.' },
   };
 
-  function showEventDetail(eventId) {
-    const ev = EVENT_DATA[eventId];
-    if (!ev) return;
-
-    let modal = document.getElementById('eventDetailModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'eventDetailModal';
-      modal.style.cssText = `
-        position:fixed; inset:0; background:rgba(0,0,0,0.75);
-        backdrop-filter:blur(8px); z-index:9999;
-        display:flex; align-items:center; justify-content:center; padding:1rem;
-      `;
-      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-      document.body.appendChild(modal);
-    }
-
-    modal.innerHTML = `
-      <div style="background:#1a1a2e; border:1px solid rgba(124,58,237,0.4);
-                  border-radius:20px; max-width:480px; width:100%; padding:2rem;
-                  position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('eventDetailModal').style.display='none'"
-                style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);
-                       border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;
-                       cursor:pointer;font-size:1rem;">✕</button>
-        <h2 style="color:#f1f5f9;font-size:1.4rem;margin-bottom:0.75rem;">${ev.title}</h2>
-        <div style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.4rem;">🕐 ${ev.date}</div>
-        <div style="color:#94a3b8;font-size:0.85rem;margin-bottom:1rem;">📍 ${ev.location}</div>
-        <p style="color:#cbd5e1;font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem;">${ev.desc}</p>
-        <button onclick="registerEvent(this,'${eventId}'); document.getElementById('eventDetailModal').style.display='none';"
-                style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);
-                       color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">
-          Register for this Event
-        </button>
-      </div>`;
-    modal.style.display = 'flex';
-  }
-
-  // ── Skill detail ────────────────────────────────────────────────
   const SKILL_DATA = {
     'web-development': { title:'Web Development', icon:'💻', courses:12, badges:3, desc:'Master HTML, CSS, JavaScript, React, Node.js and more.' },
     'ai-ml':           { title:'AI & Machine Learning', icon:'🤖', courses:8, badges:1, desc:'From Python basics to deep learning and LLM engineering.' },
@@ -772,73 +604,30 @@
     'data-science':    { title:'Data Science', icon:'📊', courses:10, badges:4, desc:'Statistics, pandas, visualization, and ML pipelines.' },
   };
 
+  function showEventDetail(eventId) {
+    const ev = EVENT_DATA[eventId];
+    if (!ev) return;
+    let m = document.getElementById('eventDetailModal');
+    if (!m) { m = document.createElement('div'); m.id = 'eventDetailModal'; m.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:1rem;'; m.onclick = (e) => { if (e.target === m) m.style.display = 'none'; }; document.body.appendChild(m); }
+    m.innerHTML = `<div style="background:#1a1a2e; border:1px solid rgba(124,58,237,0.4); border-radius:20px; max-width:480px; width:100%; padding:2rem; position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);"><button onclick="document.getElementById('eventDetailModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08); border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%; cursor:pointer;font-size:1rem;">✕</button><h2 style="color:#f1f5f9;font-size:1.4rem;margin-bottom:0.75rem;">${ev.title}</h2><div style="color:#94a3b8;font-size:0.85rem;margin-bottom:0.4rem;">🕐 ${ev.date}</div><div style="color:#94a3b8;font-size:0.85rem;margin-bottom:1rem;">📍 ${ev.location}</div><p style="color:#cbd5e1;font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem;">${ev.desc}</p><button onclick="registerEvent(this,'${eventId}'); document.getElementById('eventDetailModal').style.display='none';" style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#7c3aed,#06b6d4); color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">Register for this Event</button></div>`;
+    m.style.display = 'flex';
+  }
+
   function showSkillDetail(skillId) {
     const sk = SKILL_DATA[skillId];
-    if (!sk) { switchPage('skills'); return; }
-
-    let modal = document.getElementById('skillDetailModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'skillDetailModal';
-      modal.style.cssText = `
-        position:fixed; inset:0; background:rgba(0,0,0,0.75);
-        backdrop-filter:blur(8px); z-index:9999;
-        display:flex; align-items:center; justify-content:center; padding:1rem;
-      `;
-      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-      document.body.appendChild(modal);
-    }
-
-    modal.innerHTML = `
-      <div style="background:#1a1a2e; border:1px solid rgba(6,182,212,0.4);
-                  border-radius:20px; max-width:460px; width:100%; padding:2rem;
-                  position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('skillDetailModal').style.display='none'"
-                style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);
-                       border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;
-                       cursor:pointer;font-size:1rem;">✕</button>
-        <div style="font-size:3rem;margin-bottom:0.75rem;">${sk.icon}</div>
-        <h2 style="color:#f1f5f9;font-size:1.4rem;margin-bottom:0.5rem;">${sk.title}</h2>
-        <p style="color:#94a3b8;font-size:0.88rem;margin-bottom:1.25rem;">${sk.desc}</p>
-        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;">
-          <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem 1.25rem;text-align:center;flex:1;">
-            <div style="color:#06b6d4;font-size:1.5rem;font-weight:700;">${sk.courses}</div>
-            <div style="color:#94a3b8;font-size:0.75rem;">Courses</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem 1.25rem;text-align:center;flex:1;">
-            <div style="color:#f59e0b;font-size:1.5rem;font-weight:700;">${sk.badges}</div>
-            <div style="color:#94a3b8;font-size:0.75rem;">Badges Earned</div>
-          </div>
-        </div>
-        <button onclick="switchPage('courses'); document.getElementById('skillDetailModal').style.display='none';"
-                style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#06b6d4,#7c3aed);
-                       color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">
-          Browse ${sk.title} Courses →
-        </button>
-      </div>`;
-    modal.style.display = 'flex';
+    if (!sk) return;
+    let m = document.getElementById('skillDetailModal');
+    if (!m) { m = document.createElement('div'); m.id = 'skillDetailModal'; m.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:1rem;'; m.onclick = (e) => { if (e.target === m) m.style.display = 'none'; }; document.body.appendChild(m); }
+    m.innerHTML = `<div style="background:#1a1a2e; border:1px solid rgba(6,182,212,0.4); border-radius:20px; max-width:460px; width:100%; padding:2rem; position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);"><button onclick="document.getElementById('skillDetailModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08); border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%; cursor:pointer;font-size:1rem;">✕</button><div style="font-size:3rem;margin-bottom:0.75rem;">${sk.icon}</div><h2 style="color:#f1f5f9;font-size:1.4rem;margin-bottom:0.5rem;">${sk.title}</h2><p style="color:#94a3b8;font-size:0.88rem;margin-bottom:1.25rem;">${sk.desc}</p><div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem 1.25rem;text-align:center;flex:1;"><div style="color:#06b6d4;font-size:1.5rem;font-weight:700;">${sk.courses}</div><div style="color:#94a3b8;font-size:0.75rem;">Courses</div></div><div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem 1.25rem;text-align:center;flex:1;"><div style="color:#f59e0b;font-size:1.5rem;font-weight:700;">${sk.badges}</div><div style="color:#94a3b8;font-size:0.75rem;">Badges Earned</div></div></div><button onclick="switchPage('courses'); document.getElementById('skillDetailModal').style.display='none';" style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#06b6d4,#7c3aed); color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.95rem;">Browse ${sk.title} Courses →</button></div>`;
+    m.style.display = 'flex';
   }
 
-  // ── Register for event ──────────────────────────────────────────
   function registerEvent(btn, eventId) {
     const ev = EVENT_DATA[eventId] || { title: 'this event' };
-    btn.textContent = 'Joined ✓';
-    btn.classList.remove('primary');
-    btn.classList.add('joined');
-    btn.disabled = true;
+    btn.textContent = 'Joined ✓'; btn.classList.remove('primary'); btn.classList.add('joined'); btn.disabled = true;
     dashToast(`✅ Registered for ${ev.title}!`, 'success');
-
-    // POST to backend (non-blocking)
-    const token = localStorage.getItem('talex_token') || sessionStorage.getItem('talex_token');
-    if (token && token !== 'demo-token') {
-      fetch(`/api/events/${eventId}/register`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-      }).catch(() => {}); // silent fail — UI already updated
-    }
   }
 
-  // ── Anonymous mode toggle ───────────────────────────────────────
   function toggleAnonymousMode(btn) {
     const isOn = btn.dataset.active === 'true';
     btn.dataset.active = isOn ? 'false' : 'true';
@@ -846,55 +635,13 @@
     btn.style.background = isOn ? '' : 'rgba(124,58,237,0.3)';
     btn.style.borderColor = isOn ? '' : '#7c3aed';
     dashToast(isOn ? 'Anonymous mode disabled' : '👻 You are now anonymous!', isOn ? 'info' : 'success');
-
-    // PATCH to backend
-    const token = localStorage.getItem('talex_token') || sessionStorage.getItem('talex_token');
-    if (token && token !== 'demo-token') {
-      fetch('/api/user/anonymous-mode', {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled: !isOn })
-      }).catch(() => {});
-    }
   }
 
-  // ── Upgrade modal ───────────────────────────────────────────────
   function showUpgradeModal() {
-    let modal = document.getElementById('upgradeModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'upgradeModal';
-      modal.style.cssText = `
-        position:fixed; inset:0; background:rgba(0,0,0,0.8);
-        backdrop-filter:blur(10px); z-index:9999;
-        display:flex; align-items:center; justify-content:center; padding:1rem;
-      `;
-      modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-      document.body.appendChild(modal);
-    }
-    modal.innerHTML = `
-      <div style="background:linear-gradient(135deg,#1a1a2e,#0f0f1a);
-                  border:1px solid rgba(124,58,237,0.5); border-radius:24px;
-                  max-width:500px; width:100%; padding:2.5rem; text-align:center;
-                  position:relative; box-shadow:0 32px 80px rgba(124,58,237,0.2);">
-        <button onclick="document.getElementById('upgradeModal').style.display='none'"
-                style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);
-                       border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;cursor:pointer;">✕</button>
-        <div style="font-size:3rem;margin-bottom:1rem;">⚡</div>
-        <h2 style="color:#f1f5f9;font-size:1.75rem;margin-bottom:0.5rem;">Upgrade to TALEX Pro</h2>
-        <p style="color:#94a3b8;margin-bottom:2rem;">Unlock unlimited events, premium skill tracks, AI career matching, and priority hiring.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;text-align:left;">
-          ${['Unlimited course access','AI hiring assistant','Priority badge verification','Exclusive events','Advanced analytics','Dedicated support'].map(f =>
-            `<div style="color:#cbd5e1;font-size:0.85rem;">✓ ${f}</div>`).join('')}
-        </div>
-        <button style="width:100%;padding:1rem;background:linear-gradient(135deg,#7c3aed,#06b6d4);
-                       color:#fff;border:none;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;"
-                onclick="dashToast('🚀 Redirecting to upgrade page...','success'); setTimeout(()=>window.location.href='/upgrade',1000);">
-          Upgrade Now — ₹999/month
-        </button>
-        <p style="color:#64748b;font-size:0.75rem;margin-top:0.75rem;">Cancel anytime · No hidden fees</p>
-      </div>`;
-    modal.style.display = 'flex';
+    let m = document.getElementById('upgradeModal');
+    if (!m) { m = document.createElement('div'); m.id = 'upgradeModal'; m.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:1rem;'; m.onclick = (e) => { if (e.target === m) m.style.display = 'none'; }; document.body.appendChild(m); }
+    m.innerHTML = `<div style="background:linear-gradient(135deg,#1a1a2e,#0f0f1a); border:1px solid rgba(124,58,237,0.5); border-radius:24px; max-width:500px; width:100%; padding:2.5rem; text-align:center; position:relative; box-shadow:0 32px 80px rgba(124,58,237,0.2);"><button onclick="document.getElementById('upgradeModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08); border:none;color:#94a3b8;width:30px;height:30px;border-radius:50%;cursor:pointer;">✕</button><div style="font-size:3rem;margin-bottom:1rem;">⚡</div><h2 style="color:#f1f5f9;font-size:1.75rem;margin-bottom:0.5rem;">Upgrade to TALEX Pro</h2><p style="color:#94a3b8;margin-bottom:2rem;">Unlock unlimited events, premium skill tracks, and AI career matching.</p><button style="width:100%;padding:1rem;background:linear-gradient(135deg,#7c3aed,#06b6d4); color:#fff;border:none;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;" onclick="dashToast('🚀 Redirecting...','success');">Upgrade Now — ₹999/month</button><p style="color:#64748b;font-size:0.75rem;margin-top:0.75rem;">Cancel anytime · No hidden fees</p></div>`;
+    m.style.display = 'flex';
   }
 
   // ── Quick action buttons in hero strip ──────────────────────────
