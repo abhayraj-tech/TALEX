@@ -1,0 +1,338 @@
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Mic, Image, File, Copy, Download, Trash2, Bot } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
+import { useDropzone } from 'react-dropzone';
+
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  files?: File[];
+  timestamp: Date;
+  isStreaming?: boolean;
+}
+
+const App = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [apiKey, setApiKey] = useState(localStorage.getItem('openai-api-key') || '');
+
+  // Speech Recognition Setup
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition;
+      const rec = new SpeechRecognition();
+      rec.continuous = true;
+      rec.interimResults = true;
+      rec.lang = 'en-US';
+      
+      rec.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        setInput(transcript);
+      };
+      
+      setRecognition(rec);
+    }
+  }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const addMessage = (message: Message) => {
+    setMessages(prev => [...prev, message]);
+  };
+
+  const sendMessage = useCallback(async () => {
+    if (!input.trim() || isLoading || !apiKey) return;
+
+    const userMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: input,
+      timestamp: new Date()
+    };
+
+    addMessage(userMessage);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({ 
+          message: input,
+          model: 'gpt-4o-mini' 
+        })
+      });
+
+      if (!response.ok) throw new Error('API Error');
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      
+      const assistantMessage: Message = {
+        id: `assistant-${Date.now()}`,
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+        isStreaming: true
+      };
+
+      addMessage(assistantMessage);
+
+      while (true) {
+        const { done, value } = await reader!.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') {
+              setMessages(prev => prev.map(m => 
+                m.id === assistantMessage.id 
+                  ? { ...m, isStreaming: false }
+                  : m
+              ));
+              break;
+            }
+            try {
+              const parsed = JSON.parse(data);
+              setMessages(prev => prev.map(m => 
+                m.id === assistantMessage.id
+                  ? { ...m, content: parsed.content || m.content }
+                  : m
+              ));
+            } catch (e) {}
+          }
+        }
+      }
+    } catch (error) {
+      toast.error('Failed to get response. Check your API key.');
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [input, isLoading, apiKey]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      const userMessage: Message = {
+        id: `user-${Date.now()}`,
+        role: 'user',
+        content: `Analyzing ${acceptedFiles.length} file(s)...`,
+        files: acceptedFiles,
+        timestamp: new Date()
+      };
+      addMessage(userMessage);
+      toast.success('File uploaded! Ask me anything about it.');
+    },
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
+      'application/pdf': ['.pdf'],
+      'text/*': ['.txt']
+    }
+  });
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success('Copied!');
+  };
+
+  const clearChat = () => {
+    setMessages([]);
+    toast.success('Chat cleared!');
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white">
+      <Toaster position="top-right" />
+      
+      {/* Header */}
+      <div className="p-6 border-b border-white/20">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-lg">
+              <Bot className="w-8 h-8" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+                TALEX AI Bot
+              </h1>
+              <p className="text-gray-300">Your personal AI assistant</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="password"
+              placeholder="OpenAI API Key"
+              value={apiKey}
+              onChange={(e) => {
+                setApiKey(e.target.value);
+                localStorage.setItem('openai-api-key', e.target.value);
+              }}
+              className="px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 w-64"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-[calc(100vh-200px)] overflow-y-auto p-8 space-y-6 max-w-4xl mx-auto">
+          {messages.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-20"
+            >
+              <Bot className="w-24 h-24 mx-auto mb-6 text-white/50" />
+              <h2 className="text-2xl font-bold mb-2">Welcome to TALEX AI</h2>
+              <p className="text-gray-300 mb-8 max-w-md mx-auto">
+                Ask me anything! I can analyze images, documents, and have conversations.
+              </p>
+              <div className="bg-white/10 p-6 rounded-2xl max-w-md mx-auto">
+                💡 Tip: Add your OpenAI API key above to start chatting
+              </div>
+            </motion.div>
+          ) : (
+            <AnimatePresence>
+              {messages.map((message) => (
+                <motion.div
+                  key={message.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`max-w-3xl p-6 rounded-3xl shadow-2xl ${
+                    message.role === 'user'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white order-2'
+                      : 'bg-white/10 backdrop-blur-xl border border-white/20 order-1'
+                  }`}>
+                    <div className="prose prose-invert max-w-none">
+                      <p>{message.content}</p>
+                    </div>
+                    
+                    {message.files && (
+                      <div className="mt-4 grid grid-cols-2 gap-2">
+                        {message.files.map((file, i) => (
+                          <img key={i} src={URL.createObjectURL(file)} 
+                               className="w-full h-32 object-cover rounded-xl" 
+                               alt={file.name} />
+                        ))}
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center gap-2 mt-4 opacity-75">
+                      <span className="text-sm">{message.timestamp.toLocaleTimeString()}</span>
+                      <button
+                        onClick={() => copyToClipboard(message.content)}
+                        className="p-1.5 hover:bg-white/20 rounded-xl transition-all"
+                        title="Copy"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      {message.role === 'user' && (
+                        <button
+                          onClick={() => clearChat()}
+                          className="p-1.5 hover:bg-white/20 rounded-xl transition-all ml-auto"
+                          title="Clear chat"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+      </div>
+
+      {/* Input Area */}
+      <div className="p-6 bg-black/30 backdrop-blur-lg border-t border-white/10">
+        <div className="max-w-4xl mx-auto flex items-end gap-3">
+          {/* File Upload */}
+          <div 
+            {...getRootProps()}
+            className={`p-4 rounded-2xl border-2 border-dashed border-white/30 hover:border-white/50 transition-all flex-shrink-0 ${
+              isDragActive ? 'bg-white/20 border-white/50' : 'bg-white/10'
+            }`}
+          >
+            <input {...getInputProps()} />
+            <File className="w-5 h-5 mx-auto" />
+          </div>
+
+          {/* Voice Input */}
+          <button
+            onClick={() => {
+              if (recognition) {
+                if (isRecording) {
+                  recognition.stop();
+                } else {
+                  recognition.start();
+                }
+                setIsRecording(!isRecording);
+              }
+            }}
+            className={`p-4 rounded-2xl transition-all flex-shrink-0 ${
+              isRecording
+                ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-500/50'
+                : 'bg-white/20 hover:bg-white/30'
+            }`}
+            title="Voice Input"
+          >
+            <Mic className="w-6 h-6" />
+          </button>
+
+          {/* Text Input */}
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && !isLoading && sendMessage()}
+            placeholder={isLoading ? "Thinking..." : "Type your message..."}
+            className="flex-1 p-5 bg-white/10 border border-white/20 rounded-3xl text-white placeholder-white/50 
+                       focus:outline-none focus:border-white/50 focus:ring-4 focus:ring-white/20 transition-all resize-none"
+            disabled={isLoading}
+          />
+
+          {/* Send Button */}
+          <motion.button
+            onClick={sendMessage}
+            disabled={!input.trim() || isLoading || !apiKey}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 
+                       text-white rounded-3xl shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 
+                       disabled:cursor-not-allowed flex-shrink-0"
+          >
+            <Send className="w-7 h-7" />
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;

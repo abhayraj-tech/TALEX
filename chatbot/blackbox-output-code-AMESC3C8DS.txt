@@ -1,0 +1,18 @@
+# 1. Create project
+mkdir talex-ai-bot && cd talex-ai-bot
+npm init -y
+
+# 2. Install frontend deps
+npm install react react-dom ... (use package.json above)
+
+# 3. Backend setup
+mkdir backend && cd backend
+npm init -y
+npm install express cors openai express-rate-limit multer dotenv
+
+# 4. Create .env in backend
+echo "OPENAI_API_KEY=your_openai_key_here" > .env
+
+# 5. Run both
+# Terminal 1: npm run dev (frontend)
+# Terminal 2: node server.js (backend)

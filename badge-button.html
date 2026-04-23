@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Badge Collection – TALEX</title>
+  <link rel="stylesheet" href="badge-button.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  
+  <div id="cursor-glow"></div>
+  
+  <div class="dashboard-wrapper">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-content">
+        <div class="title-section">
+          <h1>My Badges</h1>
+          <p>Your verified proof of expertise. Show them off.</p>
+        </div>
+        <button class="btn-back" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="page-content">
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-card">
+          <div class="stat-value" id="earnedCount">0</div>
+          <div class="stat-label">Earned Badges</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalCount">0</div>
+          <div class="stat-label">Total Available</div>
+        </div>
+      </div>
+
+      <div class="badges-grid" id="badgesGrid">
+        <!-- Badges will be loaded dynamically here -->
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading your professional badges...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Cursor Glow Effect
+    const cursorGlow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', (e) => {
+      cursorGlow.style.left = e.clientX + 'px';
+      cursorGlow.style.top = e.clientY + 'px';
+    });
+
+    // Fetch Badges
+    async function fetchBadges() {
+      const grid = document.getElementById('badgesGrid');
+      try {
+        const response = await fetch('/api/badges');
+        if (!response.ok) throw new Error('API not available');
+        const data = await response.json();
+        
+        if (data.success && data.badges) {
+          renderBadges(data.badges);
+        } else {
+          throw new Error('Invalid data');
+        }
+      } catch (err) {
+        console.warn('Backend not running, using fallback data:', err);
+        // Fallback data if server is not running
+        const fallbackBadges = [
+          { id: 'badge-java', title: 'Java Expert', description: 'Mastered advanced Java concepts, Spring Boot, and Microservices.', icon: '☕', status: 'earned', rarity: 'Legendary', dateEarned: '2026-03-15' },
+          { id: 'badge-python', title: 'Python Master', description: 'Deep expertise in Python, Data Science, and AI frameworks.', icon: '🐍', status: 'earned', rarity: 'Epic', dateEarned: '2026-04-10' },
+          { id: 'badge-ui', title: 'UI/UX Pioneer', description: 'Created stunning interfaces applying glassmorphism and design systems.', icon: '🎨', status: 'earned', rarity: 'Rare', dateEarned: '2026-02-28' },
+          { id: 'badge-react', title: 'React Virtuoso', description: 'Advanced proficiency in React and Next.js.', icon: '⚛️', status: 'locked', rarity: 'Epic' },
+          { id: 'badge-cloud', title: 'Cloud Architect', description: 'Designed scalable systems on AWS and Azure.', icon: '☁️', status: 'locked', rarity: 'Legendary' },
+          { id: 'badge-data', title: 'Data Science Guru', description: 'Processed large datasets and trained predictive models.', icon: '📊', status: 'locked', rarity: 'Epic' }
+        ];
+        renderBadges(fallbackBadges);
+      }
+    }
+
+    function renderBadges(badges) {
+      const grid = document.getElementById('badgesGrid');
+      grid.innerHTML = ''; // Clear loading
+
+      let earned = 0;
+
+      badges.forEach(badge => {
+        const isEarned = badge.status === 'earned';
+        if (isEarned) earned++;
+
+        const card = document.createElement('div');
+        card.className = `badge-card ${badge.status} rarity-${badge.rarity.toLowerCase()}`;
+        
+        // Define glow color based on rarity
+        let rarityColor = '#00d4aa';
+        if (badge.rarity === 'Legendary') rarityColor = '#f59e0b';
+        if (badge.rarity === 'Epic') rarityColor = '#7c3aed';
+        
+        card.style.setProperty('--rarity-color', rarityColor);
+
+        card.innerHTML = `
+          <div class="badge-icon-wrapper">
+            <div class="badge-icon">${isEarned ? badge.icon : '🔒'}</div>
+            <div class="badge-glow"></div>
+          </div>
+          <div class="badge-info">
+            <h3 class="badge-title">${badge.title}</h3>
+            <span class="badge-rarity ${badge.rarity.toLowerCase()}">${badge.rarity}</span>
+            <p class="badge-desc">${badge.description}</p>
+            ${isEarned 
+              ? `<div class="badge-date">Earned on ${new Date(badge.dateEarned).toLocaleDateString()}</div>` 
+              : `<div class="badge-status-label">Locked</div>`
+            }
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+
+      document.getElementById('earnedCount').textContent = earned;
+      document.getElementById('totalCount').textContent = badges.length;
+    }
+
+    // Initialize
+    fetchBadges();
+  </script>
+</body>
+</html>
