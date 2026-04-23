@@ -369,8 +369,8 @@
 
 
   <!-- MODULE VIEW (IFRAME EMBED) -->
-  <main class="content" id="moduleView" style="display:none; padding:0; height: calc(100vh - var(--header-h)); overflow: hidden;">
-    <iframe id="moduleFrame" src="about:blank" style="width:100%; height:100%; border:none;"></iframe>
+  <main id="moduleView" style="display:none; position:fixed; top:0; left:var(--sidebar-w); right:0; bottom:0; padding:0; margin:0; z-index:80; overflow:hidden;">
+    <iframe id="moduleFrame" src="about:blank" style="width:100%; height:100%; border:none; display:block;"></iframe>
   </main>
 </div>
 
@@ -492,22 +492,7 @@
     });
 
     const topHeader = document.getElementById('topHeader');
-    const moduleView = document.getElementById('moduleView');
-    if (viewId === 'moduleView') {
-      if (topHeader) topHeader.style.display = 'none';
-      if (moduleView) {
-        moduleView.style.height = '100vh';
-        moduleView.style.marginTop = '0';
-        moduleView.style.padding = '0';
-      }
-    } else {
-      if (topHeader) topHeader.style.display = 'flex';
-      if (moduleView) {
-        moduleView.style.height = '';
-        moduleView.style.marginTop = '';
-        moduleView.style.padding = '';
-      }
-    }
+    if (topHeader) topHeader.style.display = (viewId === 'moduleView') ? 'none' : 'flex';
   }
 
   // ── Helper: Toast ───────────────────────────────────────────────
