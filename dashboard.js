@@ -417,9 +417,10 @@ function renderPublishedItems(items) {
 
   if (emptyPublished) emptyPublished.style.display = 'none';
 
-  items.forEach(item => {
+  items.forEach((item, index) => {
     const card = document.createElement('div');
     card.className = 'published-card';
+    card.dataset.index = index;
 
     let mediaHtml = '';
     if (item.fileType === 'image') {
@@ -437,7 +438,25 @@ function renderPublishedItems(items) {
         <h4>${item.title}</h4>
         <span class="pub-meta">${typeLabel} · ${date}</span>
       </div>
+      <button class="pub-delete-btn" title="Delete">🗑 Delete</button>
     `;
+
+    // Delete button handler
+    card.querySelector('.pub-delete-btn').addEventListener('click', () => {
+      if (!confirm(`Delete "${item.title}"?`)) return;
+      const stored = JSON.parse(localStorage.getItem('talex_published') || '[]');
+      stored.splice(index, 1);
+      localStorage.setItem('talex_published', JSON.stringify(stored));
+      card.style.animation = 'fadeOut 0.3s ease forwards';
+      setTimeout(() => {
+        card.remove();
+        if (publishedGrid.querySelectorAll('.published-card').length === 0) {
+          if (emptyPublished) emptyPublished.style.display = 'block';
+        }
+        showToast('Content deleted', 'success');
+      }, 300);
+    });
+
     publishedGrid.appendChild(card);
   });
 }
