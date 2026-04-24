@@ -126,28 +126,34 @@ img {
   width: var(--sidebar-w);
   background: var(--bg-surface);
   border-right: 1px solid var(--border);
-  padding: 28px 20px;
+  padding: 28px 20px 0;
   display: flex;
   flex-direction: column;
   z-index: 100;
+  overflow: hidden;
+}
+
+/* Custom scrollbar for sidebar nav */
+.sidebar-nav {
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  padding-bottom: 12px;
 }
 
-/* Custom scrollbar for sidebar */
-.sidebar::-webkit-scrollbar {
-  width: 4px;
+.sidebar-nav::-webkit-scrollbar {
+  width: 3px;
 }
-.sidebar::-webkit-scrollbar-track {
+.sidebar-nav::-webkit-scrollbar-track {
   background: transparent;
 }
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(6, 182, 212, 0.3);
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.35);
   border-radius: 4px;
 }
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(6, 182, 212, 0.6);
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.65);
 }
 
 .sidebar-logo {
@@ -155,6 +161,8 @@ img {
   align-items: center;
   gap: 12px;
   margin-bottom: 36px;
+  flex-shrink: 0;
+  padding: 0 0 0 0;
 }
 
 .sidebar-logo .logo-icon {
@@ -227,7 +235,8 @@ img {
 }
 
 .sidebar-cta {
-  margin-top: auto;
+  margin-top: 0;
+  flex-shrink: 0;
   background: linear-gradient(135deg, var(--cyan), var(--teal));
   border-radius: var(--radius-sm);
   padding: 20px;
