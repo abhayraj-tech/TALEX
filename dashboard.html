@@ -57,9 +57,6 @@
     <div class="nav-item" data-page="settings" onclick="switchPage('settings')">
       <span class="nav-icon">⚙️</span> Settings
     </div>
-    <div class="nav-item" data-page="resume" onclick="openResumeModal()">
-      <span class="nav-icon">📄</span> My Resume
-    </div>
   </div>
 
   <div class="sidebar-cta">
@@ -675,10 +672,78 @@
   <script src="chatbot-widget.js"></script>
 
 <!-- ═══ RESUME MODAL ═══ -->
+<style>
+.resume-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.resume-modal {
+  background: #0f172a;
+  border: 1px solid rgba(124,58,237,0.35);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+  animation: modalScale .3s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+}
+.resume-modal-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }
+.resume-modal-header h2 { font-size:22px; font-weight:800; color:#fff; margin-bottom:4px; }
+.resume-modal-header p { font-size:13px; color:#64748b; }
+.resume-close { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; width:32px; height:32px; border-radius:50%; font-size:14px; cursor:pointer; transition:0.2s; flex-shrink:0; }
+.resume-close:hover { color:#e11d48; border-color:#e11d48; }
+.resume-steps { display:flex; align-items:center; margin-bottom:28px; }
+.resume-step { font-size:12px; font-weight:700; color:#475569; padding:6px 14px; border-radius:20px; border:1px solid #1e293b; white-space:nowrap; transition:0.2s; }
+.resume-step.active { background:rgba(124,58,237,0.15); color:#a855f7; border-color:rgba(124,58,237,0.4); }
+.resume-step.done { background:rgba(5,150,105,0.1); color:#10b981; border-color:rgba(5,150,105,0.3); }
+.resume-step-line { flex:1; height:1px; background:#1e293b; min-width:12px; }
+.resume-panel { display:none; }
+.resume-panel.active { display:block; }
+.resume-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+.resume-field { display:flex; flex-direction:column; gap:6px; }
+.resume-field.full { grid-column:1/-1; }
+.resume-field label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; }
+.resume-field input, .resume-field textarea { background:#020617; border:1px solid #1e293b; border-radius:10px; color:#e2e8f0; font-size:14px; font-family:inherit; padding:10px 14px; outline:none; transition:0.2s; resize:vertical; }
+.resume-field input:focus, .resume-field textarea:focus { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
+.resume-field input::placeholder, .resume-field textarea::placeholder { color:#334155; }
+.resume-nav-btns { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.resume-btn-next { background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; border:none; padding:10px 24px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; transition:0.2s; }
+.resume-btn-next:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(124,58,237,0.4); }
+.resume-btn-back { background:rgba(255,255,255,0.05); border:1px solid #1e293b; color:#94a3b8; padding:10px 20px; border-radius:10px; font-weight:600; font-size:14px; cursor:pointer; transition:0.2s; }
+.resume-btn-back:hover { border-color:#7c3aed; color:#a855f7; }
+.resume-generate-area { text-align:center; padding:20px 0 28px; }
+.resume-ai-icon { font-size:52px; margin-bottom:16px; }
+.resume-generate-area h3 { font-size:22px; font-weight:800; color:#fff; margin-bottom:8px; }
+.resume-generate-area p { font-size:14px; color:#64748b; max-width:420px; margin:0 auto 24px; line-height:1.6; }
+.resume-progress-preview { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
+.rpp-item { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.04); border:1px solid #1e293b; border-radius:10px; padding:8px 14px; font-size:13px; color:#94a3b8; font-weight:600; }
+.resume-generate-btn { background:linear-gradient(135deg,#7c3aed,#06b6d4); color:#fff; border:none; padding:14px 36px; border-radius:14px; font-size:16px; font-weight:800; cursor:pointer; transition:0.3s; }
+.resume-generate-btn:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(124,58,237,0.4); }
+.resume-generate-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+.resume-output { margin-top:20px; border:1px solid rgba(5,150,105,0.3); border-radius:16px; overflow:hidden; }
+.resume-output-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:rgba(5,150,105,0.08); border-bottom:1px solid rgba(5,150,105,0.2); }
+.resume-output-header h3 { font-size:15px; font-weight:700; color:#10b981; }
+.resume-output-actions { display:flex; gap:8px; }
+.resume-btn-copy, .resume-btn-download { padding:7px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; transition:0.2s; border:1px solid #1e293b; background:rgba(255,255,255,0.05); color:#94a3b8; }
+.resume-btn-copy:hover { border-color:#06b6d4; color:#06b6d4; }
+.resume-btn-download:hover { border-color:#10b981; color:#10b981; }
+.resume-text-output { padding:20px; font-family:'Courier New',monospace; font-size:12.5px; line-height:1.7; color:#cbd5e1; white-space:pre-wrap; word-break:break-word; background:#020617; max-height:400px; overflow-y:auto; }
+.quick-action-btn.resume-btn { background:linear-gradient(135deg,#7c3aed,#a855f7) !important; color:#fff !important; font-weight:700 !important; }
+@media(max-width:600px){ .resume-form-grid{grid-template-columns:1fr;} }
+</style>
+
 <div class="resume-modal-overlay" id="resumeModalOverlay">
   <div class="resume-modal">
-
-    <!-- Header -->
     <div class="resume-modal-header">
       <div>
         <h2>📄 My Resume</h2>
@@ -686,8 +751,6 @@
       </div>
       <button class="resume-close" onclick="closeResumeModal()">✕</button>
     </div>
-
-    <!-- Step Indicators -->
     <div class="resume-steps">
       <div class="resume-step active" id="rstep1">1 Personal</div>
       <div class="resume-step-line"></div>
@@ -697,151 +760,79 @@
       <div class="resume-step-line"></div>
       <div class="resume-step" id="rstep4">4 Generate</div>
     </div>
-
-    <!-- Step 1: Personal Info -->
+    <!-- Step 1 -->
     <div class="resume-panel active" id="rpanel1">
       <div class="resume-form-grid">
-        <div class="resume-field">
-          <label>Full Name</label>
-          <input type="text" id="r_name" placeholder="Abhay Raj">
-        </div>
-        <div class="resume-field">
-          <label>Email</label>
-          <input type="email" id="r_email" placeholder="you@email.com">
-        </div>
-        <div class="resume-field">
-          <label>Phone</label>
-          <input type="text" id="r_phone" placeholder="+91 9876543210">
-        </div>
-        <div class="resume-field">
-          <label>Location</label>
-          <input type="text" id="r_location" placeholder="City, Country">
-        </div>
-        <div class="resume-field full">
-          <label>LinkedIn / Portfolio URL</label>
-          <input type="url" id="r_links" placeholder="https://linkedin.com/in/yourname">
-        </div>
-        <div class="resume-field full">
-          <label>Career Objective</label>
-          <textarea id="r_objective" rows="3" placeholder="Brief summary of your goals and strengths..."></textarea>
-        </div>
+        <div class="resume-field"><label>Full Name</label><input type="text" id="r_name" placeholder="Abhay Raj"></div>
+        <div class="resume-field"><label>Email</label><input type="email" id="r_email" placeholder="you@email.com"></div>
+        <div class="resume-field"><label>Phone</label><input type="text" id="r_phone" placeholder="+91 9876543210"></div>
+        <div class="resume-field"><label>Location</label><input type="text" id="r_location" placeholder="City, Country"></div>
+        <div class="resume-field full"><label>LinkedIn / Portfolio URL</label><input type="url" id="r_links" placeholder="https://linkedin.com/in/yourname"></div>
+        <div class="resume-field full"><label>Career Objective</label><textarea id="r_objective" rows="3" placeholder="Brief summary of your goals..."></textarea></div>
       </div>
-      <div class="resume-nav-btns">
-        <span></span>
-        <button class="resume-btn-next" onclick="resumeGoTo(2)">Next →</button>
-      </div>
+      <div class="resume-nav-btns"><span></span><button class="resume-btn-next" onclick="resumeGoTo(2)">Next →</button></div>
     </div>
-
-    <!-- Step 2: Education -->
+    <!-- Step 2 -->
     <div class="resume-panel" id="rpanel2">
       <div class="resume-form-grid">
-        <div class="resume-field full">
-          <label>Degree & Institution</label>
-          <input type="text" id="r_degree" placeholder="B.Tech Computer Science — XYZ University">
-        </div>
-        <div class="resume-field">
-          <label>Year of Graduation</label>
-          <input type="text" id="r_gradyear" placeholder="2026">
-        </div>
-        <div class="resume-field">
-          <label>CGPA / Percentage</label>
-          <input type="text" id="r_cgpa" placeholder="8.5 / 10">
-        </div>
-        <div class="resume-field full">
-          <label>Certifications (one per line)</label>
-          <textarea id="r_certs" rows="3" placeholder="AWS Cloud Practitioner&#10;Google Data Analytics&#10;Meta Front-End Developer"></textarea>
-        </div>
+        <div class="resume-field full"><label>Degree & Institution</label><input type="text" id="r_degree" placeholder="B.Tech CS — XYZ University"></div>
+        <div class="resume-field"><label>Year of Graduation</label><input type="text" id="r_gradyear" placeholder="2026"></div>
+        <div class="resume-field"><label>CGPA / Percentage</label><input type="text" id="r_cgpa" placeholder="8.5 / 10"></div>
+        <div class="resume-field full"><label>Certifications (one per line)</label><textarea id="r_certs" rows="3" placeholder="AWS Cloud Practitioner&#10;Google Data Analytics"></textarea></div>
       </div>
-      <div class="resume-nav-btns">
-        <button class="resume-btn-back" onclick="resumeGoTo(1)">← Back</button>
-        <button class="resume-btn-next" onclick="resumeGoTo(3)">Next →</button>
-      </div>
+      <div class="resume-nav-btns"><button class="resume-btn-back" onclick="resumeGoTo(1)">← Back</button><button class="resume-btn-next" onclick="resumeGoTo(3)">Next →</button></div>
     </div>
-
-    <!-- Step 3: Experience & Skills -->
+    <!-- Step 3 -->
     <div class="resume-panel" id="rpanel3">
       <div class="resume-form-grid">
-        <div class="resume-field full">
-          <label>Work / Internship Experience (one per line)</label>
-          <textarea id="r_experience" rows="3" placeholder="Frontend Intern @ TechCorp (Jun–Aug 2025)&#10;Built React dashboard reducing load time by 40%"></textarea>
-        </div>
-        <div class="resume-field full">
-          <label>Projects (one per line)</label>
-          <textarea id="r_projects" rows="3" placeholder="TALEX Platform — Full-stack learning app (React, Node, MongoDB)&#10;AI Chatbot — GPT-4 powered support bot"></textarea>
-        </div>
-        <div class="resume-field full">
-          <label>Extra Skills / Tools</label>
-          <input type="text" id="r_skills" placeholder="Python, Figma, Docker, Git, SQL">
-        </div>
-        <div class="resume-field full">
-          <label>Target Job Role</label>
-          <input type="text" id="r_role" placeholder="Full Stack Developer, AI Engineer...">
-        </div>
+        <div class="resume-field full"><label>Work / Internship Experience</label><textarea id="r_experience" rows="3" placeholder="Frontend Intern @ TechCorp (Jun–Aug 2025)"></textarea></div>
+        <div class="resume-field full"><label>Projects</label><textarea id="r_projects" rows="3" placeholder="TALEX Platform — Full-stack learning app"></textarea></div>
+        <div class="resume-field full"><label>Extra Skills / Tools</label><input type="text" id="r_skills" placeholder="Python, Figma, Docker, Git, SQL"></div>
+        <div class="resume-field full"><label>Target Job Role</label><input type="text" id="r_role" placeholder="Full Stack Developer, AI Engineer..."></div>
       </div>
-      <div class="resume-nav-btns">
-        <button class="resume-btn-back" onclick="resumeGoTo(2)">← Back</button>
-        <button class="resume-btn-next" onclick="resumeGoTo(4)">Next →</button>
-      </div>
+      <div class="resume-nav-btns"><button class="resume-btn-back" onclick="resumeGoTo(2)">← Back</button><button class="resume-btn-next" onclick="resumeGoTo(4)">Next →</button></div>
     </div>
-
-    <!-- Step 4: Generate -->
+    <!-- Step 4 -->
     <div class="resume-panel" id="rpanel4">
       <div class="resume-generate-area">
         <div class="resume-ai-icon">🤖</div>
         <h3>Ready to Generate</h3>
-        <p>AI will combine your details with your TALEX progress — courses, badges, skills and credits — to craft a professional resume.</p>
+        <p>AI will combine your details with your TALEX progress to craft a professional resume.</p>
         <div class="resume-progress-preview">
-          <div class="rpp-item"><span>⚡</span> <span id="rpp_credits">100 Credits earned</span></div>
-          <div class="rpp-item"><span>📚</span> <span id="rpp_courses">36 Courses</span></div>
-          <div class="rpp-item"><span>🏅</span> <span id="rpp_badges">10 Badges</span></div>
-          <div class="rpp-item"><span>🎯</span> <span id="rpp_events">14 Events</span></div>
+          <div class="rpp-item"><span>⚡</span><span id="rpp_credits">100 Credits</span></div>
+          <div class="rpp-item"><span>📚</span><span>36 Courses</span></div>
+          <div class="rpp-item"><span>🏅</span><span>10 Badges</span></div>
+          <div class="rpp-item"><span>🎯</span><span>14 Events</span></div>
         </div>
-        <button class="resume-generate-btn" id="resumeGenerateBtn" onclick="generateResume()">
-          ✨ Generate My Resume
-        </button>
+        <button class="resume-generate-btn" id="resumeGenerateBtn" onclick="generateResume()">✨ Generate My Resume</button>
       </div>
-
-      <!-- Generated Resume Output -->
       <div class="resume-output" id="resumeOutput" style="display:none;">
         <div class="resume-output-header">
           <h3>✅ Your Resume is Ready!</h3>
           <div class="resume-output-actions">
             <button class="resume-btn-copy" onclick="copyResume()">📋 Copy</button>
-            <button class="resume-btn-download" onclick="downloadResume()">⬇️ Download .txt</button>
+            <button class="resume-btn-download" onclick="downloadResume()">⬇️ Download</button>
           </div>
         </div>
         <pre id="resumeText" class="resume-text-output"></pre>
       </div>
-
-      <div class="resume-nav-btns">
-        <button class="resume-btn-back" onclick="resumeGoTo(3)">← Back</button>
-        <span></span>
-      </div>
+      <div class="resume-nav-btns"><button class="resume-btn-back" onclick="resumeGoTo(3)">← Back</button><span></span></div>
     </div>
-
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// RESUME MODAL LOGIC
-// ═══════════════════════════════════════
-
 function openResumeModal() {
-  // Pre-fill from logged-in user
   const user = JSON.parse(sessionStorage.getItem('talex_user') || 'null');
   if (user) {
     document.getElementById('r_name').value = user.name || '';
     document.getElementById('r_email').value = user.email || '';
   }
-  // Pre-fill progress stats
   const credits = document.getElementById('statCredits')?.textContent || '100';
-  document.getElementById('rpp_credits').textContent = credits + ' Credits earned';
-
+  document.getElementById('rpp_credits').textContent = credits + ' Credits';
   document.getElementById('resumeModalOverlay').style.display = 'flex';
   resumeGoTo(1);
 }
-
 function closeResumeModal() {
   document.getElementById('resumeModalOverlay').style.display = 'none';
   document.getElementById('resumeOutput').style.display = 'none';
@@ -849,182 +840,94 @@ function closeResumeModal() {
   document.getElementById('resumeGenerateBtn').textContent = '✨ Generate My Resume';
   document.getElementById('resumeGenerateBtn').disabled = false;
 }
-
-// Close on overlay click
-document.getElementById('resumeModalOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeResumeModal();
-});
-
+document.getElementById('resumeModalOverlay').addEventListener('click', function(e){ if(e.target===this) closeResumeModal(); });
 function resumeGoTo(step) {
   [1,2,3,4].forEach(i => {
-    document.getElementById('rpanel' + i).classList.toggle('active', i === step);
-    document.getElementById('rstep' + i).classList.toggle('active', i === step);
-    document.getElementById('rstep' + i).classList.toggle('done', i < step);
+    document.getElementById('rpanel'+i).classList.toggle('active', i===step);
+    document.getElementById('rstep'+i).classList.toggle('active', i===step);
+    document.getElementById('rstep'+i).classList.toggle('done', i<step);
   });
 }
-
 async function generateResume() {
   const btn = document.getElementById('resumeGenerateBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Generating...';
-
-  // Collect all form data
-  const name     = document.getElementById('r_name').value || 'User';
-  const email    = document.getElementById('r_email').value || '';
-  const phone    = document.getElementById('r_phone').value || '';
-  const location = document.getElementById('r_location').value || '';
-  const links    = document.getElementById('r_links').value || '';
-  const objective= document.getElementById('r_objective').value || '';
-  const degree   = document.getElementById('r_degree').value || '';
-  const gradyear = document.getElementById('r_gradyear').value || '';
-  const cgpa     = document.getElementById('r_cgpa').value || '';
-  const certs    = document.getElementById('r_certs').value || '';
-  const experience = document.getElementById('r_experience').value || '';
-  const projects = document.getElementById('r_projects').value || '';
-  const skills   = document.getElementById('r_skills').value || '';
-  const role     = document.getElementById('r_role').value || 'Software Developer';
-
-  // TALEX progress data
-  const credits  = document.getElementById('statCredits')?.textContent || '100';
-
-  // Build the prompt
-  const prompt = `Generate a professional resume for the following person. Format it cleanly with sections.
-
-PERSONAL INFO:
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Location: ${location}
-Portfolio/LinkedIn: ${links}
-
-CAREER OBJECTIVE:
-${objective || `Aspiring ${role} with strong technical skills and hands-on project experience.`}
-
-EDUCATION:
-${degree} (${gradyear}) — CGPA: ${cgpa}
-
-CERTIFICATIONS:
-${certs || 'None listed'}
-
-WORK EXPERIENCE:
-${experience || 'No prior work experience listed'}
-
-PROJECTS:
-${projects || 'No projects listed'}
-
-SKILLS:
-${skills}
-
-TALEX PLATFORM ACHIEVEMENTS (include these as a section called "Platform Achievements"):
-- Earned ${credits} TALEX Credits through course completions and events
-- Completed 36 courses across AI/ML, Web Dev, Data Science, Design
-- Earned 10 skill badges including Java Expert, Python Master, UI/UX Pioneer
-- Participated in 14 events including hackathons, workshops, and pitch days
-- Active member of TALEX learning community
-
-TARGET ROLE: ${role}
-
-Please write a complete, professional resume with proper sections: Contact, Objective, Education, Experience, Projects, Skills, Certifications, and Platform Achievements. Use clean formatting with dashes and proper spacing.`;
-
+  btn.disabled = true; btn.textContent = '⏳ Generating...';
+  const d = {
+    name: document.getElementById('r_name').value||'User',
+    email: document.getElementById('r_email').value||'',
+    phone: document.getElementById('r_phone').value||'',
+    location: document.getElementById('r_location').value||'',
+    links: document.getElementById('r_links').value||'',
+    objective: document.getElementById('r_objective').value||'',
+    degree: document.getElementById('r_degree').value||'',
+    gradyear: document.getElementById('r_gradyear').value||'',
+    cgpa: document.getElementById('r_cgpa').value||'',
+    certs: document.getElementById('r_certs').value||'',
+    experience: document.getElementById('r_experience').value||'',
+    projects: document.getElementById('r_projects').value||'',
+    skills: document.getElementById('r_skills').value||'',
+    role: document.getElementById('r_role').value||'Software Developer',
+    credits: document.getElementById('statCredits')?.textContent||'100'
+  };
   try {
-    // Try AI generation via backend
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${sessionStorage.getItem('talex_token') || ''}`
-      },
-      body: JSON.stringify({ message: prompt })
-    });
-
-    let resumeText = '';
-    if (res.ok) {
-      const data = await res.json();
-      resumeText = data.reply || data.message || data.response || '';
-    }
-
-    if (!resumeText) throw new Error('No response');
-
-    showGeneratedResume(resumeText);
-
-  } catch (err) {
-    // Fallback: generate locally without AI
-    const resumeText = buildLocalResume({ name, email, phone, location, links, objective, degree, gradyear, cgpa, certs, experience, projects, skills, role, credits });
-    showGeneratedResume(resumeText);
-  }
+    const res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${sessionStorage.getItem('talex_token')||''}`}, body: JSON.stringify({ message: `Generate a professional resume for: Name: ${d.name}, Email: ${d.email}, Phone: ${d.phone}, Location: ${d.location}, Portfolio: ${d.links}, Objective: ${d.objective}, Education: ${d.degree} (${d.gradyear}) CGPA: ${d.cgpa}, Certifications: ${d.certs}, Experience: ${d.experience}, Projects: ${d.projects}, Skills: ${d.skills}, Target Role: ${d.role}. Also include a Platform Achievements section: Earned ${d.credits} TALEX Credits, completed 36 courses, earned 10 badges, participated in 14 events. Format as a clean professional resume with sections.` }) });
+    if (res.ok) { const data = await res.json(); showGeneratedResume(data.reply||data.message||buildLocalResume(d)); return; }
+  } catch(e) {}
+  showGeneratedResume(buildLocalResume(d));
 }
-
 function buildLocalResume(d) {
   return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${d.name.toUpperCase()}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${[d.email, d.phone, d.location, d.links].filter(Boolean).join('  |  ')}
+${[d.email,d.phone,d.location,d.links].filter(Boolean).join('  |  ')}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CAREER OBJECTIVE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${d.objective || `Motivated ${d.role} with a strong foundation in software development, hands-on project experience, and a passion for continuous learning through the TALEX platform.`}
+${d.objective||`Motivated ${d.role} with strong technical skills and hands-on project experience.`}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EDUCATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${d.degree || 'Degree not specified'}${d.gradyear ? '  (' + d.gradyear + ')' : ''}${d.cgpa ? '  |  CGPA: ' + d.cgpa : ''}
+${d.degree||'Not specified'}${d.gradyear?' ('+d.gradyear+')':''}${d.cgpa?'  |  CGPA: '+d.cgpa:''}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WORK EXPERIENCE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${d.experience || 'No prior work experience listed.'}
+${d.experience||'No prior work experience listed.'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PROJECTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${d.projects || 'No projects listed.'}
+${d.projects||'No projects listed.'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TECHNICAL SKILLS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${d.skills || 'Not specified'}
+${d.skills||'Not specified'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CERTIFICATIONS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${d.certs || 'None listed'}
+${d.certs||'None listed'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 PLATFORM ACHIEVEMENTS (TALEX)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 - Earned ${d.credits} TALEX Credits through course completions and events
-- Completed 36 courses across AI/ML, Web Development, Data Science & Design
+- Completed 36 courses across AI/ML, Web Dev, Data Science & Design
 - Earned 10 skill badges: Java Expert, Python Master, UI/UX Pioneer & more
 - Participated in 14 events: hackathons, AI workshops, startup pitch days
-- Active contributor in TALEX learning community
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 }
-
 function showGeneratedResume(text) {
   document.getElementById('resumeText').textContent = text;
   document.getElementById('resumeOutput').style.display = 'block';
   document.getElementById('resumeGenerateBtn').style.display = 'none';
-  document.getElementById('resumeOutput').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('resumeOutput').scrollIntoView({behavior:'smooth'});
 }
-
 function copyResume() {
-  const text = document.getElementById('resumeText').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Resume copied to clipboard!', 'success');
-  });
+  navigator.clipboard.writeText(document.getElementById('resumeText').textContent).then(()=>showToast('Copied to clipboard!','success'));
 }
-
 function downloadResume() {
   const text = document.getElementById('resumeText').textContent;
-  const name = document.getElementById('r_name').value || 'resume';
-  const blob = new Blob([text], { type: 'text/plain' });
+  const name = document.getElementById('r_name').value||'resume';
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name.replace(/\s+/g, '_') + '_resume.txt';
+  a.href = URL.createObjectURL(new Blob([text],{type:'text/plain'}));
+  a.download = name.replace(/\s+/g,'_')+'_resume.txt';
   a.click();
-  URL.revokeObjectURL(a.href);
 }
 </script>
 </body>
